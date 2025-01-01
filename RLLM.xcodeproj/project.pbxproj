@@ -16,14 +16,14 @@
 			containerPortal = 8CA9EAE92D185997005607D1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8CA9EAF02D185997005607D1;
-			remoteInfo = "LLM-RSS";
+			remoteInfo = "RLLM";
 		};
 		8CA9EB0E2D185998005607D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8CA9EAE92D185997005607D1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8CA9EAF02D185997005607D1;
-			remoteInfo = "LLM-RSS";
+			remoteInfo = "RLLM";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -141,7 +141,7 @@
 			packageProductDependencies = (
 				8CF8AA1A2D1869D000C8B463 /* FeedKit */,
 			);
-			productName = "LLM-RSS";
+			productName = "RLLM";
 			productReference = 8CA9EAF12D185997005607D1 /* RLLM.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -164,7 +164,7 @@
 			name = RLLMTests;
 			packageProductDependencies = (
 			);
-			productName = "LLM-RSSTests";
+			productName = "RLLMTests";
 			productReference = 8CA9EB032D185998005607D1 /* RLLMTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -187,7 +187,7 @@
 			name = RLLMUITests;
 			packageProductDependencies = (
 			);
-			productName = "LLM-RSSUITests";
+			productName = "RLLMUITests";
 			productReference = 8CA9EB0D2D185998005607D1 /* RLLMUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
@@ -496,7 +496,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.LLM-RSSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.RLLMTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -514,7 +514,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.LLM-RSSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.RLLMTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -530,12 +530,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.LLM-RSSUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.RLLMUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "LLM-RSS";
+				TEST_TARGET_NAME = "RLLM";
 			};
 			name = Debug;
 		};
@@ -546,12 +546,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.LLM-RSSUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.RLLMUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "LLM-RSS";
+				TEST_TARGET_NAME = "RLLM";
 			};
 			name = Release;
 		};

@@ -1,6 +1,6 @@
 //
 //  LLM_RSSApp.swift
-//  LLM-RSS
+//  RLLM
 //
 //  Created by yuchen zhang on 2024/12/22.
 //

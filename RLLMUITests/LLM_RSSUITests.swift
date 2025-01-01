@@ -1,6 +1,6 @@
 //
 //  LLM_RSSUITests.swift
-//  LLM-RSSUITests
+//  RLLMUITests
 //
 //  Created by yuchen zhang on 2024/12/22.
 //

@@ -34,7 +34,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8CF8AA3D2D1872FB00C8B463 /* Exceptions for "LLM-RSS" folder in "RLLM" target */ = {
+		8CF8AA3D2D1872FB00C8B463 /* Exceptions for "RLLM" folder in "RLLM" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -45,22 +45,22 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		8CA9EAF32D185997005607D1 /* LLM-RSS */ = {
+		8CA9EAF32D185997005607D1 /* RLLM */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				8CF8AA3D2D1872FB00C8B463 /* Exceptions for "LLM-RSS" folder in "RLLM" target */,
+				8CF8AA3D2D1872FB00C8B463 /* Exceptions for "RLLM" folder in "RLLM" target */,
 			);
-			path = "LLM-RSS";
+			path = RLLM;
 			sourceTree = "<group>";
 		};
-		8CA9EB062D185998005607D1 /* LLM-RSSTests */ = {
+		8CA9EB062D185998005607D1 /* RLLMTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "LLM-RSSTests";
+			path = RLLMTests;
 			sourceTree = "<group>";
 		};
-		8CA9EB102D185998005607D1 /* LLM-RSSUITests */ = {
+		8CA9EB102D185998005607D1 /* RLLMUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "LLM-RSSUITests";
+			path = RLLMUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -94,9 +94,9 @@
 		8CA9EAE82D185997005607D1 = {
 			isa = PBXGroup;
 			children = (
-				8CA9EAF32D185997005607D1 /* LLM-RSS */,
-				8CA9EB062D185998005607D1 /* LLM-RSSTests */,
-				8CA9EB102D185998005607D1 /* LLM-RSSUITests */,
+				8CA9EAF32D185997005607D1 /* RLLM */,
+				8CA9EB062D185998005607D1 /* RLLMTests */,
+				8CA9EB102D185998005607D1 /* RLLMUITests */,
 				8CF8AA192D1869D000C8B463 /* Frameworks */,
 				8CA9EAF22D185997005607D1 /* Products */,
 			);
@@ -135,7 +135,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				8CA9EAF32D185997005607D1 /* LLM-RSS */,
+				8CA9EAF32D185997005607D1 /* RLLM */,
 			);
 			name = RLLM;
 			packageProductDependencies = (
@@ -159,7 +159,7 @@
 				8CA9EB052D185998005607D1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				8CA9EB062D185998005607D1 /* LLM-RSSTests */,
+				8CA9EB062D185998005607D1 /* RLLMTests */,
 			);
 			name = RLLMTests;
 			packageProductDependencies = (
@@ -182,7 +182,7 @@
 				8CA9EB0F2D185998005607D1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				8CA9EB102D185998005607D1 /* LLM-RSSUITests */,
+				8CA9EB102D185998005607D1 /* RLLMUITests */,
 			);
 			name = RLLMUITests;
 			packageProductDependencies = (
@@ -426,11 +426,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"LLM-RSS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"RLLM/Preview Content\"";
 				DEVELOPMENT_TEAM = 77U54682YX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "LLM-RSS/Info.plist";
+				INFOPLIST_FILE = RLLM/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -441,7 +441,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.LLM-RSS";
+				PRODUCT_BUNDLE_IDENTIFIER = xy0v0.RLLM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -460,11 +460,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"LLM-RSS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"RLLM/Preview Content\"";
 				DEVELOPMENT_TEAM = 77U54682YX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "LLM-RSS/Info.plist";
+				INFOPLIST_FILE = RLLM/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -475,7 +475,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "xy0v0.LLM-RSS";
+				PRODUCT_BUNDLE_IDENTIFIER = xy0v0.RLLM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

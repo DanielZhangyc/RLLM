@@ -100,7 +100,7 @@ struct SettingsView: View {
                         .foregroundColor(.secondary)
                 }
                 
-                Link(destination: URL(string: "https://github.com/yourusername/LLM-RSS")!) {
+                Link(destination: URL(string: "https://github.com/yourusername/RLLM")!) {
                     HStack {
                         Text("源代码")
                         Spacer()
@@ -111,7 +111,7 @@ struct SettingsView: View {
             } header: {
                 Text("关于")
             } footer: {
-                Text("LLM-RSS 是一个开源的RSS阅读器，结合了AI的智能分析功能。")
+                Text("RLLM 是一个开源的RSS阅读器，结合了AI的智能分析功能。")
             }
             
             Section {

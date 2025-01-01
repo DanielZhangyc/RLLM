@@ -21,7 +21,9 @@ struct QuoteDetailView: View {
                     contentHeight: $contentHeight,
                     fontSize: fontSize
                 )
-                .frame(height: contentHeight)
+                .frame(minHeight: 100)
+                .frame(height: contentHeight > 0 ? contentHeight : nil)
+                .animation(.easeInOut, value: contentHeight)
                 
                 Divider()
                 

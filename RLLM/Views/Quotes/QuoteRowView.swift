@@ -17,7 +17,8 @@ struct QuoteRowView: View {
             
             Text(previewContent)
                 .font(.body)
-                .lineLimit(quote.isFullArticle ? 3 : nil)
+                .lineLimit(4)
+                .multilineTextAlignment(.leading)
             
             HStack {
                 Text(quote.articleTitle)

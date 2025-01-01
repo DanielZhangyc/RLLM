@@ -35,9 +35,11 @@ class QuotesViewModel: ObservableObject {
             isFullArticle: isFullArticle
         )
         
-        // 检查是否已存在相同的引用
+        // 检查是否已存在完全相同的引用（包括内容）
         if !quotes.contains(where: { 
-            $0.articleURL == article.url && $0.isFullArticle == isFullArticle 
+            $0.articleURL == article.url && 
+            $0.isFullArticle == isFullArticle && 
+            $0.content == content
         }) {
             quotes.insert(quote, at: 0)
             saveQuotes()

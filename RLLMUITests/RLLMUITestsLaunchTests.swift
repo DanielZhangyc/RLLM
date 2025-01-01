@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class LLM_RSSUITestsLaunchTests: XCTestCase {
+final class RLLMUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

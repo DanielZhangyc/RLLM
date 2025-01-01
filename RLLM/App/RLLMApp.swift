@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct LLM_RSSApp: App {
+struct RLLMApp: App {
     @StateObject private var articlesViewModel = ArticlesViewModel()
     
     var body: some Scene { 

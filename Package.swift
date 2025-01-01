@@ -2,15 +2,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "LLM-RSS",
+    name: "RLLM",
     platforms: [
         .iOS(.v17),
         .macOS(.v14)
     ],
     products: [
         .library(
-            name: "LLM-RSS",
-            targets: ["LLM-RSS"]
+            name: "RLLM",
+            targets: ["RLLM"]
         ),
     ],
     dependencies: [
@@ -18,14 +18,14 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "LLM-RSS",
+            name: "RLLM",
             dependencies: [],
-            path: "LLM-RSS"
+            path: "RLLM"
         ),
         .testTarget(
-            name: "LLM-RSSTests",
-            dependencies: ["LLM-RSS"],
-            path: "LLM-RSSTests"
+            name: "RLLMTests",
+            dependencies: ["RLLM"],
+            path: "RLLMTests"
         ),
     ]
 )

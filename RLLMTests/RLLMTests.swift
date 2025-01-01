@@ -6,9 +6,9 @@
 //
 
 import Testing
-@testable import LLM_RSS
+@testable import RLLM
 
-struct LLM_RSSTests {
+struct RLLMTests {
 
     @Test func example() async throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.

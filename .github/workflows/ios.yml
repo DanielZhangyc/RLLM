@@ -7,9 +7,48 @@ on:
     branches: [ "main" ]
 
 jobs:
+  check:
+    name: Project Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: List Directory
+        run: ls -la
+      
+      - name: Check Project Structure
+        run: |
+          if [ ! -d "RLLM.xcodeproj" ]; then
+            echo "Error: RLLM.xcodeproj directory not found"
+            exit 1
+          fi
+          echo "Project directory exists"
+          ls -la RLLM.xcodeproj
+      
+      - name: Check Source Files
+        run: |
+          if [ ! -d "RLLM" ]; then
+            echo "Error: Source directory not found"
+            exit 1
+          fi
+          echo "Source files found:"
+          find RLLM -name "*.swift" | sort
+      
+      - name: Validate Package.swift
+        run: |
+          if [ -f "Package.swift" ]; then
+            echo "Package.swift found:"
+            cat Package.swift
+          else
+            echo "Warning: Package.swift not found"
+          fi
+  
   build:
     name: Build iOS App
     runs-on: macos-latest
+    needs: check
 
     steps:
       - name: Checkout
@@ -32,7 +71,8 @@ jobs:
         run: |
           xcodebuild clean build -project RLLM.xcodeproj \
             -scheme "RLLM" \
-            -destination "platform=iOS Simulator,name=iPhone 15 Pro,OS=17.2" \
+            -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.1" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO 
+            CODE_SIGNING_ALLOWED=NO \
+            -verbose 

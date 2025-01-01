@@ -83,3 +83,5 @@ Config.xcconfig
 logs/ 
 .vscode/
 .cursorrules
+*.bak/
+*.bak

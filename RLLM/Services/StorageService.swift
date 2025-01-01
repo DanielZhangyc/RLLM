@@ -25,7 +25,7 @@ class StorageService {
     }
     
     // MARK: - Articles
-    func saveArticles(_ articles: [UUID: [Article]], for feedId: UUID) {
+    func saveArticles(_ articles: [Article], for feedId: UUID) {
         if let encoded = try? JSONEncoder().encode(articles) {
             defaults.set(encoded, forKey: "\(Self.articlesKey)_\(feedId)")
         }

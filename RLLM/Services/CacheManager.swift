@@ -111,7 +111,7 @@ class CacheManager {
         
         for (_, info) in entryInfos {
             totalSize += info.fileSize
-            if info.isExpired {
+            if info.isExpired() {
                 expiredCount += 1
             }
             
@@ -148,7 +148,7 @@ class CacheManager {
     /// 清理过期和超量的缓存
     private func cleanup() {
         // 清理过期缓存
-        let expiredKeys = entryInfos.filter { $0.value.isExpired }.map { $0.key }
+        let expiredKeys = entryInfos.filter { $0.value.isExpired() }.map { $0.key }
         for key in expiredKeys {
             removeEntry(for: key)
         }
@@ -246,23 +246,19 @@ class CacheManager {
     func read(for key: String) throws -> Data {
         totalAccesses += 1
         
-        guard let info = entryInfos[key], !info.isExpired else {
+        guard let info = entryInfos[key], !info.isExpired() else {
             if entryInfos[key] != nil {
                 removeEntry(for: key)
             }
-            return Data()
+            throw CacheError.readFailed(NSError(domain: "Cache", code: -1, userInfo: [NSLocalizedDescriptionKey: "Cache entry expired or not found"]))
         }
         
         let fileURL = cacheDirectory.appendingPathComponent(key)
         do {
             let data = try Data(contentsOf: fileURL)
             hits += 1
-            
-            // 更新访问时间
             entryInfos[key]?.lastAccessedAt = Date()
-            updateStats()
             saveCacheInfo()
-            
             return data
         } catch {
             throw CacheError.readFailed(error)
@@ -273,7 +269,7 @@ class CacheManager {
     /// - Parameter key: 缓存key
     /// - Returns: 是否存在有效缓存
     func has(for key: String) -> Bool {
-        guard let info = entryInfos[key], !info.isExpired else {
+        guard let info = entryInfos[key], !info.isExpired() else {
             if entryInfos[key] != nil {
                 removeEntry(for: key)
             }

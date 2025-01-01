@@ -26,8 +26,8 @@ struct CacheEntryInfo: Codable {
     /// 文件大小（字节）
     let fileSize: Int64
     
-    /// 是否已过期
-    var isExpired: Bool {
+    /// 检查是否已过期
+    func isExpired() -> Bool {
         Date().timeIntervalSince(createdAt) > CacheConfig.expirationInterval
     }
 }

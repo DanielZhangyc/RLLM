@@ -25,6 +25,9 @@ jobs:
         with:
           swift-version: "5.9"
       
+      - name: List Schemes
+        run: xcodebuild -project RLLM.xcodeproj -list
+      
       - name: Build
         run: |
           xcodebuild clean build -project RLLM.xcodeproj \

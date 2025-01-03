@@ -128,33 +128,28 @@ class AIInsightsViewModel: ObservableObject {
             var currentSection = ""
             var collectingSection = false
             
-            for (_, line) in lines.enumerated() {
+            for line in lines {
                 let trimmedLine = line.trimmingCharacters(in: CharacterSet.whitespaces)
                 if trimmedLine.isEmpty { continue }
                 
                 // 检查是否是新的段落标题
                 if trimmedLine.contains("[核心摘要]") {
-                    print("找到核心摘要部分")
                     currentSection = "summary"
                     collectingSection = true
                     continue
                 } else if trimmedLine.contains("[关键观点]") {
-                    print("找到关键观点部分")
                     currentSection = "keyPoints"
                     collectingSection = true
                     continue
                 } else if trimmedLine.contains("[主题标签]") {
-                    print("找到主题标签部分")
                     currentSection = "topics"
                     collectingSection = true
                     continue
                 } else if trimmedLine.contains("[情感倾向]") {
-                    print("找到情感倾向部分")
                     currentSection = "sentiment"
                     collectingSection = true
                     continue
                 } else if trimmedLine.contains("[背景补充]") {
-                    print("找到背景补充部分")
                     currentSection = "background"
                     collectingSection = true
                     continue
@@ -162,7 +157,6 @@ class AIInsightsViewModel: ObservableObject {
                 
                 // 如果遇到下一个标记，停止收集当前段落
                 if trimmedLine.hasPrefix("[") && trimmedLine.hasSuffix("]") {
-                    print("遇到新的段落标记，停止收集当前段落")
                     collectingSection = false
                     continue
                 }
@@ -234,9 +228,9 @@ class AIInsightsViewModel: ObservableObject {
             
             return true
             
-        } catch let error as AIAnalysisError {
+        } catch let error as LLMService.LLMError {
             await MainActor.run {
-                self.error = error
+                self.error = AIAnalysisError.llmServiceError(error.localizedDescription)
                 self.isAnalyzing = false
             }
             return false

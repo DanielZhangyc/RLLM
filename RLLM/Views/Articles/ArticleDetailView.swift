@@ -15,6 +15,9 @@ struct ArticleDetailView: View {
     @State private var error: Error?
     @EnvironmentObject private var quotesViewModel: QuotesViewModel
     @State private var showInsightView = false
+    @StateObject private var historyManager = ReadingHistoryManager.shared
+    @State private var readingStartTime: Date?
+    @State private var scrollOffset: CGFloat = 0
     
     init(article: Article) {
         self.article = article
@@ -28,6 +31,13 @@ struct ArticleDetailView: View {
         quotesViewModel.quotes.contains { quote in
             quote.articleURL == article.url && quote.isFullArticle
         }
+    }
+    
+    private var completionPercentage: Double {
+        guard contentHeight > 0 else { return 0 }
+        let visibleHeight = UIScreen.main.bounds.height
+        let progress = min(max(0, (scrollOffset + visibleHeight) / contentHeight), 1)
+        return progress
     }
     
     var body: some View {
@@ -176,6 +186,34 @@ struct ArticleDetailView: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
+            .background(GeometryReader { proxy in
+                Color.clear.preference(
+                    key: ScrollOffsetPreferenceKey.self,
+                    value: proxy.frame(in: .named("scroll")).minY
+                )
+            })
+        }
+        .coordinateSpace(name: "scroll")
+        .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+            scrollOffset = value
+        }
+        .onAppear {
+            readingStartTime = Date()
+        }
+        .onDisappear {
+            if let startTime = readingStartTime {
+                let duration = Date().timeIntervalSince(startTime)
+                if duration >= ReadingHistoryManager.minimumReadingDuration {
+                    let record = ReadingRecord(
+                        articleId: article.id.uuidString,
+                        articleTitle: article.title,
+                        articleURL: article.url,
+                        startTime: startTime,
+                        duration: duration
+                    )
+                    historyManager.addRecord(record)
+                }
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $contentViewModel.showWebView) {
@@ -282,5 +320,12 @@ class ArticleContentViewModel: ObservableObject {
         }
         
         return [content]
+    }
+}
+
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 } 

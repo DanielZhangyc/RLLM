@@ -1,12 +1,17 @@
 import SwiftUI
+import Foundation
 
 struct SettingsView: View {
+    // MARK: - Properties
+    
     @AppStorage("fontSize") private var fontSize: Double = 17
     @StateObject private var viewModel: SettingsViewModel
     @StateObject private var llmViewModel = LLMSettingsViewModel()
+    @StateObject private var historyManager = ReadingHistoryManager.shared
     @EnvironmentObject var articlesViewModel: ArticlesViewModel
     @State private var showingClearSummaryCacheAlert = false
     @State private var showingClearInsightCacheAlert = false
+    @State private var showingClearReadingHistoryAlert = false
     
     init() {
         _viewModel = StateObject(wrappedValue: SettingsViewModel(articlesViewModel: ArticlesViewModel()))
@@ -77,6 +82,12 @@ struct SettingsView: View {
                     Slider(value: $fontSize, in: 14...24, step: 1)
                     Text("A").font(.title)
                 }
+                
+                NavigationLink {
+                    ReadingHistoryView()
+                } label: {
+                    Label("阅读历史", systemImage: "clock.arrow.circlepath")
+                }
             }
             
             Section("订阅源管理") {
@@ -100,7 +111,7 @@ struct SettingsView: View {
                         .foregroundColor(.secondary)
                 }
                 
-                Link(destination: URL(string: "https://github.com/yourusername/RLLM")!) {
+                Link(destination: URL(string: "https://github.com/DanielZhangyc/RLLM")!) {
                     HStack {
                         Text("源代码")
                         Spacer()
@@ -134,6 +145,16 @@ struct SettingsView: View {
                         Image(systemName: "trash")
                     }
                 }
+                
+                Button(role: .destructive) {
+                    showingClearReadingHistoryAlert = true
+                } label: {
+                    HStack {
+                        Text("清除阅读记录")
+                        Spacer()
+                        Image(systemName: "trash")
+                    }
+                }
             } header: {
                 Text("缓存管理")
             } footer: {
@@ -157,6 +178,11 @@ struct SettingsView: View {
                     + Text(" • ")
                         .font(.footnote)
                     + Text(ByteCountFormatter.string(fromByteCount: insightStats.totalSize, countStyle: .file))
+                        .font(.footnote)
+                    
+                    Text("阅读记录：")
+                        .font(.footnote)
+                    + Text("\(historyManager.readingRecords.count)个记录")
                         .font(.footnote)
                     
                     if summaryStats.expiredCount > 0 || insightStats.expiredCount > 0 {
@@ -192,6 +218,14 @@ struct SettingsView: View {
             }
         } message: {
             Text("这将删除所有已生成的文章洞察分析，需要时会重新生成。")
+        }
+        .alert("确认清除阅读记录", isPresented: $showingClearReadingHistoryAlert) {
+            Button("取消", role: .cancel) { }
+            Button("清除", role: .destructive) {
+                historyManager.clearAllRecords()
+            }
+        } message: {
+            Text("这将删除所有阅读记录和统计数据，此操作无法撤销。")
         }
     }
 }

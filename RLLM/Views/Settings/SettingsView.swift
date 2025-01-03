@@ -9,8 +9,6 @@ struct SettingsView: View {
     @StateObject private var llmViewModel = LLMSettingsViewModel()
     @StateObject private var historyManager = ReadingHistoryManager.shared
     @EnvironmentObject var articlesViewModel: ArticlesViewModel
-    @State private var showingClearSummaryCacheAlert = false
-    @State private var showingClearInsightCacheAlert = false
     @State private var showingClearReadingHistoryAlert = false
     
     init() {
@@ -126,23 +124,15 @@ struct SettingsView: View {
             }
             
             Section {
-                Button(role: .destructive) {
-                    showingClearSummaryCacheAlert = true
+                NavigationLink {
+                    AICacheManagementView()
                 } label: {
                     HStack {
-                        Text("清除AI概括缓存")
+                        Text("AI缓存管理")
                         Spacer()
-                        Image(systemName: "trash")
-                    }
-                }
-                
-                Button(role: .destructive) {
-                    showingClearInsightCacheAlert = true
-                } label: {
-                    HStack {
-                        Text("清除AI洞察缓存")
-                        Spacer()
-                        Image(systemName: "trash")
+                        let totalSize = summaryStats.totalSize + insightStats.totalSize + dailySummaryStats.totalSize
+                        Text(ByteCountFormatter.string(fromByteCount: totalSize, countStyle: .file))
+                            .foregroundColor(.secondary)
                     }
                 }
                 
@@ -152,45 +142,14 @@ struct SettingsView: View {
                     HStack {
                         Text("清除阅读记录")
                         Spacer()
-                        Image(systemName: "trash")
-                    }
-                }
-            } header: {
-                Text("缓存管理")
-            } footer: {
-                VStack(alignment: .leading, spacing: 8) {
-                    let summaryStats = SummaryCache.shared.getStats()
-                    let insightStats = InsightCache.shared.getStats()
-                    
-                    Text("AI概括缓存：")
-                        .font(.footnote)
-                    + Text("\(summaryStats.entryCount)个条目")
-                        .font(.footnote)
-                    + Text(" • ")
-                        .font(.footnote)
-                    + Text(ByteCountFormatter.string(fromByteCount: summaryStats.totalSize, countStyle: .file))
-                        .font(.footnote)
-                    
-                    Text("AI洞察缓存：")
-                        .font(.footnote)
-                    + Text("\(insightStats.entryCount)个条目")
-                        .font(.footnote)
-                    + Text(" • ")
-                        .font(.footnote)
-                    + Text(ByteCountFormatter.string(fromByteCount: insightStats.totalSize, countStyle: .file))
-                        .font(.footnote)
-                    
-                    Text("阅读记录：")
-                        .font(.footnote)
-                    + Text("\(historyManager.readingRecords.count)个记录")
-                        .font(.footnote)
-                    
-                    if summaryStats.expiredCount > 0 || insightStats.expiredCount > 0 {
-                        Text("已过期：\(summaryStats.expiredCount + insightStats.expiredCount)个条目")
-                            .font(.footnote)
+                        Text("\(historyManager.readingRecords.count)个记录")
                             .foregroundColor(.secondary)
                     }
                 }
+            } header: {
+                Text("数据管理")
+            } footer: {
+                Text("清除阅读记录将删除所有阅读历史和统计数据，此操作无法撤销。")
             }
         }
         .navigationTitle("设置")
@@ -203,22 +162,6 @@ struct SettingsView: View {
         .onChange(of: llmViewModel.config) { _, _ in
             llmViewModel.saveConfig()
         }
-        .alert("确认清除AI概括缓存", isPresented: $showingClearSummaryCacheAlert) {
-            Button("取消", role: .cancel) { }
-            Button("清除", role: .destructive) {
-                SummaryCache.shared.clear()
-            }
-        } message: {
-            Text("这将删除所有已生成的文章概括，需要时会重新生成。")
-        }
-        .alert("确认清除AI洞察缓存", isPresented: $showingClearInsightCacheAlert) {
-            Button("取消", role: .cancel) { }
-            Button("清除", role: .destructive) {
-                InsightCache.shared.clear()
-            }
-        } message: {
-            Text("这将删除所有已生成的文章洞察分析，需要时会重新生成。")
-        }
         .alert("确认清除阅读记录", isPresented: $showingClearReadingHistoryAlert) {
             Button("取消", role: .cancel) { }
             Button("清除", role: .destructive) {
@@ -227,6 +170,18 @@ struct SettingsView: View {
         } message: {
             Text("这将删除所有阅读记录和统计数据，此操作无法撤销。")
         }
+    }
+    
+    private var summaryStats: CacheStats {
+        SummaryCache.shared.getStats()
+    }
+    
+    private var insightStats: CacheStats {
+        InsightCache.shared.getStats()
+    }
+    
+    private var dailySummaryStats: CacheStats {
+        DailySummaryCache.shared.getStats()
     }
 }
 

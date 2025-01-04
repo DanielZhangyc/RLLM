@@ -6,7 +6,7 @@
 
 🌟 由 LLM 驱动的 RSS 阅读器
 
-[🌐 项目主页](https://rllm.xy0v0.top/zh){:target="_blank" rel="noopener"}
+<a href="https://rllm.xy0v0.top/zh" target="_blank">🌐 项目主页</a>
 
 [English](README.md) | [中文](README_CN.md)
 

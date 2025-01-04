@@ -6,7 +6,7 @@
 
 🌟 A LLM-Powered RSS Reader
 
-[🌐 Project Homepage](https://rllm.xy0v0.top){:target="_blank" rel="noopener"}
+<a href="https://rllm.xy0v0.top" target="_blank">🌐 Project Homepage</a>
 
 [English](README.md) | [中文](README_CN.md)
 

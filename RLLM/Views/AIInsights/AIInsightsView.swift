@@ -116,7 +116,7 @@ struct AIInsightsView: View {
             }
             .padding()
         }
-        .navigationTitle("AI洞察")
+        .navigationTitle("AI总结")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             if backgroundTask == nil {

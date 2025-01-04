@@ -472,6 +472,7 @@ class AIInsightsViewModel: ObservableObject {
         
         var topics: [String] = []
         var counts: [String: Int] = [:]
+        let totalArticles = articles.count
         
         // 按行分割文本
         let lines = analysis.components(separatedBy: .newlines)
@@ -514,7 +515,8 @@ class AIInsightsViewModel: ObservableObject {
                         .replacingOccurrences(of: "篇", with: "")
                         .trimmingCharacters(in: .whitespaces)
                     if let count = Int(countStr) {
-                        counts[topic] = count
+                        // 确保计数不超过总文章数
+                        counts[topic] = min(count, totalArticles)
                     }
                 }
             }
@@ -528,6 +530,7 @@ class AIInsightsViewModel: ObservableObject {
             .sorted { (counts[$0] ?? 0) > (counts[$1] ?? 0) }
         
         print("解析完成：")
+        print("总文章数：\(totalArticles)")
         print("话题列表：\(topics)")
         print("话题计数：\(counts)")
         

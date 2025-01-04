@@ -6,6 +6,8 @@
 
 🌟 由 LLM 驱动的 RSS 阅读器
 
+[🌐 项目主页](https://rllm.xy0v0.top/zh)
+
 [English](README.md) | [中文](README_CN.md)
 
 [![GitHub stars](https://img.shields.io/github/stars/DanielZhangyc/RLLM.svg?style=social)](https://github.com/DanielZhangyc/RLLM/stargazers)
@@ -14,12 +16,13 @@
 [![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)](https://swift.org)
 [![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)](https://www.apple.com/ios/)
 
-
 </div>
 
 # 📖 RLLM - LLM 驱动的 RSS 阅读器
 
 RLLM 是一个由大语言模型驱动的创新型 RSS 阅读器，提供智能内容分析和摘要功能。
+
+
 
 - [功能特性](#功能特性)
 - [应用截图](#应用截图)

@@ -1,4 +1,5 @@
 import SwiftUI
+import Alamofire
 
 @main
 struct RLLMApp: App {
@@ -19,11 +20,8 @@ struct RLLMApp: App {
     /// 请求网络权限
     private func requestNetworkPermission() {
         // 发起一个简单的网络请求来触发系统网络权限弹窗
-        guard let url = URL(string: "https://www.apple.com") else { return }
-        
-        let task = URLSession.shared.dataTask(with: url) { _, _, _ in
+        AF.request("https://www.apple.com").response { _ in
             // 不需要处理响应
         }
-        task.resume()
     }
 } 

@@ -37,6 +37,8 @@ struct FeedCardView: View {
     let lastUpdateTime: Date?
     let loadingState: ArticlesViewModel.LoadingState
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var articlesViewModel: ArticlesViewModel
+    @State private var showingEditSheet = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -92,5 +94,23 @@ struct FeedCardView: View {
             y: 2
         )
         .opacity(loadingState == .loading ? 0.6 : 1.0)
+        .contextMenu {
+            Button(action: {
+                showingEditSheet = true
+            }) {
+                Label("设置", systemImage: "gear")
+            }
+            
+            Button(role: .destructive, action: {
+                articlesViewModel.deleteFeed(feed)
+            }) {
+                Label("删除", systemImage: "trash")
+            }
+        }
+        .sheet(isPresented: $showingEditSheet) {
+            NavigationStack {
+                FeedEditView(feed: feed)
+            }
+        }
     }
 }

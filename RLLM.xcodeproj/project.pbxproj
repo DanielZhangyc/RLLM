@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8CC3FFC42D2953F9004A69B5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC3FFC32D2953F9004A69B5 /* Alamofire */; };
-		8CC3FFC82D2953F9004A69B5 /* AlamofireDynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 8CC3FFC52D2953F9004A69B5 /* AlamofireDynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8CF8AA1B2D1869D000C8B463 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF8AA1A2D1869D000C8B463 /* FeedKit */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +35,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8CC3FFC82D2953F9004A69B5 /* AlamofireDynamic in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;

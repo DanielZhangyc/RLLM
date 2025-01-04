@@ -106,15 +106,11 @@ class ArticlesViewModel: ObservableObject {
                     let mergedArticles = mergeArticles(existing: currentArticles, new: processedNewArticles)
                     currentArticles = mergedArticles
                     
+                    // 在MainActor上下文中更新UI和状态
                     await MainActor.run {
-                        // 更新UI
                         articles = currentArticles
                         articles.sort { $0.publishDate > $1.publishDate }
-                        
-                        // 更新加载状态为已完成
                         feedLoadingStates[feed.id] = .loaded
-                        
-                        // 确保UI更新
                         objectWillChange.send()
                     }
                     
@@ -128,8 +124,6 @@ class ArticlesViewModel: ObservableObject {
         
         await MainActor.run {
             isLoading = false
-            
-            // 检查任何未设置为loaded的Feed，将其设置为idle
             feeds.forEach { feed in
                 if feedLoadingStates[feed.id] == .loading {
                     feedLoadingStates[feed.id] = .idle
@@ -143,14 +137,12 @@ class ArticlesViewModel: ObservableObject {
     func refreshFeed(_ feed: Feed) async {
         print("\n--- Refreshing single feed: \(feed.title) ---")
         
-        // 设置加载状态
         await MainActor.run {
             feedLoadingStates[feed.id] = .loading
             objectWillChange.send()
         }
         
         if let (_, newArticles) = await loadFeedArticles(feed) {
-            // 获取除了当前feed以外的所有文章
             let otherArticles = articles.filter { article in
                 if let feedId = article.feedId {
                     return feedId != feed.id
@@ -170,13 +162,8 @@ class ArticlesViewModel: ObservableObject {
             let mergedArticles = mergeArticles(existing: otherArticles, new: processedNewArticles)
             
             await MainActor.run {
-                // 更新并排序文章列表
                 articles = mergedArticles.sorted { $0.publishDate > $1.publishDate }
-                
-                // 更新加载状态为已完成
                 feedLoadingStates[feed.id] = .loaded
-                
-                // 确保UI更新
                 objectWillChange.send()
             }
             
@@ -184,11 +171,9 @@ class ArticlesViewModel: ObservableObject {
             print("Total articles in app: \(articles.count)")
         } else {
             await MainActor.run {
-                // 如果加载失败，将状态设置为idle
                 if feedLoadingStates[feed.id] == .loading {
                     feedLoadingStates[feed.id] = .idle
                 }
-                // 确保UI更新
                 objectWillChange.send()
             }
             print("Failed to refresh feed: \(feed.title)")
@@ -314,16 +299,14 @@ class ArticlesViewModel: ObservableObject {
                 
                 // 立即刷新更新后的Feed的文章列表
                 Task {
-                    // 等待刷新完成
                     await refreshFeed(updatedFeed)
-                    // 确保UI更新
-                    objectWillChange.send()
                 }
             } catch {
                 print("Error saving updated feeds: \(error.localizedDescription)")
                 self.error = error
-                // 如果保存失败，设置加载状态为失败
-                feedLoadingStates[feed.id] = .failed(error)
+                Task { @MainActor in
+                    feedLoadingStates[feed.id] = .failed(error)
+                }
             }
         }
     }

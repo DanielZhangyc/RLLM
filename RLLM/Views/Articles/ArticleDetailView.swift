@@ -221,7 +221,7 @@ struct ArticleDetailView: View {
             }
             lastActiveTime = Date()
         }
-        .onChange(of: scenePhase) { newPhase in
+        .onChange(of: scenePhase) { oldPhase, newPhase in
             print("🔄 场景状态变化：\(newPhase)")
             switch newPhase {
             case .active:

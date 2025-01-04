@@ -14,12 +14,12 @@ let package = Package(
         ),
     ],
     dependencies: [
-        // 如果有外部依赖，在这里添加
+        .package(url: "https://github.com/nmdias/FeedKit.git", from: "10.0.0"),
     ],
     targets: [
         .target(
             name: "RLLM",
-            dependencies: [],
+            dependencies: ["FeedKit"],
             path: "RLLM"
         ),
         .testTarget(

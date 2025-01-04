@@ -18,6 +18,9 @@ struct ArticleDetailView: View {
     @StateObject private var historyManager = ReadingHistoryManager.shared
     @State private var readingStartTime: Date?
     @State private var scrollOffset: CGFloat = 0
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var accumulatedTime: TimeInterval = 0
+    @State private var lastActiveTime: Date?
     
     init(article: Article) {
         self.article = article
@@ -199,17 +202,36 @@ struct ArticleDetailView: View {
         }
         .onAppear {
             readingStartTime = Date()
+            lastActiveTime = Date()
+        }
+        .onChange(of: scenePhase) { newPhase in
+            switch newPhase {
+            case .active:
+                // 恢复计时
+                lastActiveTime = Date()
+            case .background, .inactive:
+                // 暂停计时，累加已读时间
+                if let lastActive = lastActiveTime {
+                    accumulatedTime += Date().timeIntervalSince(lastActive)
+                }
+            @unknown default:
+                break
+            }
         }
         .onDisappear {
-            if let startTime = readingStartTime {
-                let duration = Date().timeIntervalSince(startTime)
-                if duration >= ReadingHistoryManager.minimumReadingDuration {
+            // 计算总阅读时间
+            if let startTime = readingStartTime,
+               let lastActive = lastActiveTime {
+                let finalSessionTime = Date().timeIntervalSince(lastActive)
+                let totalDuration = accumulatedTime + finalSessionTime
+                
+                if totalDuration >= ReadingHistoryManager.minimumReadingDuration {
                     let record = ReadingRecord(
                         articleId: article.id.uuidString,
                         articleTitle: article.title,
                         articleURL: article.url,
                         startTime: startTime,
-                        duration: duration
+                        duration: totalDuration
                     )
                     historyManager.addRecord(record)
                 }

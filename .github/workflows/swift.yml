@@ -1,14 +1,15 @@
-name: Build IPA
+name: iOS Build
 
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch:
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
-    name: Build iOS App
-    runs-on: macos-15
+    name: Build and Archive iOS App
+    runs-on: macos-14
 
     steps:
       - name: Checkout
@@ -17,33 +18,75 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.1.app
 
+      - name: Build Configuration
+        run: |
+          echo "📱 Building RLLM iOS app"
+          echo "Xcode version:"
+          xcodebuild -version
+          echo "Swift version:"
+          swift --version
+
       - name: Install Dependencies
         run: |
           if [ -f "Package.swift" ]; then
             swift package resolve
           fi
 
-      - name: Build IPA
+      - name: Create Export Options Plist
         run: |
-          xcodebuild clean archive \
+          cat > exportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>ad-hoc</string>
+              <key>compileBitcode</key>
+              <false/>
+              <key>signingStyle</key>
+              <string>automatic</string>
+              <key>stripSwiftSymbols</key>
+              <true/>
+              <key>thinning</key>
+              <string>&lt;none&gt;</string>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Build and Test
+        run: |
+          xcodebuild clean build -scheme RLLM \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO \
+            ONLY_ACTIVE_ARCH=NO \
+            -verbose | xcpretty && exit ${PIPESTATUS[0]}
+
+      - name: Archive
+        run: |
+          xcodebuild archive \
             -scheme RLLM \
-            -archivePath build/RLLM.xcarchive \
+            -archivePath $RUNNER_TEMP/RLLM.xcarchive \
             -sdk iphoneos \
-            -configuration Release \
+            -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM="" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
 
+      - name: Export IPA
+        run: |
           xcodebuild -exportArchive \
-            -archivePath build/RLLM.xcarchive \
-            -exportPath build \
-            -exportOptionsPlist ExportOptions.plist \
+            -archivePath $RUNNER_TEMP/RLLM.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath $RUNNER_TEMP/build \
+            -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM="" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: RLLM
-          path: build/RLLM.ipa
+          name: app
+          path: ${{ runner.temp }}/build/*.ipa

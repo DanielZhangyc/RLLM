@@ -18,6 +18,12 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.1.app
 
+      - name: Update Build Number
+        run: |
+          buildNumber=${{ github.run_number }}
+          echo "Updating build number to $buildNumber"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "RLLM/Info.plist"
+
       - name: Build Configuration
         run: |
           echo "📱 Building RLLM iOS app"

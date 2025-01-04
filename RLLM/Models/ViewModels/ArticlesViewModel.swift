@@ -109,7 +109,9 @@ class ArticlesViewModel: ObservableObject {
                     articles.sort { $0.publishDate > $1.publishDate }
                     
                     // 更新加载状态为已完成
-                    feedLoadingStates[feed.id] = .loaded
+                    await MainActor.run {
+                        feedLoadingStates[feed.id] = .loaded
+                    }
                     
                     print("Total articles for \(feed.title): \(processedNewArticles.count)")
                     print("Total articles in app: \(articles.count)")
@@ -137,8 +139,10 @@ class ArticlesViewModel: ObservableObject {
         print("\n--- Refreshing single feed: \(feed.title) ---")
         
         // 设置加载状态
-        feedLoadingStates[feed.id] = .loading
-        objectWillChange.send()
+        await MainActor.run {
+            feedLoadingStates[feed.id] = .loading
+            objectWillChange.send()
+        }
         
         if let (_, newArticles) = await loadFeedArticles(feed) {
             // 获取除了当前feed以外的所有文章
@@ -160,24 +164,30 @@ class ArticlesViewModel: ObservableObject {
             // 合并新文章
             let mergedArticles = mergeArticles(existing: otherArticles, new: processedNewArticles)
             
-            // 更新并排序文章列表
-            articles = mergedArticles.sorted { $0.publishDate > $1.publishDate }
-            
-            // 更新加载状态为已完成
-            feedLoadingStates[feed.id] = .loaded
+            await MainActor.run {
+                // 更新并排序文章列表
+                articles = mergedArticles.sorted { $0.publishDate > $1.publishDate }
+                
+                // 更新加载状态为已完成
+                feedLoadingStates[feed.id] = .loaded
+            }
             
             print("Updated articles for \(feed.title): \(processedNewArticles.count)")
             print("Total articles in app: \(articles.count)")
         } else {
             // 如果加载失败，将状态设置为idle（因为loadFeedArticles已经设置了失败状态）
-            if feedLoadingStates[feed.id] == .loading {
-                feedLoadingStates[feed.id] = .idle
+            await MainActor.run {
+                if feedLoadingStates[feed.id] == .loading {
+                    feedLoadingStates[feed.id] = .idle
+                }
             }
             print("Failed to refresh feed: \(feed.title)")
         }
         
         // 确保UI更新
-        objectWillChange.send()
+        await MainActor.run {
+            objectWillChange.send()
+        }
     }
     
     /// 验证RSS源的有效性

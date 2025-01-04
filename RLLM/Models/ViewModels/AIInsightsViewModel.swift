@@ -115,10 +115,15 @@ class AIInsightsViewModel: ObservableObject {
         print("观点数量：\(points.count)")
         print("建议：\(advice)")
         
+        // 创建变量副本
+        let finalSummaryText = summaryText
+        let finalPoints = points
+        let finalAdvice = advice
+        
         Task { @MainActor in
-            self.dailySummary = summaryText
-            self.keyPoints = points
-            self.learningAdvice = advice
+            self.dailySummary = finalSummaryText
+            self.keyPoints = finalPoints
+            self.learningAdvice = finalAdvice
         }
     }
     

@@ -18,15 +18,20 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.1.app
 
-      - name: Update Build Number
+      - name: Set Build Number
+        id: set_build_number
         run: |
           buildNumber=${{ github.run_number }}
-          echo "Updating build number to $buildNumber"
+          echo "Setting build number to $buildNumber"
+          echo "BUILD_NUMBER=$buildNumber" >> $GITHUB_ENV
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $buildNumber" "RLLM/Info.plist"
+          echo "Current Info.plist content:"
+          /usr/libexec/PlistBuddy -c "Print" "RLLM/Info.plist"
 
       - name: Build Configuration
         run: |
           echo "📱 Building RLLM iOS app"
+          echo "Build number: ${{ env.BUILD_NUMBER }}"
           echo "Xcode version:"
           xcodebuild -version
           echo "Swift version:"
@@ -64,6 +69,8 @@ jobs:
           xcodebuild clean build -scheme RLLM \
             -configuration Release \
             -sdk iphoneos \
+            CURRENT_PROJECT_VERSION=${{ env.BUILD_NUMBER }} \
+            MARKETING_VERSION=1.0 \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
@@ -77,6 +84,8 @@ jobs:
             -configuration Release \
             -sdk iphoneos \
             -archivePath $RUNNER_TEMP/RLLM.xcarchive \
+            CURRENT_PROJECT_VERSION=${{ env.BUILD_NUMBER }} \
+            MARKETING_VERSION=1.0 \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
@@ -91,7 +100,7 @@ jobs:
           zip -r RLLM.ipa Payload
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: unsigned-ipa
           path: ${{ runner.temp }}/RLLM.xcarchive/Products/Applications/RLLM.ipa

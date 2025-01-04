@@ -40,15 +40,11 @@ jobs:
           <plist version="1.0">
           <dict>
               <key>method</key>
-              <string>enterprise</string>
+              <string>development</string>
               <key>compileBitcode</key>
               <false/>
-              <key>signingStyle</key>
-              <string>manual</string>
               <key>stripSwiftSymbols</key>
               <true/>
-              <key>thinning</key>
-              <string>&lt;none&gt;</string>
           </dict>
           </plist>
           EOF
@@ -67,14 +63,9 @@ jobs:
             -scheme RLLM \
             -archivePath $RUNNER_TEMP/RLLM.xcarchive \
             -sdk iphoneos \
-            -allowProvisioningUpdates \
-            CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            PROVISIONING_PROFILE_SPECIFIER="" \
-            SKIP_INSTALL=NO \
-            BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
+            CODE_SIGNING_ALLOWED=NO
 
       - name: Export IPA
         run: |
@@ -82,12 +73,9 @@ jobs:
             -archivePath $RUNNER_TEMP/RLLM.xcarchive \
             -exportOptionsPlist exportOptions.plist \
             -exportPath $RUNNER_TEMP/build \
-            -allowProvisioningUpdates \
-            CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            PROVISIONING_PROFILE_SPECIFIER=""
+            CODE_SIGNING_ALLOWED=NO
 
       - name: Upload IPA
         uses: actions/upload-artifact@v3

@@ -228,7 +228,7 @@ class AIInsightsViewModel: ObservableObject {
             
             // 解析结果
             parseDailySummary(summary)
-            let (topics, counts) = parseTopicsAnalysis(topicsAnalysis)
+            let (topics, counts) = parseTopicsAnalysis(topicsAnalysis, totalArticles: todayRecords.count)
             
             await MainActor.run {
                 self.topTopics = topics
@@ -465,14 +465,15 @@ class AIInsightsViewModel: ObservableObject {
     // MARK: - Private Methods
     
     /// 解析话题分析结果
-    /// - Parameter analysis: LLM返回的话题分析文本
+    /// - Parameters:
+    ///   - analysis: LLM返回的话题分析文本
+    ///   - totalArticles: 文章总数
     /// - Returns: 话题列表和话题计数的元组
-    private func parseTopicsAnalysis(_ analysis: String) -> ([String], [String: Int]) {
+    private func parseTopicsAnalysis(_ analysis: String, totalArticles: Int) -> ([String], [String: Int]) {
         print("开始解析话题分析结果...")
         
         var topics: [String] = []
         var counts: [String: Int] = [:]
-        let totalArticles = articles.count
         
         // 按行分割文本
         let lines = analysis.components(separatedBy: .newlines)

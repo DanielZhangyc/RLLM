@@ -19,15 +19,15 @@
 
 RLLM is an innovative RSS reader powered by Large Language Models (LLM), providing intelligent content analysis and summarization capabilities.
 
-## 📋 Table of Contents
-
 - [Features](#features)
 - [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Development](#development)
 - [Contributing](#contributing)
+- [FAQ](#faq)
 - [License](#license)
 
+<a id="features"></a>
 ## ✨ Features
 
 ### RSS Reading
@@ -47,6 +47,7 @@ RLLM is an innovative RSS reader powered by Large Language Models (LLM), providi
 - 📝 Recent Reading Trends/Tags
 - 📝 English Language Support
 
+<a id="screenshots"></a>
 ## 📱 Screenshots
 
 <div align="center">
@@ -55,16 +56,12 @@ RLLM is an innovative RSS reader powered by Large Language Models (LLM), providi
 <img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/3.PNG?raw=true" alt="Daily Summary" width="250"/>
 </div>
 
+<a id="installation"></a>
 ## 📥 Installation
 
 Build and install from source code
 
-## 🛠 Dependencies
-
-- FeedKit
-- SwiftUI
-- iOS 17.0+
-
+<a id="development"></a>
 ## 👨‍💻 Development
 
 ### Prerequisites
@@ -88,6 +85,7 @@ open RLLM.xcodeproj
 
 3. Build and run the project in Xcode
 
+<a id="contributing"></a>
 ## 🤝 Contributing
 
 We welcome contributions! Here's how you can help:
@@ -103,6 +101,16 @@ Need help? Feel free to:
 - Open an issue
 - Start a discussion
 
+<a id="faq"></a>
+## ❓ FAQ
+
+### What's the origin of the name RLLM?
+RLLM is a combination of "RSS" and "LLM", representing our goal of enhancing the RSS reading experience with AI capabilities.
+
+### Do I need to provide my own API keys?
+Yes, you need to provide your own API keys for the LLM services you want to use. These can be configured in the app settings.
+
+<a id="license"></a>
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

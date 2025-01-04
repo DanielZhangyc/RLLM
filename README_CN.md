@@ -48,9 +48,9 @@ RLLM 是一个由大语言模型驱动的创新型 RSS 阅读器，提供智能�
 ## 📱 应用截图
 
 <div align="center">
-<img src="screenshots/1.PNG" alt="AI 洞察" width="300"/>
-<img src="screenshots/2.PNG" alt="语段收藏" width="300"/>
-<img src="screenshots/3.PNG" alt="每日总结" width="300"/>
+<img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/1.PNG?raw=true" alt="AI 洞察" width="300"/>
+<img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/2.PNG?raw=true" alt="语段收藏" width="300"/>
+<img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/3.PNG?raw=true" alt="每日总结" width="300"/>
 </div>
 
 ## 📥 安装方式

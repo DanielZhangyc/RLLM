@@ -49,9 +49,9 @@ RLLM is an innovative RSS reader powered by Large Language Models (LLM), providi
 ## 📱 Screenshots
 
 <div align="center">
-<img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/1.PNG?raw=true" alt="AI Insights" width="300"/>
-<img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/2.PNG?raw=true" alt="Quote Collection" width="300"/>
-<img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/3.PNG?raw=true" alt="Daily Summary" width="300"/>
+<img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/1.PNG?raw=true" alt="AI Insights" width="250"/>
+<img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/2.PNG?raw=true" alt="Quote Collection" width="250"/>
+<img src="https://github.com/DanielZhangyc/RLLM/blob/main/Screenshots/3.PNG?raw=true" alt="Daily Summary" width="250"/>
 </div>
 
 ## 📥 Installation

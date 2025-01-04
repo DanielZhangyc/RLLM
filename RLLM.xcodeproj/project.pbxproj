@@ -3,12 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8CC3FFC42D2953F9004A69B5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC3FFC32D2953F9004A69B5 /* Alamofire */; };
 		8CF8AA1B2D1869D000C8B463 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF8AA1A2D1869D000C8B463 /* FeedKit */; };
+		8CFF946C2D295FA0005CA3BD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC3FFC32D2953F9004A69B5 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +48,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8CF8AA3D2D1872FB00C8B463 /* Exceptions for "RLLM" folder in "RLLM" target */ = {
+		8CF8AA3D2D1872FB00C8B463 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -58,24 +58,9 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		8CA9EAF32D185997005607D1 /* RLLM */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				8CF8AA3D2D1872FB00C8B463 /* Exceptions for "RLLM" folder in "RLLM" target */,
-			);
-			path = RLLM;
-			sourceTree = "<group>";
-		};
-		8CA9EB062D185998005607D1 /* RLLMTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RLLMTests;
-			sourceTree = "<group>";
-		};
-		8CA9EB102D185998005607D1 /* RLLMUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RLLMUITests;
-			sourceTree = "<group>";
-		};
+		8CA9EAF32D185997005607D1 /* RLLM */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8CF8AA3D2D1872FB00C8B463 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = RLLM; sourceTree = "<group>"; };
+		8CA9EB062D185998005607D1 /* RLLMTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = RLLMTests; sourceTree = "<group>"; };
+		8CA9EB102D185998005607D1 /* RLLMUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = RLLMUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,8 +68,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CFF946C2D295FA0005CA3BD /* Alamofire in Frameworks */,
 				8CF8AA1B2D1869D000C8B463 /* FeedKit in Frameworks */,
-				8CC3FFC42D2953F9004A69B5 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +217,7 @@
 				};
 			};
 			buildConfigurationList = 8CA9EAEC2D185997005607D1 /* Build configuration list for PBXProject "RLLM" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -244,7 +230,6 @@
 				8CA9EB6A2D186458005607D1 /* XCRemoteSwiftPackageReference "FeedKit" */,
 				8CC3FFC22D2953E3004A69B5 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
-			preferredProjectObjectVersion = 77;
 			productRefGroup = 8CA9EAF22D185997005607D1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

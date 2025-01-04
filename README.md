@@ -1,36 +1,107 @@
+<div align="center">
+
+<img src="icon.png" alt="RLLM Icon" width="200"/>
+
 # RLLM
 
-一个由LLM驱动的RSS阅读器
+🌟 A LLM-Powered RSS Reader
 
-## Features
+[English](README.md) | [中文](README_CN.md)
 
-- ✅ 基础RSS阅读
-- ✅ 文章/语段阅读与收藏
-- ✅ AI文章摘要生成
-- ✅ AI文章洞察分析
-- ✅ 每日阅读AI总结
+[![GitHub stars](https://img.shields.io/github/stars/DanielZhangyc/RLLM.svg?style=social)](https://github.com/DanielZhangyc/RLLM/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)](https://swift.org)
+[![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)](https://www.apple.com/ios/)
 
-## TODO
+</div>
 
-- 📝 完善收藏管理
-- 📝 收藏AI总结
-- 📝 近期阅读分析
-- 📝 近期阅读趋势/标签
+# 📖 RLLM - LLM-Powered RSS Reader
 
-## Dependencies
+RLLM is an innovative RSS reader powered by Large Language Models (LLM), providing intelligent content analysis and summarization capabilities.
 
-FeedKit
+## 📋 Table of Contents
 
-## Misc
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Installation](#installation)
+- [Development](#development)
+- [Contributing](#contributing)
+- [License](#license)
 
-### LLM服务支持
+## ✨ Features
 
-目仅前对Anthropic、Deepseek、OpenAI API支持
+### RSS Reading
+- ✅ Support for RSS 1.0, 2.0 and Atom feeds
+- ✅ Article/Quote Reading and Collection
 
-## Develop the project
+### AI Features
+- ✅ AI Article Summary Generation
+- ✅ AI Article Insight Analysis
+- ✅ Daily Reading AI Summary
+- ✅ Integrated with Anthropic, Deepseek and OpenAI
 
-Welcome to contribute to this project. Accepting any PRs. :3
+### TODO
+- 📝 Enhanced Collection Management
+- 📝 Collection AI Summary
+- 📝 Recent Reading Analysis
+- 📝 Recent Reading Trends/Tags
 
-## License
+## 📱 Screenshots
 
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
+<div align="center">
+<img src="screenshots/1.PNG" alt="AI Insights" width="300"/>
+<img src="screenshots/2.PNG" alt="Quote Collection" width="300"/>
+<img src="screenshots/3.PNG" alt="Daily Summary" width="300"/>
+</div>
+
+## 📥 Installation
+
+Build and install from source code
+
+## 🛠 Dependencies
+
+- FeedKit
+- SwiftUI
+- iOS 17.0+
+
+## 👨‍💻 Development
+
+### Prerequisites
+
+- Xcode 15.0+
+- iOS 17.0+
+- Swift 5.0+
+
+### Getting Started
+
+1. Clone the repository
+```bash
+git clone https://github.com/DanielZhangyc/RLLM.git
+cd RLLM
+```
+
+2. Open the project in Xcode
+```bash
+open RLLM.xcodeproj
+```
+
+3. Build and run the project in Xcode
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Commit your changes (`git commit -m 'Write something here'`)
+5. Push to the branch (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
+
+Need help? Feel free to:
+- Open an issue
+- Start a discussion
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

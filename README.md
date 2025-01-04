@@ -45,6 +45,7 @@ RLLM is an innovative RSS reader powered by Large Language Models (LLM), providi
 - 📝 Collection AI Summary
 - 📝 Recent Reading Analysis
 - 📝 Recent Reading Trends/Tags
+- 📝 English Language Support
 
 ## 📱 Screenshots
 

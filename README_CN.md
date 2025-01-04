@@ -9,9 +9,11 @@
 [English](README.md) | [中文](README_CN.md)
 
 [![GitHub stars](https://img.shields.io/github/stars/DanielZhangyc/RLLM.svg?style=social)](https://github.com/DanielZhangyc/RLLM/stargazers)
+[![构建状态](https://github.com/DanielZhangyc/RLLM/actions/workflows/swift.yml/badge.svg)](https://github.com/DanielZhangyc/RLLM/actions/workflows/swift.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)](https://swift.org)
 [![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)](https://www.apple.com/ios/)
+
 
 </div>
 
@@ -59,7 +61,29 @@ RLLM 是一个由大语言模型驱动的创新型 RSS 阅读器，提供智能�
 <a id="安装方式"></a>
 ## 📥 安装方式
 
-自行编译安装
+### 方式一：从源码构建
+
+请参考[开发](#开发)部分了解从源码构建的详细步骤。
+
+### 方式二：安装IPA文件
+
+1. 从[GitHub Actions](https://github.com/DanielZhangyc/RLLM/actions)下载最新的未签名IPA文件（最新成功构建）
+2. 使用以下方式之一签名并安装IPA文件：
+
+   #### 使用签名工具
+   - [AltStore](https://altstore.io) - 流行的侧载工具，支持自动重签名
+   - [Sideloadly](https://sideloadly.io) - 跨平台侧载工具
+   - [ESign](https://esign.yyyue.xyz) - 设备端签名工具
+   
+   #### 使用TrollStore（无需签名）
+   - [TrollStore](https://github.com/opa334/TrollStore) - 支持iOS 14.0-15.4.1、15.5beta4和16.0-16.6.1的永久应用安装工具
+   
+   #### 使用其他方式
+   - [Scarlet](https://usescarlet.com) - 设备端应用安装器
+   - 使用您的Apple开发者账号和Xcode
+   - 企业证书（如果您有权限）
+
+注意：IPA文件未经签名，除非在受支持的iOS版本上使用TrollStore，否则需要先签名才能安装到您的设备上。
 
 <a id="开发"></a>
 ## 👨‍💻 开发

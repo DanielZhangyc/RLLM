@@ -9,9 +9,11 @@
 [English](README.md) | [中文](README_CN.md)
 
 [![GitHub stars](https://img.shields.io/github/stars/DanielZhangyc/RLLM.svg?style=social)](https://github.com/DanielZhangyc/RLLM/stargazers)
+[![Build Status](https://github.com/DanielZhangyc/RLLM/actions/workflows/swift.yml/badge.svg)](https://github.com/DanielZhangyc/RLLM/actions/workflows/swift.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)](https://swift.org)
 [![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)](https://www.apple.com/ios/)
+
 
 </div>
 
@@ -59,7 +61,29 @@ RLLM is an innovative RSS reader powered by Large Language Models (LLM), providi
 <a id="installation"></a>
 ## 📥 Installation
 
-Build and install from source code
+### Option 1: Build from Source Code
+
+See [Development](#development) section for detailed instructions on building from source code.
+
+### Option 2: Install from IPA File
+
+1. Download the latest unsigned IPA file from [GitHub Actions](https://github.com/DanielZhangyc/RLLM/actions) (Latest successful build)
+2. Sign and install the IPA file using one of these methods:
+
+   #### Using Signing Tools
+   - [AltStore](https://altstore.io) - Popular sideloading tool with automatic resigning
+   - [Sideloadly](https://sideloadly.io) - Cross-platform sideloading tool
+   - [ESign](https://esign.yyyue.xyz) - On-device signing tool
+   
+   #### Using TrollStore (No Signing Required)
+   - [TrollStore](https://github.com/opa334/TrollStore) - Permanent app installation for iOS 14.0-15.4.1, 15.5beta4, and 16.0-16.6.1
+   
+   #### Using Other Methods
+   - [Scarlet](https://usescarlet.com) - On-device app installer
+   - Your Apple Developer account and Xcode
+   - Enterprise certificate (if you have access)
+
+Note: The IPA file is unsigned and requires signing before it can be installed on your device, except when using TrollStore on supported iOS versions.
 
 <a id="development"></a>
 ## 👨‍💻 Development

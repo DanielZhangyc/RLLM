@@ -1,4 +1,5 @@
 import Foundation
+import Alamofire
 
 class LLMService {
     private let connectionManager = LLMConnectionManager()
@@ -31,6 +32,8 @@ class LLMService {
     static let shared = LLMService()
     private init() {}
     
+    // MARK: - Private Methods
+    
     private func buildSummaryPrompt(for article: Article) -> String {
         return LLMPrompts.format(LLMPrompts.summary, with: [
             "article_content": article.content.removingHTMLTags()
@@ -44,12 +47,11 @@ class LLMService {
     }
     
     private func buildDailySummaryPrompt(with records: [ReadingRecord]) -> String {
-        // 构建阅读记录的文本表示
-        let recordsText = records.map { record -> String in
+        let recordsText = records.map { record in
             """
             标题：\(record.articleTitle)
-            阅读时长：\(Int(record.duration / 60))分钟
-            开始时间：\(DateFormatter.timeOnly.string(from: record.startTime))
+            阅读时长：\(record.duration)秒
+            链接：\(record.articleURL)
             """
         }.joined(separator: "\n\n")
         
@@ -59,12 +61,11 @@ class LLMService {
     }
     
     private func buildTopicAnalysisPrompt(with records: [ReadingRecord]) -> String {
-        // 构建阅读记录的文本表示
-        let recordsText = records.map { record -> String in
+        let recordsText = records.map { record in
             """
             标题：\(record.articleTitle)
-            阅读时长：\(Int(record.duration / 60))分钟
-            URL：\(record.articleURL)
+            阅读时长：\(record.duration)秒
+            链接：\(record.articleURL)
             """
         }.joined(separator: "\n\n")
         
@@ -73,6 +74,81 @@ class LLMService {
         ])
     }
     
+    // MARK: - Network Request Methods
+    
+    private func sendRequest<T: Decodable>(endpoint: String, 
+                                         headers: [String: String], 
+                                         body: [String: Any],
+                                         responseType: T.Type) async throws -> T {
+        print("准备发送LLM请求：")
+        print("请求URL：\(endpoint)")
+        print("请求头：\(headers)")
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(endpoint,
+                      method: .post,
+                      parameters: body,
+                      encoding: JSONEncoding.default,
+                      headers: HTTPHeaders(headers))
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                switch response.result {
+                case .success(let value):
+                    print("请求成功，响应数据长度：\(response.data?.count ?? 0)字节")
+                    continuation.resume(returning: value)
+                    
+                case .failure(let error):
+                    print("请求失败：\(error.localizedDescription)")
+                    if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            continuation.resume(throwing: LLMError.authenticationFailed)
+                        } else {
+                            continuation.resume(throwing: LLMError.networkError(error))
+                        }
+                    } else {
+                        continuation.resume(throwing: LLMError.networkError(error))
+                    }
+                }
+            }
+        }
+    }
+    
+    private func sendModelRequest<T: Decodable>(endpoint: String,
+                                              headers: [String: String],
+                                              responseType: T.Type) async throws -> T {
+        print("准备获取模型列表：")
+        print("请求URL：\(endpoint)")
+        print("请求头：\(headers)")
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(endpoint,
+                      method: .get,
+                      headers: HTTPHeaders(headers))
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                switch response.result {
+                case .success(let value):
+                    print("请求成功，响应数据长度：\(response.data?.count ?? 0)字节")
+                    continuation.resume(returning: value)
+                    
+                case .failure(let error):
+                    print("请求失败：\(error.localizedDescription)")
+                    if let statusCode = response.response?.statusCode {
+                        if statusCode == 401 {
+                            continuation.resume(throwing: LLMError.authenticationFailed)
+                        } else {
+                            continuation.resume(throwing: LLMError.networkError(error))
+                        }
+                    } else {
+                        continuation.resume(throwing: LLMError.networkError(error))
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Public Methods
+    
     /// 生成今日阅读总结
     /// - Parameters:
     ///   - records: 阅读记录列表
@@ -80,7 +156,24 @@ class LLMService {
     /// - Returns: 生成的总结内容
     func generateDailySummary(for records: [ReadingRecord], config: LLMConfig) async throws -> String {
         let prompt = buildDailySummaryPrompt(with: records)
-        return try await sendRequest(prompt: prompt, config: config)
+        let connection = LLMConnectionManager.getConnection(for: config.provider, config: config, prompt: prompt, temperature: 0.3)
+        
+        guard let url = URL(string: connection.endpoint) else {
+            throw LLMError.invalidURL
+        }
+        
+        let response: OpenAIResponse = try await sendRequest(
+            endpoint: url.absoluteString,
+            headers: connection.headers,
+            body: connection.body,
+            responseType: OpenAIResponse.self
+        )
+        
+        guard let content = response.choices.first?.message.content else {
+            throw LLMError.noContent
+        }
+        
+        return content
     }
     
     /// 分析热门话题
@@ -90,218 +183,68 @@ class LLMService {
     /// - Returns: 话题分析结果
     func analyzeTopics(for records: [ReadingRecord], config: LLMConfig) async throws -> String {
         let prompt = buildTopicAnalysisPrompt(with: records)
-        return try await sendRequest(prompt: prompt, config: config)
-    }
-    
-    /// 发送请求到LLM服务
-    /// - Parameters:
-    ///   - prompt: 提示词
-    ///   - config: LLM配置
-    /// - Returns: LLM响应内容
-    private func sendRequest(prompt: String, config: LLMConfig) async throws -> String {
-        print("准备发送LLM请求：")
-        print("提供商：\(config.provider.rawValue)")
-        print("模型：\(config.model)")
-        print("提示词长度：\(prompt.count)字符")
-        
-        let temperature = 0.3
-        let connection = LLMConnectionManager.getConnection(for: config.provider, config: config, prompt: prompt, temperature: temperature)
+        let connection = LLMConnectionManager.getConnection(for: config.provider, config: config, prompt: prompt, temperature: 0.3)
         
         guard let url = URL(string: connection.endpoint) else {
-            print("无效的URL：\(connection.endpoint)")
             throw LLMError.invalidURL
         }
         
-        print("请求URL：\(url.absoluteString)")
+        let response: OpenAIResponse = try await sendRequest(
+            endpoint: url.absoluteString,
+            headers: connection.headers,
+            body: connection.body,
+            responseType: OpenAIResponse.self
+        )
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONSerialization.data(withJSONObject: connection.body)
-        connection.headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
-        
-        print("请求头：\(connection.headers)")
-        
-        do {
-            print("开始发送请求...")
-            let (data, response) = try await URLSession.shared.data(for: request)
-            print("收到响应，数据长度：\(data.count)字节")
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("无效的响应类型")
-                throw LLMError.invalidResponse
-            }
-            
-            print("HTTP状态码：\(httpResponse.statusCode)")
-            
-            if httpResponse.statusCode == 401 {
-                print("认证失败")
-                throw LLMError.authenticationFailed
-            }
-            
-            if let responseStr = String(data: data, encoding: .utf8) {
-                print("响应内容：\n\(responseStr)")
-            }
-            
-            // 解析不同提供商的响应
-            switch config.provider {
-            case .openAI:
-                let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
-                guard let content = response.choices.first?.message.content else {
-                    print("OpenAI响应缺少内容")
-                    throw LLMError.noContent
-                }
-                print("成功解析OpenAI响应")
-                return content
-                
-            case .anthropic:
-                let response = try JSONDecoder().decode(AnthropicResponse.self, from: data)
-                guard let content = response.content.first?.text else {
-                    print("Anthropic响应缺少内容")
-                    throw LLMError.noContent
-                }
-                print("成功解析Anthropic响应")
-                return content
-                
-            case .custom:
-                let response = try JSONDecoder().decode(CustomResponse.self, from: data)
-                print("成功解析自定义响应")
-                return response.text
-                
-            case .deepseek:
-                let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
-                guard let content = response.choices.first?.message.content else {
-                    print("Deepseek响应缺少内容")
-                    throw LLMError.noContent
-                }
-                print("成功解析Deepseek响应")
-                return content
-            }
-            
-        } catch {
-            print("请求失败：\(error.localizedDescription)")
-            if let decodingError = error as? DecodingError {
-                print("解码错误：\(decodingError)")
-                throw LLMError.decodingError(decodingError)
-            }
-            throw LLMError.networkError(error)
+        guard let content = response.choices.first?.message.content else {
+            throw LLMError.noContent
         }
+        
+        return content
     }
     
     func generateInsight(for content: String, config: LLMConfig) async throws -> String {
         let prompt = buildInsightPrompt(for: content)
-        
-        let temperature = 0.3
-        let connection = LLMConnectionManager.getConnection(for: config.provider, config: config, prompt: prompt, temperature: temperature)
+        let connection = LLMConnectionManager.getConnection(for: config.provider, config: config, prompt: prompt, temperature: 0.3)
         
         guard let url = URL(string: connection.endpoint) else {
             throw LLMError.invalidURL
         }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONSerialization.data(withJSONObject: connection.body)
-        connection.headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
+        let response: OpenAIResponse = try await sendRequest(
+            endpoint: url.absoluteString,
+            headers: connection.headers,
+            body: connection.body,
+            responseType: OpenAIResponse.self
+        )
         
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                throw LLMError.invalidResponse
-            }
-            
-            if httpResponse.statusCode == 401 {
-                throw LLMError.authenticationFailed
-            }
-            
-            // 解析不同提供商的响应
-            switch config.provider {
-            case .openAI:
-                let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
-                guard let content = response.choices.first?.message.content else {
-                    throw LLMError.noContent
-                }
-                return content
-                
-            case .anthropic:
-                let response = try JSONDecoder().decode(AnthropicResponse.self, from: data)
-                guard let content = response.content.first?.text else {
-                    throw LLMError.noContent
-                }
-                return content
-                
-            case .custom:
-                let response = try JSONDecoder().decode(CustomResponse.self, from: data)
-                return response.text
-                
-            case .deepseek:
-                let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
-                guard let content = response.choices.first?.message.content else {
-                    throw LLMError.noContent
-                }
-                return content
-            }
-            
-        } catch {
-            throw LLMError.networkError(error)
+        guard let content = response.choices.first?.message.content else {
+            throw LLMError.noContent
         }
+        
+        return content
     }
     
     func generateSummary(for article: Article, config: LLMConfig) async throws -> String {
         let prompt = buildSummaryPrompt(for: article)
-        
         let connection = LLMConnectionManager.getConnection(for: config.provider, config: config, prompt: prompt, temperature: config.temperature)
         
         guard let url = URL(string: connection.endpoint) else {
             throw LLMError.invalidURL
         }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = try? JSONSerialization.data(withJSONObject: connection.body)
-        connection.headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
+        let response: OpenAIResponse = try await sendRequest(
+            endpoint: url.absoluteString,
+            headers: connection.headers,
+            body: connection.body,
+            responseType: OpenAIResponse.self
+        )
         
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                throw LLMError.invalidResponse
-            }
-            
-            if httpResponse.statusCode == 401 {
-                throw LLMError.authenticationFailed
-            }
-            
-            // 解析不同提供商的响应
-            switch config.provider {
-            case .openAI:
-                let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
-                guard let content = response.choices.first?.message.content else {
-                    throw LLMError.noContent
-                }
-                return content
-                
-            case .anthropic:
-                let response = try JSONDecoder().decode(AnthropicResponse.self, from: data)
-                guard let content = response.content.first?.text else {
-                    throw LLMError.noContent
-                }
-                return content
-                
-            case .custom:
-                let response = try JSONDecoder().decode(CustomResponse.self, from: data)
-                return response.text
-                
-            case .deepseek:
-                let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
-                guard let content = response.choices.first?.message.content else {
-                    throw LLMError.noContent
-                }
-                return content
-            }
-            
-        } catch {
-            throw LLMError.networkError(error)
+        guard let content = response.choices.first?.message.content else {
+            throw LLMError.noContent
         }
+        
+        return content
     }
     
     func fetchAvailableModels(config: LLMConfig) async throws -> [String] {
@@ -311,53 +254,45 @@ class LLMService {
             throw LLMError.invalidURL
         }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
-        
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+        switch config.provider {
+        case .openAI:
+            let response: OpenAIModelsResponse = try await sendModelRequest(
+                endpoint: url.absoluteString,
+                headers: headers,
+                responseType: OpenAIModelsResponse.self
+            )
+            return response.data.map { $0.id }
+                .filter { $0.contains("gpt") }
             
-            guard let httpResponse = response as? HTTPURLResponse else {
-                throw LLMError.invalidResponse
-            }
+        case .anthropic:
+            let response: AnthropicModelsResponse = try await sendModelRequest(
+                endpoint: url.absoluteString,
+                headers: headers,
+                responseType: AnthropicModelsResponse.self
+            )
+            return response.models.map { $0.name }
+                .filter { $0.contains("claude") }
             
-            if httpResponse.statusCode == 401 {
-                throw LLMError.authenticationFailed
-            }
+        case .custom:
+            var models = config.provider.defaultModels
+            models.sort()
+            return models + ["自定义"]
             
-            switch config.provider {
-            case .openAI:
-                let response = try JSONDecoder().decode(OpenAIModelsResponse.self, from: data)
-                return response.data.map { $0.id }
-                    .filter { $0.contains("gpt") } // 只返回 GPT 相关模型
-                
-            case .anthropic:
-                let response = try JSONDecoder().decode(AnthropicModelsResponse.self, from: data)
-                return response.models.map { $0.name }
-                    .filter { $0.contains("claude") } // 只返回 Claude 相关模型
-                
-            case .custom:
-                var models = config.provider.defaultModels
-                // 先对其它模型按首字母排序
-                models.sort()
-                // 确保自定义选项始终在最后
-                return models + ["自定义"]
-                
-            case .deepseek:
-                let response = try JSONDecoder().decode(OpenAIModelsResponse.self, from: data)
-                return response.data.map { $0.id }
-                    .filter { $0.contains("deepseek") }
-                    .sorted() // 按首字母排序
-            }
-            
-        } catch {
-            throw LLMError.networkError(error)
+        case .deepseek:
+            let response: OpenAIModelsResponse = try await sendModelRequest(
+                endpoint: url.absoluteString,
+                headers: headers,
+                responseType: OpenAIModelsResponse.self
+            )
+            return response.data.map { $0.id }
+                .filter { $0.contains("deepseek") }
+                .sorted()
         }
     }
 }
 
-// API 响应模型
+// MARK: - API Response Models
+
 private struct OpenAIResponse: Codable {
     struct Choice: Codable {
         struct Message: Codable {
@@ -379,7 +314,6 @@ private struct CustomResponse: Codable {
     let text: String
 }
 
-// 添加模型列表响应的结构
 private struct OpenAIModelsResponse: Codable {
     struct Model: Codable {
         let id: String

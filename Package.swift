@@ -15,11 +15,12 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/nmdias/FeedKit.git", from: "9.1.2"),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.10.2"),
     ],
     targets: [
         .target(
             name: "RLLM",
-            dependencies: ["FeedKit"],
+            dependencies: ["FeedKit", "Alamofire"],
             path: "RLLM"
         ),
         .testTarget(

@@ -70,6 +70,11 @@ Build and install from source code
 - iOS 17.0+
 - Swift 5.0+
 
+### Dependencies
+
+- [FeedKit](https://github.com/nmdias/FeedKit) - RSS and Atom feed parser
+- [Alamofire](https://github.com/Alamofire/Alamofire) - HTTP networking library
+
 ### Getting Started
 
 1. Clone the repository

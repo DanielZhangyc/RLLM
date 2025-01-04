@@ -1,4 +1,5 @@
 import Foundation
+import Alamofire
 
 /// RSS服务，负责管理RSS订阅源的获取和缓存
 actor RSSService {
@@ -44,7 +45,19 @@ actor RSSService {
             throw RSSError.invalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: feedURL)
+        let data = try await withCheckedThrowingContinuation { continuation in
+            AF.request(feedURL)
+                .validate()
+                .responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        continuation.resume(returning: data)
+                    case .failure(let error):
+                        continuation.resume(throwing: RSSError.fetchError(error))
+                    }
+                }
+        }
+        
         let parser = RSSParser()
         let (_, parsedArticles) = try parser.parse(data: data)
         
@@ -123,7 +136,19 @@ actor RSSService {
             throw RSSError.invalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: feedURL)
+        let data = try await withCheckedThrowingContinuation { continuation in
+            AF.request(feedURL)
+                .validate()
+                .responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        continuation.resume(returning: data)
+                    case .failure(let error):
+                        continuation.resume(throwing: RSSError.fetchError(error))
+                    }
+                }
+        }
+        
         let parser = RSSParser()
         let (feed, _) = try parser.parse(data: data)
         

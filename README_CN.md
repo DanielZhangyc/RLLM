@@ -70,6 +70,11 @@ RLLM 是一个由大语言模型驱动的创新型 RSS 阅读器，提供智能�
 - iOS 17.0+
 - Swift 5.0+
 
+### 依赖库
+
+- [FeedKit](https://github.com/nmdias/FeedKit) - RSS 和 Atom 订阅源解析器
+- [Alamofire](https://github.com/Alamofire/Alamofire) - HTTP 网络请求库
+
 ### 开始开发
 
 1. 克隆仓库

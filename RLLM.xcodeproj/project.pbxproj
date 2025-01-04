@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8CC3FFC42D2953F9004A69B5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC3FFC32D2953F9004A69B5 /* Alamofire */; };
+		8CC3FFC82D2953F9004A69B5 /* AlamofireDynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 8CC3FFC52D2953F9004A69B5 /* AlamofireDynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8CF8AA1B2D1869D000C8B463 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF8AA1A2D1869D000C8B463 /* FeedKit */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +28,20 @@
 			remoteInfo = RLLM;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8CC3FFC72D2953F9004A69B5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8CC3FFC82D2953F9004A69B5 /* AlamofireDynamic in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		8CA9EAF12D185997005607D1 /* RLLM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RLLM.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CF8AA1B2D1869D000C8B463 /* FeedKit in Frameworks */,
+				8CC3FFC42D2953F9004A69B5 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +145,7 @@
 				8CA9EAED2D185997005607D1 /* Sources */,
 				8CA9EAEE2D185997005607D1 /* Frameworks */,
 				8CA9EAEF2D185997005607D1 /* Resources */,
+				8CC3FFC72D2953F9004A69B5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -139,6 +157,8 @@
 			name = RLLM;
 			packageProductDependencies = (
 				8CF8AA1A2D1869D000C8B463 /* FeedKit */,
+				8CC3FFC32D2953F9004A69B5 /* Alamofire */,
+				8CC3FFC52D2953F9004A69B5 /* AlamofireDynamic */,
 			);
 			productName = RLLM;
 			productReference = 8CA9EAF12D185997005607D1 /* RLLM.app */;
@@ -224,6 +244,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				8CA9EB6A2D186458005607D1 /* XCRemoteSwiftPackageReference "FeedKit" */,
+				8CC3FFC22D2953E3004A69B5 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8CA9EAF22D185997005607D1 /* Products */;
@@ -604,9 +625,27 @@
 				minimumVersion = 9.1.2;
 			};
 		};
+		8CC3FFC22D2953E3004A69B5 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8CC3FFC32D2953F9004A69B5 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CC3FFC22D2953E3004A69B5 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		8CC3FFC52D2953F9004A69B5 /* AlamofireDynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CC3FFC22D2953E3004A69B5 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = AlamofireDynamic;
+		};
 		8CF8AA1A2D1869D000C8B463 /* FeedKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8CA9EB6A2D186458005607D1 /* XCRemoteSwiftPackageReference "FeedKit" */;

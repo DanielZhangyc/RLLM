@@ -40,45 +40,52 @@ jobs:
           <plist version="1.0">
           <dict>
               <key>method</key>
-              <string>development</string>
+              <string>ad-hoc</string>
               <key>compileBitcode</key>
               <false/>
+              <key>signingStyle</key>
+              <string>automatic</string>
               <key>stripSwiftSymbols</key>
               <true/>
+              <key>thinning</key>
+              <string>&lt;none&gt;</string>
           </dict>
           </plist>
           EOF
 
-      - name: Build and Test
+      - name: Build for Archive
         run: |
           xcodebuild clean build -scheme RLLM \
-            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO \
-            ONLY_ACTIVE_ARCH=NO \
-            -verbose | xcpretty && exit ${PIPESTATUS[0]}
-
-      - name: Archive
-        run: |
-          xcodebuild archive \
-            -scheme RLLM \
-            -archivePath $RUNNER_TEMP/RLLM.xcarchive \
+            -configuration Release \
             -sdk iphoneos \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            ENABLE_BITCODE=NO \
+            ONLY_ACTIVE_ARCH=NO
 
-      - name: Export IPA
+      - name: Create Archive
         run: |
-          xcodebuild -exportArchive \
+          xcodebuild archive \
+            -scheme RLLM \
+            -configuration Release \
+            -sdk iphoneos \
             -archivePath $RUNNER_TEMP/RLLM.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
-            -exportPath $RUNNER_TEMP/build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            ENABLE_BITCODE=NO \
+            ONLY_ACTIVE_ARCH=NO
+
+      - name: Create IPA
+        run: |
+          cd $RUNNER_TEMP/RLLM.xcarchive/Products/Applications
+          mkdir Payload
+          cp -r RLLM.app Payload/
+          zip -r RLLM.ipa Payload
 
       - name: Upload IPA
         uses: actions/upload-artifact@v3
         with:
-          name: app
-          path: ${{ runner.temp }}/build/*.ipa
+          name: unsigned-ipa
+          path: ${{ runner.temp }}/RLLM.xcarchive/Products/Applications/RLLM.ipa

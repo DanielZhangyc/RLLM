@@ -21,12 +21,23 @@ struct ArticleDetailView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var accumulatedTime: TimeInterval = 0
     @State private var lastActiveTime: Date?
+    @AppStorage("lastArticleId") private var lastArticleId: String = ""
+    @AppStorage("lastAccumulatedTime") private var lastAccumulatedTime: Double = 0
     
     init(article: Article) {
         self.article = article
         // 检查缓存并设置初始值
         if let cached = SummaryCache.shared.get(for: article.id.uuidString) {
             _summary = State(initialValue: cached)
+        }
+        
+        // 如果是同一篇文章，恢复累计时间
+        if lastArticleId == article.id.uuidString {
+            _accumulatedTime = State(initialValue: lastAccumulatedTime)
+        } else {
+            // 新文章，重置累计时间
+            lastArticleId = article.id.uuidString
+            lastAccumulatedTime = 0
         }
     }
     
@@ -201,29 +212,50 @@ struct ArticleDetailView: View {
             scrollOffset = value
         }
         .onAppear {
-            readingStartTime = Date()
+            // 只在readingStartTime为nil时初始化
+            if readingStartTime == nil {
+                readingStartTime = Date()
+                print("📖 首次开始阅读，时间：\(Date())")
+            } else {
+                print("📖 继续阅读，当前累计时间：\(accumulatedTime)秒")
+            }
             lastActiveTime = Date()
         }
         .onChange(of: scenePhase) { newPhase in
+            print("🔄 场景状态变化：\(newPhase)")
             switch newPhase {
             case .active:
-                // 恢复计时
                 lastActiveTime = Date()
-            case .background, .inactive:
-                // 暂停计时，累加已读时间
+                print("▶️ 恢复计时，当前累计时间：\(accumulatedTime)秒")
+            case .background:
                 if let lastActive = lastActiveTime {
-                    accumulatedTime += Date().timeIntervalSince(lastActive)
+                    let sessionTime = Date().timeIntervalSince(lastActive)
+                    accumulatedTime += sessionTime
+                    // 保存累计时间
+                    lastAccumulatedTime = accumulatedTime
+                    print("⏸ 暂停计时，本次会话时长：\(sessionTime)秒")
+                    print("📊 当前累计时间：\(accumulatedTime)秒")
+                    lastActiveTime = Date()
                 }
+            case .inactive:
+                print("⚪️ 进入非活跃状态")
             @unknown default:
                 break
             }
         }
         .onDisappear {
-            // 计算总阅读时间
             if let startTime = readingStartTime,
                let lastActive = lastActiveTime {
                 let finalSessionTime = Date().timeIntervalSince(lastActive)
                 let totalDuration = accumulatedTime + finalSessionTime
+                
+                print("📝 结束阅读")
+                print("⏱ 最后一段时长：\(finalSessionTime)秒")
+                print("⌛️ 累计时间：\(accumulatedTime)秒")
+                print("🕒 总计时间：\(totalDuration)秒")
+                
+                // 保存累计时间
+                lastAccumulatedTime = accumulatedTime
                 
                 if totalDuration >= ReadingHistoryManager.minimumReadingDuration {
                     let record = ReadingRecord(
@@ -234,6 +266,13 @@ struct ArticleDetailView: View {
                         duration: totalDuration
                     )
                     historyManager.addRecord(record)
+                    print("✅ 保存阅读记录：\(totalDuration)秒")
+                    
+                    // 保存记录后重置
+                    lastArticleId = ""
+                    lastAccumulatedTime = 0
+                } else {
+                    print("❌ 阅读时间不足，未保存记录")
                 }
             }
         }

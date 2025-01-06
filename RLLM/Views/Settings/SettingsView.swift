@@ -70,8 +70,6 @@ struct SettingsView: View {
                     Text(testResult)
                         .foregroundColor(testResult.contains("成功") ? .green : .red)
                 }
-                
-                Toggle("自动生成摘要", isOn: $viewModel.autoGenerateSummary)
             }
             
             Section(header: Text("阅读设置")) {

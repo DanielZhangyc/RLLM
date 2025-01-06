@@ -39,61 +39,131 @@ struct FeedCardView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var articlesViewModel: ArticlesViewModel
     @State private var showingEditSheet = false
+    @State private var isDeleting = false
+    @State private var isPressed = false
+    
+    private var cardBackground: some View {
+        colorScheme == .dark
+            ? Color(UIColor.secondarySystemBackground)
+            : Color(UIColor.systemBackground)
+    }
+    
+    private var shadowColor: Color {
+        colorScheme == .dark
+            ? Color.white
+            : Color.black
+    }
+    
+    private var iconColor: Color {
+        if feed.iconColor == "AccentColor" || feed.iconColor == nil {
+            return .accentColor
+        }
+        let colorMap: [String: Color] = [
+            "red": .red,
+            "orange": .orange,
+            "yellow": .yellow,
+            "green": .green,
+            "mint": .mint,
+            "blue": .blue,
+            "indigo": .indigo,
+            "purple": .purple,
+            "pink": .pink
+        ]
+        return colorMap[feed.iconColor!] ?? .accentColor
+    }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Image(systemName: feed.iconName)
-                    .font(.title)
-                    .foregroundColor(.accentColor)
+        NavigationLink(destination: ArticleListView(feed: feed)) {
+            VStack(alignment: .leading, spacing: 12) {
+                // 顶部图标和文章数
+                HStack(spacing: 12) {
+                    Image(systemName: feed.iconName)
+                        .font(.system(size: 28, weight: .medium))
+                        .foregroundColor(iconColor)
+                        .frame(width: 40, height: 40)
+                        .padding(.vertical, 4)
+                    
+                    Spacer()
+                    
+                    switch loadingState {
+                    case .loading:
+                        ProgressView()
+                    case .failed(let error):
+                        Image(systemName: "exclamationmark.triangle")
+                            .foregroundColor(.red)
+                            .help(error.localizedDescription)
+                    default:
+                        Text("\(articleCount)篇")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(Color.secondary.opacity(0.1))
+                            .clipShape(Capsule())
+                    }
+                }
+                
                 Spacer()
                 
-                switch loadingState {
-                case .loading:
-                    ProgressView()
-                case .failed(let error):
-                    Image(systemName: "exclamationmark.triangle")
-                        .foregroundColor(.red)
-                        .help(error.localizedDescription)
-                default:
-                    Text("\(articleCount)篇")
-                        .font(.subheadline)
+                // 标题和更新时间
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(feed.title)
+                        .font(.title3.weight(.semibold))
+                        .lineLimit(2)
+                    
+                    if let lastUpdate = lastUpdateTime {
+                        HStack(spacing: 4) {
+                            Image(systemName: "clock")
+                                .font(.caption2)
+                            Text(lastUpdate.timeAgoDisplay())
+                                .font(.caption2)
+                        }
                         .foregroundColor(.secondary)
+                    }
                 }
             }
-            
-            Spacer()
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(feed.title)
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .lineLimit(2)
-                
-                if let lastUpdate = lastUpdateTime {
-                    Text("更新于 \(lastUpdate.timeAgoDisplay())")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+            .frame(height: 120)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                ZStack {
+                    cardBackground
+                        .opacity(0.98)
+                    
+                    // 添加微妙的渐变背景
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            iconColor.opacity(0.05),
+                            Color.clear
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                }
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .shadow(
+                color: shadowColor.opacity(colorScheme == .dark ? 0.1 : 0.15),
+                radius: 10,
+                x: 0,
+                y: 2
+            )
+        }
+        .buttonStyle(.plain)
+        .opacity(loadingState == .loading ? 0.6 : isDeleting ? 0 : 1.0)
+        .scaleEffect(isDeleting ? 0.5 : isPressed ? 0.98 : 1.0)
+        .animation(.spring(response: 0.35, dampingFraction: 0.7), value: isDeleting)
+        .animation(.spring(response: 0.2, dampingFraction: 0.7), value: isPressed)
+        .onTapGesture {
+            withAnimation {
+                isPressed = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                    isPressed = false
                 }
             }
         }
-        .frame(height: 120)
-        .padding()
-        .background(
-            colorScheme == .dark 
-                ? Color(UIColor.secondarySystemBackground)
-                : Color(UIColor.systemBackground)
-        )
-        .cornerRadius(12)
-        .shadow(
-            color: colorScheme == .dark 
-                ? Color.white.opacity(0.05)
-                : Color.black.opacity(0.1),
-            radius: 5, 
-            x: 0, 
-            y: 2
-        )
-        .opacity(loadingState == .loading ? 0.6 : 1.0)
         .contextMenu {
             Button(action: {
                 showingEditSheet = true
@@ -102,7 +172,13 @@ struct FeedCardView: View {
             }
             
             Button(role: .destructive, action: {
-                articlesViewModel.deleteFeed(feed)
+                withAnimation {
+                    isDeleting = true
+                }
+                // 延迟删除操作，等待动画完成
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                    articlesViewModel.deleteFeed(feed)
+                }
             }) {
                 Label("删除", systemImage: "trash")
             }

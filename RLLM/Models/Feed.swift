@@ -19,6 +19,9 @@ struct Feed: Identifiable, Codable {
     /// 订阅源的图标名称
     var iconName: String
     
+    /// 订阅源的图标颜色
+    var iconColor: String?
+    
     // MARK: - Initialization
     
     /// 创建一个新的Feed实例
@@ -28,18 +31,21 @@ struct Feed: Identifiable, Codable {
     ///   - url: 订阅源URL
     ///   - description: 订阅源描述
     ///   - iconName: 图标名称
+    ///   - iconColor: 图标颜色
     init(
         id: UUID = UUID(),
         title: String,
         url: String,
         description: String? = nil,
-        iconName: String = "newspaper.fill"
+        iconName: String = "newspaper.fill",
+        iconColor: String? = nil
     ) {
         self.id = id
         self.title = title
         self.url = url
         self.description = description
         self.iconName = iconName
+        self.iconColor = iconColor
     }
     
     // MARK: - Methods
@@ -48,14 +54,16 @@ struct Feed: Identifiable, Codable {
     /// - Parameters:
     ///   - title: 新的标题，如果为nil则保持原值
     ///   - iconName: 新的图标名称，如果为nil则保持原值
+    ///   - iconColor: 新的图标颜色，如果为nil则保持原值
     /// - Returns: 更新后的Feed实例
-    func updating(title: String? = nil, iconName: String? = nil) -> Feed {
+    func updating(title: String? = nil, iconName: String? = nil, iconColor: String? = nil) -> Feed {
         Feed(
             id: self.id,
             title: title ?? self.title,
             url: self.url,
             description: self.description,
-            iconName: iconName ?? self.iconName
+            iconName: iconName ?? self.iconName,
+            iconColor: iconColor ?? self.iconColor
         )
     }
 } 

@@ -1,59 +1,130 @@
 import SwiftUI
 
 struct FeedEditView: View {
-    @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var articlesViewModel: ArticlesViewModel
     let feed: Feed
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var articlesViewModel: ArticlesViewModel
     @State private var title: String
     @State private var selectedIcon: String
+    @State private var selectedColor: String
     
-    private let iconOptions = [
-        "newspaper.fill", "book.fill", "text.book.closed.fill",
-        "doc.text.fill", "magazine.fill", "bookmark.fill",
-        "link", "globe", "network", "antenna.radiowaves.left.and.right"
+    private let icons = [
+        "newspaper.fill",           // 新闻/媒体
+        "doc.text.fill",           // 文章/博客
+        "terminal.fill",           // 技术/开发
+        "person.2.fill",           // 社区/论坛
+        "book.fill",               // 杂志/期刊
+        "globe.americas.fill",     // 网站
+        "quote.bubble.fill",       // 评论/观点
+        "chart.bar.fill"           // 数据/分析
     ]
+    
+    private let colors: [(name: String, color: Color)] = [
+        ("AccentColor", .accentColor),
+        ("red", .red),
+        ("orange", .orange),
+        ("yellow", .yellow),
+        ("green", .green),
+        ("mint", .mint),
+        ("blue", .blue),
+        ("indigo", .indigo),
+        ("purple", .purple),
+        ("pink", .pink)
+    ]
+    
+    private var currentColor: Color {
+        if selectedColor == "AccentColor" {
+            return .accentColor
+        }
+        return colors.first { $0.name == selectedColor }?.color ?? .accentColor
+    }
     
     init(feed: Feed) {
         self.feed = feed
         _title = State(initialValue: feed.title)
         _selectedIcon = State(initialValue: feed.iconName)
+        _selectedColor = State(initialValue: feed.iconColor ?? "AccentColor")
     }
     
     var body: some View {
         Form {
-            Section(header: Text("基本信息")) {
-                TextField("名称", text: $title)
+            Section {
+                TextField("标题", text: $title)
+            } header: {
+                Text("基本信息")
+            } footer: {
+                Text("修改标题不会影响原始RSS源")
             }
             
-            Section(header: Text("图标")) {
+            Section {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
-                        ForEach(iconOptions, id: \.self) { icon in
+                        ForEach(icons, id: \.self) { icon in
                             Image(systemName: icon)
                                 .font(.title2)
-                                .foregroundColor(selectedIcon == icon ? .accentColor : .primary)
+                                .foregroundColor(currentColor)
+                                .frame(width: 24, height: 24)
                                 .padding(8)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(selectedIcon == icon ? Color.accentColor.opacity(0.1) : Color.clear)
+                                .background(currentColor.opacity(0.1))
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .strokeBorder(currentColor, lineWidth: selectedIcon == icon ? 2 : 0)
                                 )
                                 .onTapGesture {
                                     selectedIcon = icon
+                                    HapticManager.shared.selection()
                                 }
                         }
                     }
                     .padding(.vertical, 8)
                 }
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        ForEach(colors, id: \.name) { colorOption in
+                            Circle()
+                                .fill(colorOption.color)
+                                .frame(width: 24, height: 24)
+                                .padding(8)
+                                .background(colorOption.color.opacity(0.1))
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .strokeBorder(colorOption.color, lineWidth: selectedColor == colorOption.name ? 2 : 0)
+                                )
+                                .onTapGesture {
+                                    selectedColor = colorOption.name
+                                    HapticManager.shared.selection()
+                                }
+                        }
+                    }
+                    .padding(.vertical, 8)
+                }
+            } header: {
+                Text("图标设置")
             }
         }
-        .navigationTitle("编辑订阅源")
+        .navigationTitle("设置")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("完成") {
-                    articlesViewModel.updateFeed(feed, title: title, icon: selectedIcon)
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("取消") {
                     dismiss()
                 }
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("完成") {
+                    articlesViewModel.updateFeed(
+                        feed,
+                        title: title,
+                        icon: selectedIcon,
+                        color: selectedColor
+                    )
+                    dismiss()
+                }
+                .disabled(title.isEmpty)
             }
         }
     }

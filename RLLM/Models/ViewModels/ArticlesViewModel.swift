@@ -112,7 +112,7 @@ class ArticlesViewModel: ObservableObject {
                         articles.sort { $0.publishDate > $1.publishDate }
                         feedLoadingStates[feed.id] = .loaded
                         objectWillChange.send()
-                        HapticManager.shared.success()
+                        HapticManager.shared.selection()
                     }
                     
                     print("Total articles for \(feed.title): \(processedNewArticles.count)")
@@ -130,7 +130,7 @@ class ArticlesViewModel: ObservableObject {
                     feedLoadingStates[feed.id] = .idle
                 }
             }
-            HapticManager.shared.success()
+            HapticManager.shared.selection()
         }
     }
     
@@ -167,7 +167,7 @@ class ArticlesViewModel: ObservableObject {
                 articles = mergedArticles.sorted { $0.publishDate > $1.publishDate }
                 feedLoadingStates[feed.id] = .loaded
                 objectWillChange.send()
-                HapticManager.shared.success()
+                HapticManager.shared.selection()
             }
             
             print("Updated articles for \(feed.title): \(processedNewArticles.count)")
@@ -235,7 +235,7 @@ class ArticlesViewModel: ObservableObject {
             objectWillChange.send()
         }
         
-        HapticManager.shared.success()
+        HapticManager.shared.selection()
     }
     
     /// 删除RSS源
@@ -313,11 +313,13 @@ class ArticlesViewModel: ObservableObject {
     ///   - feed: 要更新的Feed对象
     ///   - title: 新标题
     ///   - icon: 新图标
-    func updateFeed(_ feed: Feed, title: String, icon: String) {
+    ///   - color: 新图标颜色
+    func updateFeed(_ feed: Feed, title: String, icon: String, color: String) {
         if let index = feeds.firstIndex(where: { $0.id == feed.id }) {
             let updatedFeed = feed.updating(
                 title: title,
-                iconName: icon
+                iconName: icon,
+                iconColor: color
             )
             
             // 更新feeds数组中的Feed
@@ -340,6 +342,7 @@ class ArticlesViewModel: ObservableObject {
                 try feedStorage.save(feeds)
                 print("Updated feed: \(updatedFeed.title)")
                 print("New icon: \(updatedFeed.iconName)")
+                print("New color: \(updatedFeed.iconColor ?? "AccentColor")")
                 
                 // 立即刷新更新后的Feed的文章列表
                 Task {

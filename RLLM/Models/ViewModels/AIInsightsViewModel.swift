@@ -53,6 +53,11 @@ class AIInsightsViewModel: ObservableObject {
         dailySummary != nil && !dailySummary!.isEmpty && dailySummary != "今日暂无阅读记录" && dailySummary != "生成总结时出错"
     }
     
+    /// 是否没有阅读记录
+    var hasNoReadingRecords: Bool {
+        dailySummary == "今日暂无阅读记录" || (dailySummary == nil && !isAnalyzing && error == nil)
+    }
+    
     // MARK: - Public Methods
     
     /// 解析每日总结
@@ -158,12 +163,20 @@ class AIInsightsViewModel: ObservableObject {
             error = nil
         }
         
+        // 检查LLM配置
         guard let configData = storedConfig,
               let config = try? JSONDecoder().decode(LLMConfig.self, from: configData) else {
             print("LLM配置解析失败")
             await MainActor.run {
                 error = AIAnalysisError.configurationError("未找到有效的LLM配置")
                 isAnalyzing = false
+                // 清空所有内容
+                dailySummary = nil
+                topTopics = []
+                topicCounts = [:]
+                keyPoints = []
+                learningAdvice = nil
+                readingTime = nil
             }
             return
         }
@@ -188,6 +201,7 @@ class AIInsightsViewModel: ObservableObject {
                 learningAdvice = nil
                 readingTime = nil
                 isAnalyzing = false
+                error = nil
             }
             return
         }

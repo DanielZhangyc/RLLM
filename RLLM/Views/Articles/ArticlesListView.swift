@@ -19,14 +19,23 @@ struct ArticlesListView: View {
     var body: some View {
         ScrollView {
             if articlesViewModel.feeds.isEmpty {
-                VStack(spacing: 20) {
-                    Text("还没有添加任何订阅源")
-                        .font(.headline)
-                    Button("添加订阅源") {
-                        showAddFeedSheet = true
+                ContentUnavailableView {
+                    Label("开始你的阅读之旅", systemImage: "doc.text.magnifyingglass")
+                        .font(.title2)
+                } description: {
+                    Text("添加你感兴趣的RSS源，开始探索精彩内容")
+                } actions: {
+                    Button(action: { showAddFeedSheet = true }) {
+                        Text("添加订阅源")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(Color.accentColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
                 }
-                .frame(maxHeight: .infinity)
+                .padding(.top, 100)
             } else {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(articlesViewModel.feeds) { feed in
@@ -44,7 +53,7 @@ struct ArticlesListView: View {
                 .padding()
             }
         }
-        .navigationTitle("订阅")
+        .navigationTitle("文章")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { showAddFeedSheet = true }) {

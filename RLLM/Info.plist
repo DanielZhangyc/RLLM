@@ -7,5 +7,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>CFBundleVersion</key>
++	<string>31</string>
 </dict>
 </plist>

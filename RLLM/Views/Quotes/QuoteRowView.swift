@@ -2,6 +2,7 @@ import SwiftUI
 
 struct QuoteRowView: View {
     let quote: Quote
+    @Environment(\.colorScheme) private var colorScheme
     
     private var previewContent: String {
         quote.content.removingHTMLTags()
@@ -17,8 +18,17 @@ struct QuoteRowView: View {
                         .foregroundColor(.secondary)
                         .padding(.vertical, 4)
                         .padding(.horizontal, 10)
-                        .background(Color(.systemGray6))
-                        .clipShape(Capsule())
+                        .background(
+                            Capsule()
+                                .fill(colorScheme == .dark ? Color(.systemGray5) : Color(.systemGray6))
+                                .overlay(
+                                    Capsule()
+                                        .stroke(
+                                            Color(.separator).opacity(colorScheme == .dark ? 0.3 : 0),
+                                            lineWidth: colorScheme == .dark ? 0.5 : 0
+                                        )
+                                )
+                        )
                 }
                 
                 Text(previewContent)
@@ -57,8 +67,20 @@ struct QuoteRowView: View {
         .padding(.horizontal, 16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground))
-                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                .fill(colorScheme == .dark ? Color(.systemGray6) : Color(.systemBackground))
+                .shadow(
+                    color: Color.black.opacity(colorScheme == .dark ? 0.2 : 0.05),
+                    radius: colorScheme == .dark ? 3 : 2,
+                    x: 0,
+                    y: colorScheme == .dark ? 2 : 1
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(
+                            Color(.separator).opacity(colorScheme == .dark ? 0.3 : 0),
+                            lineWidth: colorScheme == .dark ? 1 : 0
+                        )
+                )
         )
     }
 }

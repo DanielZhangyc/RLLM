@@ -443,6 +443,7 @@ class AIInsightsViewModel: ObservableObject {
             await MainActor.run {
                 self.articleInsight = insight
                 self.isAnalyzing = false
+                HapticManager.shared.success()
             }
             
             return true

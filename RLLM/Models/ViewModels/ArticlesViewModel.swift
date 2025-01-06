@@ -112,6 +112,7 @@ class ArticlesViewModel: ObservableObject {
                         articles.sort { $0.publishDate > $1.publishDate }
                         feedLoadingStates[feed.id] = .loaded
                         objectWillChange.send()
+                        HapticManager.shared.success()
                     }
                     
                     print("Total articles for \(feed.title): \(processedNewArticles.count)")
@@ -129,6 +130,7 @@ class ArticlesViewModel: ObservableObject {
                     feedLoadingStates[feed.id] = .idle
                 }
             }
+            HapticManager.shared.success()
         }
     }
     
@@ -165,6 +167,7 @@ class ArticlesViewModel: ObservableObject {
                 articles = mergedArticles.sorted { $0.publishDate > $1.publishDate }
                 feedLoadingStates[feed.id] = .loaded
                 objectWillChange.send()
+                HapticManager.shared.success()
             }
             
             print("Updated articles for \(feed.title): \(processedNewArticles.count)")
@@ -199,6 +202,7 @@ class ArticlesViewModel: ObservableObject {
         feeds.append(feed)
         try feedStorage.save(feeds)
         await refreshFeed(feed)
+        HapticManager.shared.success()
     }
     
     /// 删除RSS源
@@ -208,6 +212,7 @@ class ArticlesViewModel: ObservableObject {
         do {
             try feedStorage.save(feeds)
             articles.removeAll { $0.feedTitle == feed.title }
+            HapticManager.shared.lightImpact()
         } catch {
             print("Error saving feeds after deletion: \(error.localizedDescription)")
             self.error = error

@@ -120,6 +120,7 @@ struct ArticleDetailView: View {
                             .cornerRadius(8)
                             .onTapGesture {
                                 withAnimation { showSummary.toggle() }
+                                HapticManager.shared.selection()
                             }
                         } else {
                             HStack {
@@ -147,6 +148,7 @@ struct ArticleDetailView: View {
                         .cornerRadius(8)
                         .onTapGesture {
                             withAnimation { showSummary.toggle() }
+                            HapticManager.shared.selection()
                         }
                     }
                 }

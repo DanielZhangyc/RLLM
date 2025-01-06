@@ -43,6 +43,7 @@ class QuotesViewModel: ObservableObject {
         }) {
             quotes.insert(quote, at: 0)
             saveQuotes()
+            HapticManager.shared.success()
             print("Added new quote: \(isFullArticle ? "Full article" : "Text selection") from \(article.title)")
         } else {
             print("Quote already exists")
@@ -52,6 +53,7 @@ class QuotesViewModel: ObservableObject {
     func deleteQuotes(at offsets: IndexSet) {
         quotes.remove(atOffsets: offsets)
         saveQuotes()
+        HapticManager.shared.lightImpact()
         print("Deleted quotes at offsets: \(offsets)")
     }
     
@@ -61,6 +63,7 @@ class QuotesViewModel: ObservableObject {
         }) {
             quotes.remove(at: index)
             saveQuotes()
+            HapticManager.shared.lightImpact()
             print("Removed quote for article: \(articleURL)")
         }
     }

@@ -51,6 +51,7 @@ struct ArticleInsightView: View {
                         Button("开始分析") {
                             Task {
                                 _ = await viewModel.analyzeArticle(content, articleId: articleId)
+                                HapticManager.shared.success()
                             }
                         }
                         .buttonStyle(.bordered)
@@ -106,6 +107,9 @@ struct ArticleInsightView: View {
                                 .padding(.vertical, 6)
                                 .background(Color.accentColor.opacity(0.1))
                                 .clipShape(Capsule())
+                                .onTapGesture {
+                                    HapticManager.shared.selection()
+                                }
                         }
                     }
                     .padding(.horizontal, 2)

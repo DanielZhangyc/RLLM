@@ -78,6 +78,9 @@ struct SettingsView: View {
                 HStack {
                     Text("A").font(.footnote)
                     Slider(value: $fontSize, in: 14...24, step: 1)
+                        .onChange(of: fontSize) { _, _ in
+                            HapticManager.shared.selection()
+                        }
                     Text("A").font(.title)
                 }
                 

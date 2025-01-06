@@ -134,6 +134,7 @@ struct ArticleDetailView: View {
                             .cornerRadius(8)
                             .onTapGesture {
                                 generateSummary()
+                                HapticManager.shared.selection()
                             }
                         }
                     } else {
@@ -340,6 +341,7 @@ struct ArticleDetailView: View {
                     isLoadingSummary = false
                     // 保存到缓存
                     SummaryCache.shared.set(result, for: article.id.uuidString)
+                    HapticManager.shared.success()
                 }
             } catch {
                 await MainActor.run {

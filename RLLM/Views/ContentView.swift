@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var articlesViewModel = ArticlesViewModel()
+    @EnvironmentObject var articlesViewModel: ArticlesViewModel
     @StateObject var llmViewModel = LLMSettingsViewModel()
     @StateObject var aiInsightsViewModel = AIInsightsViewModel()
     @StateObject var quotesViewModel = QuotesViewModel.shared

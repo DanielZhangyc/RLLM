@@ -188,20 +188,53 @@ class ArticlesViewModel: ObservableObject {
     /// - Returns: 验证通过的Feed对象
     /// - Throws: RSSError
     func validateFeed(_ url: String) async throws -> Feed {
-        return try await rssService.validateFeed(url)
+        print("开始验证RSS源: \(url)")
+        let feed = try await rssService.validateFeed(url)
+        print("RSS源验证成功: \(feed.title)")
+        return feed
     }
     
     /// 添加新的RSS源
     /// - Parameter feed: 要添加的Feed对象
     /// - Throws: RSSError.duplicateFeed 当Feed已存在时
     func addFeed(_ feed: Feed) async throws {
-        guard !feeds.contains(where: { $0.url == feed.url }) else {
+        print("正在添加RSS源: \(feed.title)")
+        
+        // 检查是否已存在相同URL的源
+        if let existingFeed = feeds.first(where: { $0.url == feed.url }) {
+            print("发现重复的RSS源: \(existingFeed.title)")
             throw RSSError.duplicateFeed
         }
         
-        feeds.append(feed)
-        try feedStorage.save(feeds)
-        await refreshFeed(feed)
+        // 检查是否已存在相同标题的源
+        if let existingFeed = feeds.first(where: { $0.title == feed.title }) {
+            print("发现标题重复的RSS源: \(existingFeed.title)")
+            // 为新源生成一个不重复的标题
+            var newTitle = feed.title
+            var counter = 1
+            while feeds.contains(where: { $0.title == newTitle }) {
+                newTitle = "\(feed.title) (\(counter))"
+                counter += 1
+            }
+            var updatedFeed = feed
+            updatedFeed.title = newTitle
+            feeds.append(updatedFeed)
+            try feedStorage.save(feeds)
+            await refreshFeed(updatedFeed)
+            print("RSS源添加成功(使用新标题): \(newTitle)")
+        } else {
+            // 添加新源
+            feeds.append(feed)
+            try feedStorage.save(feeds)
+            await refreshFeed(feed)
+            print("RSS源添加成功: \(feed.title)")
+        }
+        
+        // 发送更新通知
+        await MainActor.run {
+            objectWillChange.send()
+        }
+        
         HapticManager.shared.success()
     }
     
@@ -211,7 +244,13 @@ class ArticlesViewModel: ObservableObject {
         feeds.removeAll { $0.id == feed.id }
         do {
             try feedStorage.save(feeds)
-            articles.removeAll { $0.feedTitle == feed.title }
+            articles.removeAll { article in
+                if let feedId = article.feedId {
+                    return feedId == feed.id
+                }
+                return false
+            }
+            objectWillChange.send()
             HapticManager.shared.lightImpact()
         } catch {
             print("Error saving feeds after deletion: \(error.localizedDescription)")

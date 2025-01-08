@@ -33,6 +33,13 @@ struct ModelCard: View {
                                 .foregroundColor(.secondary)
                                 .lineLimit(2)
                         }
+                        
+                        if model.isThinkingModel {
+                            Text("⚠️ 此模型会输出思维过程，可能影响摘要质量")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                                .padding(.top, 4)
+                        }
                     }
                     
                     Spacer()

@@ -23,6 +23,8 @@ struct ArticleDetailView: View {
     @State private var lastActiveTime: Date?
     @AppStorage("lastArticleId") private var lastArticleId: String = ""
     @AppStorage("lastAccumulatedTime") private var lastAccumulatedTime: Double = 0
+    @Environment(\.dismiss) private var dismiss
+    @AppStorage("llmConfig") private var storedConfig: Data?
     
     init(article: Article) {
         self.article = article
@@ -316,7 +318,13 @@ struct ArticleDetailView: View {
     }
     
     private func generateSummary(forceRefresh: Bool = false) {
-        guard !llmViewModel.config.apiKey.isEmpty else {
+        guard let configData = storedConfig,
+              let config = try? JSONDecoder().decode(LLMConfig.self, from: configData) else {
+            summary = "请先在设置中配置 LLM"
+            return
+        }
+        
+        guard !config.apiKey.isEmpty else {
             summary = "请先在设置中配置 API Key"
             return
         }
@@ -334,7 +342,7 @@ struct ArticleDetailView: View {
             do {
                 let result = try await LLMService.shared.generateSummary(
                     for: article,
-                    config: llmViewModel.config
+                    config: config
                 )
                 await MainActor.run {
                     summary = result

@@ -80,6 +80,22 @@ struct Model: Identifiable, Codable, Hashable {
     let contextLength: Int?
     let provider: String?
     
+    /// 检查是否是思维链模型
+    var isThinkingModel: Bool {
+        let modelName = name.lowercased()
+        let components = modelName.components(separatedBy: CharacterSet.alphanumerics.inverted)
+        
+        // 检查常见的思维链关键词
+        if modelName.contains("thinking") || 
+           modelName.contains("thought") || 
+           modelName.contains("cot") {
+            return true
+        }
+        
+        // 检查 "o1" 是否作为独立标记出现
+        return components.contains("o1")
+    }
+    
     enum CodingKeys: String, CodingKey {
         case id
         case description

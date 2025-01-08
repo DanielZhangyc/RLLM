@@ -79,7 +79,8 @@ class LLMService {
     private func sendRequest<T: Decodable>(endpoint: String, 
                                          headers: [String: String], 
                                          body: [String: Any],
-                                         responseType: T.Type) async throws -> T {
+                                         config: LLMConfig,
+                                         responseType: T.Type) async throws -> String {
         print("准备发送LLM请求：")
         print("请求URL：\(endpoint)")
         print("请求头：\(headers)")
@@ -91,11 +92,16 @@ class LLMService {
                       encoding: JSONEncoding.default,
                       headers: HTTPHeaders(headers))
             .validate()
-            .responseDecodable(of: T.self) { response in
+            .responseData { response in
                 switch response.result {
-                case .success(let value):
-                    print("请求成功，响应数据长度：\(response.data?.count ?? 0)字节")
-                    continuation.resume(returning: value)
+                case .success(let data):
+                    print("请求成功，响应数据长度：\(data.count)字节")
+                    do {
+                        let content = try self.extractContent(from: data, config: config, responseType: T.self)
+                        continuation.resume(returning: content)
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
                     
                 case .failure(let error):
                     print("请求失败：\(error.localizedDescription)")
@@ -162,18 +168,13 @@ class LLMService {
             throw LLMError.invalidURL
         }
         
-        let response: OpenAIResponse = try await sendRequest(
+        return try await sendRequest(
             endpoint: url.absoluteString,
             headers: connection.headers,
             body: connection.body,
+            config: config,
             responseType: OpenAIResponse.self
         )
-        
-        guard let content = response.choices.first?.message.content else {
-            throw LLMError.noContent
-        }
-        
-        return content
     }
     
     /// 分析热门话题
@@ -189,18 +190,13 @@ class LLMService {
             throw LLMError.invalidURL
         }
         
-        let response: OpenAIResponse = try await sendRequest(
+        return try await sendRequest(
             endpoint: url.absoluteString,
             headers: connection.headers,
             body: connection.body,
+            config: config,
             responseType: OpenAIResponse.self
         )
-        
-        guard let content = response.choices.first?.message.content else {
-            throw LLMError.noContent
-        }
-        
-        return content
     }
     
     func generateInsight(for content: String, config: LLMConfig) async throws -> String {
@@ -211,18 +207,13 @@ class LLMService {
             throw LLMError.invalidURL
         }
         
-        let response: OpenAIResponse = try await sendRequest(
+        return try await sendRequest(
             endpoint: url.absoluteString,
             headers: connection.headers,
             body: connection.body,
+            config: config,
             responseType: OpenAIResponse.self
         )
-        
-        guard let content = response.choices.first?.message.content else {
-            throw LLMError.noContent
-        }
-        
-        return content
     }
     
     func generateSummary(for article: Article, config: LLMConfig) async throws -> String {
@@ -233,18 +224,13 @@ class LLMService {
             throw LLMError.invalidURL
         }
         
-        let response: OpenAIResponse = try await sendRequest(
+        return try await sendRequest(
             endpoint: url.absoluteString,
             headers: connection.headers,
             body: connection.body,
+            config: config,
             responseType: OpenAIResponse.self
         )
-        
-        guard let content = response.choices.first?.message.content else {
-            throw LLMError.noContent
-        }
-        
-        return content
     }
     
     func fetchAvailableModels(config: LLMConfig) async throws -> [Model] {
@@ -310,6 +296,17 @@ private struct OpenAIResponse: Codable {
             let content: String
         }
         let message: Message
+        let text: String?
+    }
+    let choices: [Choice]
+}
+
+private struct GeminiResponse: Codable {
+    struct Choice: Codable {
+        struct Message: Codable {
+            let content: String
+        }
+        let message: Message
     }
     let choices: [Choice]
 }
@@ -334,4 +331,82 @@ private struct AnthropicModelsResponse: Codable {
         let name: String
     }
     let models: [Model]
+}
+
+extension LLMService {
+    private enum ModelType {
+        case gpt
+        case claude
+        case gemini
+        case unknown
+        
+        static func detect(from modelName: String) -> ModelType {
+            let modelName = modelName.lowercased()
+            
+            // 定义每种类型的关键词
+            let gptKeywords = ["gpt", "openai"]
+            let claudeKeywords = ["claude", "anthropic"]
+            let geminiKeywords = ["gemini", "google"]
+            
+            // 检查是否包含任何关键词
+            if gptKeywords.contains(where: modelName.contains) {
+                return .gpt
+            } else if claudeKeywords.contains(where: modelName.contains) {
+                return .claude
+            } else if geminiKeywords.contains(where: modelName.contains) {
+                return .gemini
+            }
+            
+            return .unknown
+        }
+    }
+    
+    private func extractContent<T: Decodable>(from data: Data, config: LLMConfig, responseType: T.Type) throws -> String {
+        // 打印原始响应以便调试
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("原始响应: \(jsonString)")
+        }
+        
+        let modelType = ModelType.detect(from: config.model)
+        
+        do {
+            switch modelType {
+            case .gemini:
+                let response = try JSONDecoder().decode(GeminiResponse.self, from: data)
+                if let content = response.choices.first?.message.content {
+                    return content
+                } else {
+                    throw LLMError.noContent
+                }
+                
+            case .claude:
+                let response = try JSONDecoder().decode(AnthropicResponse.self, from: data)
+                guard let text = response.content.first?.text else {
+                    throw LLMError.noContent
+                }
+                return text
+                
+            case .gpt, .unknown:
+                // 对于 GPT 和未知模型,使用 OpenAI 格式
+                let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
+                if let content = response.choices.first?.message.content {
+                    return content
+                } else if let text = response.choices.first?.text {
+                    return text
+                } else {
+                    throw LLMError.noContent
+                }
+            }
+        } catch {
+            print("解析响应失败：\(error)")
+            // 尝试解析为简单的文本响应
+            do {
+                let response = try JSONDecoder().decode(CustomResponse.self, from: data)
+                return response.text
+            } catch {
+                print("尝试解析为简单响应也失败：\(error)")
+                throw LLMError.decodingError(error)
+            }
+        }
+    }
 }

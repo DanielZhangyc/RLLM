@@ -247,7 +247,7 @@ class LLMService {
         return content
     }
     
-    func fetchAvailableModels(config: LLMConfig) async throws -> [String] {
+    func fetchAvailableModels(config: LLMConfig) async throws -> [Model] {
         let (endpoint, headers) = LLMConnectionManager.getModelEndpoint(for: config.provider, config: config)
         
         guard let url = URL(string: endpoint) else {
@@ -261,8 +261,8 @@ class LLMService {
                 headers: headers,
                 responseType: OpenAIModelsResponse.self
             )
-            return response.data.map { $0.id }
-                .filter { $0.contains("gpt") }
+            return response.data
+                .filter { $0.id.contains("gpt") }
             
         case .anthropic:
             let response: AnthropicModelsResponse = try await sendModelRequest(
@@ -270,13 +270,25 @@ class LLMService {
                 headers: headers,
                 responseType: AnthropicModelsResponse.self
             )
-            return response.models.map { $0.name }
-                .filter { $0.contains("claude") }
+            return response.models
+                .filter { $0.name.contains("claude") }
+                .map { model in
+                    Model(
+                        id: model.name,
+                        name: model.name,
+                        description: nil,
+                        contextLength: nil,
+                        provider: "Anthropic"
+                    )
+                }
             
         case .custom:
-            var models = config.provider.defaultModels
-            models.sort()
-            return models + ["自定义"]
+            let response: OpenAIModelsResponse = try await sendModelRequest(
+                endpoint: url.absoluteString,
+                headers: headers,
+                responseType: OpenAIModelsResponse.self
+            )
+            return response.data
             
         case .deepseek:
             let response: OpenAIModelsResponse = try await sendModelRequest(
@@ -284,9 +296,8 @@ class LLMService {
                 headers: headers,
                 responseType: OpenAIModelsResponse.self
             )
-            return response.data.map { $0.id }
-                .filter { $0.contains("deepseek") }
-                .sorted()
+            return response.data
+                .filter { $0.id.contains("deepseek") }
         }
     }
 }
@@ -315,9 +326,6 @@ private struct CustomResponse: Codable {
 }
 
 private struct OpenAIModelsResponse: Codable {
-    struct Model: Codable {
-        let id: String
-    }
     let data: [Model]
 }
 

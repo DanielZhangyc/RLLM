@@ -53,11 +53,14 @@ class LLMConnectionManager {
             ]
             
         case .custom:
-            endpoint = "\(config.baseURL)/completions"
+            endpoint = "\(config.baseURL)/chat/completions"
             headers["Authorization"] = "Bearer \(config.apiKey)"
             body = [
                 "model": config.model,
-                "prompt": prompt,
+                "messages": [
+                    ["role": "system", "content": "你是一个专业的文章分析助手，善于深入分析文章并提供独到见解。你的输出必须严格遵循指定的格式。"],
+                    ["role": "user", "content": prompt]
+                ],
                 "temperature": temperature,
                 "max_tokens": config.maxTokens
             ]
@@ -93,6 +96,8 @@ class LLMConnectionManager {
         case .custom:
             endpoint = "\(config.baseURL)/models"
             headers["Authorization"] = "Bearer \(config.apiKey)"
+            headers["HTTP-Referer"] = "https://github.com/CaffeineShawn/RLLM"
+            headers["X-Title"] = "RLLM"
         }
         
         return (endpoint, headers)

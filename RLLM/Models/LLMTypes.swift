@@ -71,3 +71,45 @@ struct LLMResponse: Decodable {
     let content: String
     let error: String?
 } 
+
+/// 模型信息结构体
+struct Model: Identifiable, Codable, Hashable {
+    let id: String
+    let name: String
+    let description: String?
+    let contextLength: Int?
+    let provider: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case description
+        case contextLength = "context_length"
+        case provider
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        name = id  // 使用id作为name
+        description = try container.decodeIfPresent(String.self, forKey: .description)
+        contextLength = try container.decodeIfPresent(Int.self, forKey: .contextLength)
+        provider = try container.decodeIfPresent(String.self, forKey: .provider)
+    }
+    
+    init(id: String, name: String? = nil, description: String? = nil, contextLength: Int? = nil, provider: String? = nil) {
+        self.id = id
+        self.name = name ?? id  // 如果没有提供name，使用id
+        self.description = description
+        self.contextLength = contextLength
+        self.provider = provider
+    }
+    
+    // 实现Hashable协议
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: Model, rhs: Model) -> Bool {
+        lhs.id == rhs.id
+    }
+} 

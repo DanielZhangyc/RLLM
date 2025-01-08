@@ -37,16 +37,20 @@ struct SettingsView: View {
                 
                 if llmViewModel.isLoadingModels {
                     ProgressView("加载模型列表...")
-                } else if !llmViewModel.availableModels.isEmpty {
-                    Picker("模型", selection: $llmViewModel.config.model) {
-                        ForEach(llmViewModel.availableModels, id: \.self) { model in
-                            Text(model).tag(model)
-                        }
-                    }
-                } else if llmViewModel.error == nil && !llmViewModel.config.apiKey.isEmpty {
-                    Button("获取模型列表") {
-                        Task {
-                            await llmViewModel.fetchModels()
+                } else {
+                    NavigationLink {
+                        ModelSelectionView(
+                            config: llmViewModel.config,
+                            onModelSelected: { modelId in
+                                llmViewModel.config.model = modelId
+                            }
+                        )
+                    } label: {
+                        HStack {
+                            Text("模型")
+                            Spacer()
+                            Text(llmViewModel.config.model)
+                                .foregroundColor(.secondary)
                         }
                     }
                 }

@@ -6,6 +6,7 @@ struct ModelCard: View {
     let onTap: () -> Void
     
     @State private var isPressed = false
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         Button(action: {
@@ -82,10 +83,14 @@ struct ModelCard: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(isSelected ? Color.blue : Color.gray.opacity(0.1), lineWidth: isSelected ? 2 : 1)
+                    .stroke(
+                        isSelected ? Color.blue : 
+                        Color.primary.opacity(colorScheme == .dark ? 0.1 : 0.05),
+                        lineWidth: isSelected ? 2 : 1
+                    )
             )
             .shadow(
-                color: Color.black.opacity(0.05),
+                color: Color.black.opacity(colorScheme == .dark ? 0.2 : 0.05),
                 radius: 8,
                 x: 0,
                 y: isPressed ? 2 : 4

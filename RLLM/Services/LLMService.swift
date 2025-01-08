@@ -76,11 +76,10 @@ class LLMService {
     
     // MARK: - Network Request Methods
     
-    private func sendRequest<T: Decodable>(endpoint: String, 
-                                         headers: [String: String], 
-                                         body: [String: Any],
-                                         config: LLMConfig,
-                                         responseType: T.Type) async throws -> String {
+    private func sendRequest(endpoint: String, 
+                           headers: [String: String], 
+                           body: [String: Any],
+                           config: LLMConfig) async throws -> String {
         print("准备发送LLM请求：")
         print("请求URL：\(endpoint)")
         print("请求头：\(headers)")
@@ -97,7 +96,7 @@ class LLMService {
                 case .success(let data):
                     print("请求成功，响应数据长度：\(data.count)字节")
                     do {
-                        let content = try self.extractContent(from: data, config: config, responseType: T.self)
+                        let content = try self.extractContent(from: data, config: config)
                         continuation.resume(returning: content)
                     } catch {
                         continuation.resume(throwing: error)
@@ -155,6 +154,20 @@ class LLMService {
     
     // MARK: - Public Methods
     
+    private typealias LLMResponseType = Decodable
+    
+    private func getResponseType(for config: LLMConfig) -> any LLMResponseType.Type {
+        let modelType = ModelType.detect(from: config.model)
+        return switch modelType {
+        case .gemini:
+            GeminiResponse.self
+        case .claude:
+            AnthropicResponse.self
+        case .gpt, .unknown:
+            OpenAIResponse.self
+        }
+    }
+    
     /// 生成今日阅读总结
     /// - Parameters:
     ///   - records: 阅读记录列表
@@ -172,8 +185,7 @@ class LLMService {
             endpoint: url.absoluteString,
             headers: connection.headers,
             body: connection.body,
-            config: config,
-            responseType: OpenAIResponse.self
+            config: config
         )
     }
     
@@ -194,8 +206,7 @@ class LLMService {
             endpoint: url.absoluteString,
             headers: connection.headers,
             body: connection.body,
-            config: config,
-            responseType: OpenAIResponse.self
+            config: config
         )
     }
     
@@ -211,8 +222,7 @@ class LLMService {
             endpoint: url.absoluteString,
             headers: connection.headers,
             body: connection.body,
-            config: config,
-            responseType: OpenAIResponse.self
+            config: config
         )
     }
     
@@ -228,8 +238,7 @@ class LLMService {
             endpoint: url.absoluteString,
             headers: connection.headers,
             body: connection.body,
-            config: config,
-            responseType: OpenAIResponse.self
+            config: config
         )
     }
     
@@ -361,7 +370,7 @@ extension LLMService {
         }
     }
     
-    private func extractContent<T: Decodable>(from data: Data, config: LLMConfig, responseType: T.Type) throws -> String {
+    private func extractContent(from data: Data, config: LLMConfig) throws -> String {
         // 打印原始响应以便调试
         if let jsonString = String(data: data, encoding: .utf8) {
             print("原始响应: \(jsonString)")

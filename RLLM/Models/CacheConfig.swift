@@ -1,55 +1,71 @@
 import Foundation
 
-/// 缓存配置
+/// 缓存配置结构体
+/// 定义了缓存的各项参数限制
 struct CacheConfig {
+    // MARK: - Static Properties
+    
     /// 缓存过期时间（秒）
+    /// 默认为15天
     static let expirationInterval: TimeInterval = 15 * 24 * 60 * 60  // 15天
     
     /// 最大缓存条目数
+    /// 默认为1000条
     static let maxEntries: Int = 1000
     
     /// 单个缓存文件大小限制（字节）
+    /// 默认为1MB
     static let maxFileSize: Int64 = 1024 * 1024  // 1MB
     
     /// 总缓存大小限制（字节）
+    /// 默认为100MB
     static let maxTotalSize: Int64 = 100 * 1024 * 1024  // 100MB
 }
 
-/// 缓存条目信息
+/// 缓存条目信息结构体
+/// 记录每个缓存条目的元数据
 struct CacheEntryInfo: Codable {
-    /// 创建时间
+    // MARK: - Properties
+    
+    /// 缓存条目的创建时间
     let createdAt: Date
     
-    /// 最后访问时间
+    /// 缓存条目的最后访问时间
     var lastAccessedAt: Date
     
-    /// 文件大小（字节）
+    /// 缓存文件的大小（字节）
     let fileSize: Int64
     
-    /// 检查是否已过期
+    // MARK: - Methods
+    
+    /// 检查缓存条目是否已过期
+    /// - Returns: 如果缓存条目已过期则返回true，否则返回false
     func isExpired() -> Bool {
         Date().timeIntervalSince(createdAt) > CacheConfig.expirationInterval
     }
 }
 
-/// 缓存统计信息
+/// 缓存统计信息结构体
+/// 提供缓存系统的整体统计数据
 struct CacheStats {
-    /// 缓存条目数量
+    // MARK: - Properties
+    
+    /// 当前缓存条目的总数
     let entryCount: Int
     
-    /// 总缓存大小（字节）
+    /// 当前总缓存大小（字节）
     let totalSize: Int64
     
-    /// 已过期的条目数量
+    /// 已过期的缓存条目数量
     let expiredCount: Int
     
-    /// 最早的缓存时间
+    /// 最早的缓存条目创建时间
     let oldestEntryDate: Date?
     
-    /// 最近的缓存时间
+    /// 最新的缓存条目创建时间
     let newestEntryDate: Date?
     
-    /// 平均缓存时间
+    /// 缓存条目的平均存在时间
     let averageAge: TimeInterval?
     
     /// 缓存命中率

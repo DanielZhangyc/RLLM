@@ -5,15 +5,11 @@ struct SettingsView: View {
     // MARK: - Properties
     
     @AppStorage("fontSize") private var fontSize: Double = 17
-    @StateObject private var viewModel: SettingsViewModel
+    @StateObject private var viewModel = SettingsViewModel()
     @StateObject private var llmViewModel = LLMSettingsViewModel()
     @StateObject private var historyManager = ReadingHistoryManager.shared
     @EnvironmentObject var articlesViewModel: ArticlesViewModel
     @State private var showingClearReadingHistoryAlert = false
-    
-    init() {
-        _viewModel = StateObject(wrappedValue: SettingsViewModel(articlesViewModel: ArticlesViewModel()))
-    }
     
     var body: some View {
         Form {
@@ -159,10 +155,10 @@ struct SettingsView: View {
         }
         .navigationTitle("设置")
         .onAppear {
-            viewModel.updateFeedCount()
+            viewModel.updateFeedCount(feeds: articlesViewModel.feeds)
         }
         .onReceive(NotificationCenter.default.publisher(for: Notification.Name("FeedsUpdated"))) { _ in
-            viewModel.updateFeedCount()
+            viewModel.updateFeedCount(feeds: articlesViewModel.feeds)
         }
         .onChange(of: llmViewModel.config) { _, _ in
             llmViewModel.saveConfig()

@@ -51,6 +51,11 @@ class ArticlesViewModel: ObservableObject {
             print("Error loading feeds: \(error.localizedDescription)")
             feeds = []
             self.error = error
+            // 显示错误提示
+            ToastManager.shared.showError(
+                "加载失败",
+                message: "无法加载订阅源列表，请重启应用"
+            )
         }
     }
     
@@ -72,6 +77,10 @@ class ArticlesViewModel: ObservableObject {
         // 创建一个临时的文章数组来存储所有文章
         var currentArticles = articles
         
+        // 用于统计成功和失败的数量
+        var successCount = 0
+        var failureCount = 0
+        
         await withTaskGroup(of: (Feed, [Article])?.self) { group in
             // 创建并发任务
             for feed in feeds {
@@ -85,6 +94,8 @@ class ArticlesViewModel: ObservableObject {
                 if let (feed, newArticles) = result {
                     print("\n✅ Successfully loaded feed: \(feed.title)")
                     print("Found \(newArticles.count) articles")
+                    
+                    successCount += 1
                     
                     // 移除当前feed的旧文章
                     currentArticles.removeAll { article in
@@ -112,11 +123,12 @@ class ArticlesViewModel: ObservableObject {
                         articles.sort { $0.publishDate > $1.publishDate }
                         feedLoadingStates[feed.id] = .loaded
                         objectWillChange.send()
-                        HapticManager.shared.selection()
                     }
                     
                     print("Total articles for \(feed.title): \(processedNewArticles.count)")
                     print("Total articles in app: \(articles.count)")
+                } else {
+                    failureCount += 1
                 }
             }
         }
@@ -130,7 +142,23 @@ class ArticlesViewModel: ObservableObject {
                     feedLoadingStates[feed.id] = .idle
                 }
             }
-            HapticManager.shared.selection()
+            
+            // 显示刷新结果的toast
+            if failureCount == 0 {
+                if successCount > 0 {
+                    HapticManager.shared.success()
+                    ToastManager.shared.showSuccess(
+                        "刷新成功",
+                        message: "已更新\(successCount)个订阅源的内容"
+                    )
+                }
+            } else {
+                HapticManager.shared.error()
+                ToastManager.shared.showError(
+                    "刷新失败",
+                    message: "成功\(successCount)个，失败\(failureCount)个"
+                )
+            }
         }
     }
     
@@ -167,7 +195,14 @@ class ArticlesViewModel: ObservableObject {
                 articles = mergedArticles.sorted { $0.publishDate > $1.publishDate }
                 feedLoadingStates[feed.id] = .loaded
                 objectWillChange.send()
-                HapticManager.shared.selection()
+                HapticManager.shared.lightImpact()
+                // 显示成功提示
+                if processedNewArticles.count > 0 {
+                    ToastManager.shared.showSuccess(
+                        "更新成功",
+                        message: "已更新源\"\(feed.title)\"，获取\(processedNewArticles.count)篇文章"
+                    )
+                }
             }
             
             print("Updated articles for \(feed.title): \(processedNewArticles.count)")
@@ -178,6 +213,11 @@ class ArticlesViewModel: ObservableObject {
                     feedLoadingStates[feed.id] = .idle
                 }
                 objectWillChange.send()
+                // 显示错误提示
+                ToastManager.shared.showError(
+                    "更新失败",
+                    message: "无法更新源\"\(feed.title)\"，请检查网络连接"
+                )
             }
             print("Failed to refresh feed: \(feed.title)")
         }
@@ -252,9 +292,19 @@ class ArticlesViewModel: ObservableObject {
             }
             objectWillChange.send()
             HapticManager.shared.lightImpact()
+            // 显示成功提示
+            ToastManager.shared.showWarning(
+                "已删除订阅源",
+                message: "已移除源\"\(feed.title)\"及其所有文章"
+            )
         } catch {
             print("Error saving feeds after deletion: \(error.localizedDescription)")
             self.error = error
+            // 显示错误提示
+            ToastManager.shared.showError(
+                "删除失败",
+                message: "无法保存更改，请重试"
+            )
         }
     }
     
@@ -263,6 +313,11 @@ class ArticlesViewModel: ObservableObject {
     func markAsRead(_ article: Article) {
         if let index = articles.firstIndex(where: { $0.id == article.id }) {
             articles[index].isRead = true
+            // 显示提示
+            ToastManager.shared.showInfo(
+                "已读",
+                message: "已将源\"\(article.title)\"标记为已读"
+            )
         }
     }
     
@@ -344,6 +399,12 @@ class ArticlesViewModel: ObservableObject {
                 print("New icon: \(updatedFeed.iconName)")
                 print("New color: \(updatedFeed.iconColor ?? "AccentColor")")
                 
+                // 显示成功提示
+                ToastManager.shared.showSuccess(
+                    "更新成功",
+                    message: "已更新源\"\(title)\"的设置"
+                )
+                
                 // 立即刷新更新后的Feed的文章列表
                 Task {
                     await refreshFeed(updatedFeed)
@@ -353,6 +414,11 @@ class ArticlesViewModel: ObservableObject {
                 self.error = error
                 Task { @MainActor in
                     feedLoadingStates[feed.id] = .failed(error)
+                    // 显示错误提示
+                    ToastManager.shared.showError(
+                        "保存失败",
+                        message: "无法保存源\"\(title)\"的设置更改"
+                    )
                 }
             }
         }

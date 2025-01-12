@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8C3C81822D29612E00A5F7D5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8C3C81812D29612E00A5F7D5 /* Alamofire */; };
 		8C3C81842D29613900A5F7D5 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C3C81832D29613900A5F7D5 /* FeedKit */; };
+		8C9158552D33DCD0000E82E5 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 8C9158542D33DCD0000E82E5 /* Toast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C9158552D33DCD0000E82E5 /* Toast in Frameworks */,
 				8C3C81822D29612E00A5F7D5 /* Alamofire in Frameworks */,
 				8C3C81842D29613900A5F7D5 /* FeedKit in Frameworks */,
 			);
@@ -96,10 +98,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C9158532D33DCD0000E82E5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		8CFF95F62D2960B5005CA3BD = {
 			isa = PBXGroup;
 			children = (
 				8C7E36302D2C3E1900CE807C /* RLLM */,
+				8C9158532D33DCD0000E82E5 /* Frameworks */,
 				8CFF96002D2960B5005CA3BD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -136,6 +146,7 @@
 			packageProductDependencies = (
 				8C3C81812D29612E00A5F7D5 /* Alamofire */,
 				8C3C81832D29613900A5F7D5 /* FeedKit */,
+				8C9158542D33DCD0000E82E5 /* Toast */,
 			);
 			productName = RLLM;
 			productReference = 8CFF95FF2D2960B5005CA3BD /* RLLM.app */;
@@ -216,6 +227,7 @@
 			packageReferences = (
 				8C3C817F2D29610E00A5F7D5 /* XCRemoteSwiftPackageReference "FeedKit" */,
 				8C3C81802D29611F00A5F7D5 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				8C9158522D33DC56000E82E5 /* XCRemoteSwiftPackageReference "toast-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8CFF96002D2960B5005CA3BD /* Products */;
@@ -620,6 +632,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		8C9158522D33DC56000E82E5 /* XCRemoteSwiftPackageReference "toast-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BastiaanJansen/toast-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -632,6 +652,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C3C817F2D29610E00A5F7D5 /* XCRemoteSwiftPackageReference "FeedKit" */;
 			productName = FeedKit;
+		};
+		8C9158542D33DCD0000E82E5 /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C9158522D33DC56000E82E5 /* XCRemoteSwiftPackageReference "toast-swift" */;
+			productName = Toast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

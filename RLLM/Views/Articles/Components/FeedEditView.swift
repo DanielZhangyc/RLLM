@@ -52,8 +52,6 @@ struct FeedEditView: View {
                 TextField("标题", text: $title)
             } header: {
                 Text("基本信息")
-            } footer: {
-                Text("修改标题不会影响原始RSS源")
             }
             
             Section {

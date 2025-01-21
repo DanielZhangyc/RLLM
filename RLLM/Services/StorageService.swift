@@ -53,4 +53,21 @@ class StorageService {
     func removeArticles(for feedId: UUID) {
         defaults.removeObject(forKey: "\(Self.articlesKey)_\(feedId)")
     }
+    
+    // MARK: - Data Cleanup
+    
+    /// 清理所有存储的数据
+    func clearAllData() {
+        // 删除所有feeds数据
+        defaults.removeObject(forKey: Self.feedsKey)
+        
+        // 删除所有articles数据
+        let feeds = loadFeeds()
+        for feed in feeds {
+            removeArticles(for: feed.id)
+        }
+        
+        // 同步UserDefaults
+        defaults.synchronize()
+    }
 } 

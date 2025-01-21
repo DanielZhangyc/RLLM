@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="24.2.0" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="ArticleEntity" representedClassName="ArticleEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="author" optional="YES" attributeType="String"/>
+        <attribute name="content" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isRead" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="publishDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="summary" optional="YES" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="url" attributeType="String"/>
+        <relationship name="feed" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FeedEntity" inverseName="articles" inverseEntity="FeedEntity"/>
+        <relationship name="insight" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ArticleInsightEntity" inverseName="article" inverseEntity="ArticleInsightEntity"/>
+        <relationship name="quotes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="QuoteEntity" inverseName="article" inverseEntity="QuoteEntity"/>
+        <relationship name="readingRecords" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReadingRecordEntity" inverseName="article" inverseEntity="ReadingRecordEntity"/>
+    </entity>
+    <entity name="ArticleInsightEntity" representedClassName="ArticleInsightEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="backgroundInfo" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="keyPoints" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="NSArray"/>
+        <attribute name="sentiment" attributeType="String" defaultValueString=""/>
+        <attribute name="summary" attributeType="String" defaultValueString=""/>
+        <attribute name="topics" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="NSArray"/>
+        <relationship name="article" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ArticleEntity" inverseName="insight" inverseEntity="ArticleEntity"/>
+    </entity>
+    <entity name="DailySummaryEntity" representedClassName="DailySummaryEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="keyPoints" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="NSArray"/>
+        <attribute name="learningAdvice" attributeType="String" defaultValueString=""/>
+        <attribute name="readingTime" attributeType="String" defaultValueString=""/>
+        <attribute name="summary" attributeType="String" defaultValueString=""/>
+        <attribute name="topicCounts" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="NSDictionary"/>
+        <attribute name="topTopics" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="NSArray"/>
+    </entity>
+    <entity name="FeedEntity" representedClassName="FeedEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="desc" optional="YES" attributeType="String"/>
+        <attribute name="iconName" attributeType="String" defaultValueString="newspaper.fill"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="url" attributeType="String"/>
+        <relationship name="articles" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ArticleEntity" inverseName="feed" inverseEntity="ArticleEntity"/>
+    </entity>
+    <entity name="QuoteEntity" representedClassName="QuoteEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="articleTitle" optional="YES" attributeType="String"/>
+        <attribute name="articleURL" attributeType="String"/>
+        <attribute name="content" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isFullArticle" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="savedDate" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="article" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ArticleEntity" inverseName="quotes" inverseEntity="ArticleEntity"/>
+    </entity>
+    <entity name="ReadingRecordEntity" representedClassName="ReadingRecordEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="articleTitle" optional="YES" attributeType="String"/>
+        <attribute name="articleURL" optional="YES" attributeType="String"/>
+        <attribute name="duration" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="startTime" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="article" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ArticleEntity" inverseName="readingRecords" inverseEntity="ArticleEntity"/>
+    </entity>
+    <entity name="ReadingStatsEntity" representedClassName="ReadingStatsEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="actualReadingDays" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="articleCount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="totalReadingTime" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+</model>

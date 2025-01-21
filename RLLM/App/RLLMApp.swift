@@ -5,11 +5,17 @@ import os
 @main
 struct RLLMApp: App {
     @StateObject private var articlesViewModel = ArticlesViewModel()
+    @StateObject private var llmSettingsViewModel = LLMSettingsViewModel()
     private let logger = Logger(subsystem: "xy0v0.RLLM", category: "URLScheme")
     @State private var showError = false
     @State private var errorMessage = ""
     
     init() {
+        DataMigrationService.shared.resetMigrationStatus()
+        // 执行数据迁移
+        DataMigrationService.shared.performMigration()
+        // 检查并执行数据清理
+        CleanupService.shared.performCleanupIfNeeded()
         // 在应用启动时主动请求网络权限
         requestNetworkPermission()
     }
@@ -18,6 +24,7 @@ struct RLLMApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(articlesViewModel)
+                .environmentObject(llmSettingsViewModel)
                 .onOpenURL { url in
                     handleIncomingURL(url)
                 }
@@ -123,4 +130,4 @@ struct RLLMApp: App {
             // 不需要处理响应
         }
     }
-} 
+}

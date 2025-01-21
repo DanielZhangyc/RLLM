@@ -65,7 +65,9 @@ struct ArticlesListView: View {
             AddFeedView(viewModel: articlesViewModel)
         }
         .refreshable {
+            print("\n=== ArticlesListView: Pull to refresh triggered ===")
             await articlesViewModel.refreshAllFeeds()
+            print("=== ArticlesListView: Pull to refresh completed ===\n")
         }
     }
 }

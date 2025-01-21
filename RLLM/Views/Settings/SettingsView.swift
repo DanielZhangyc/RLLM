@@ -166,7 +166,10 @@ struct SettingsView: View {
         .alert("确认清除阅读记录", isPresented: $showingClearReadingHistoryAlert) {
             Button("取消", role: .cancel) { }
             Button("清除", role: .destructive) {
-                historyManager.clearAllRecords()
+                // 使用CoreStorage清除阅读记录
+                CoreDataManager.shared.clearAllReadingRecords()
+                // 更新UI状态
+                historyManager.readingRecords = []
             }
         } message: {
             Text("这将删除所有阅读记录和统计数据，此操作无法撤销。")
@@ -190,4 +193,4 @@ struct SettingsView: View {
     NavigationView {
         SettingsView()
     }
-} 
+}

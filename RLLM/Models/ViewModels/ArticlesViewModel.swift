@@ -15,6 +15,7 @@ class ArticlesViewModel: ObservableObject {
     
     private let rssService = RSSService.shared
     private let feedStorage = FeedStorage.shared
+    private let storageService = StorageService.shared
     
     // MARK: - Types
     
@@ -43,7 +44,12 @@ class ArticlesViewModel: ObservableObject {
             // 初始化所有Feed的加载状态为idle
             feeds.forEach { feed in
                 feedLoadingStates[feed.id] = .idle
+                // 从存储中加载该Feed的文章
+                let savedArticles = storageService.loadArticles(for: feed.id)
+                articles.append(contentsOf: savedArticles)
             }
+            // 按发布日期排序
+            articles.sort { $0.publishDate > $1.publishDate }
             Task {
                 await refreshAllFeeds()
             }
@@ -62,8 +68,12 @@ class ArticlesViewModel: ObservableObject {
     // MARK: - Public Methods
     
     /// 刷新所有RSS源
-    func refreshAllFeeds() async {
+    /// - Parameter forceRefresh: 是否强制刷新，忽略缓存
+    func refreshAllFeeds(forceRefresh: Bool = true) async {
+        print("\n=== ArticlesViewModel: Starting refreshAllFeeds() ===")
+        
         await MainActor.run {
+            print("Setting loading states...")
             isLoading = true
             error = nil
             // 设置所有Feed的加载状态为loading
@@ -72,10 +82,7 @@ class ArticlesViewModel: ObservableObject {
             }
         }
         
-        print("\n--- Starting refresh all feeds ---")
-        
-        // 创建一个临时的文章数组来存储所有文章
-        var currentArticles = articles
+        print("Creating task group for \(feeds.count) feeds")
         
         // 用于统计成功和失败的数量
         var successCount = 0
@@ -84,8 +91,9 @@ class ArticlesViewModel: ObservableObject {
         await withTaskGroup(of: (Feed, [Article])?.self) { group in
             // 创建并发任务
             for feed in feeds {
+                print("Adding task for feed: \(feed.title)")
                 group.addTask {
-                    await self.loadFeedArticles(feed)
+                    await self.loadFeedArticles(feed, forceRefresh: forceRefresh)
                 }
             }
             
@@ -97,12 +105,16 @@ class ArticlesViewModel: ObservableObject {
                     
                     successCount += 1
                     
-                    // 移除当前feed的旧文章
-                    currentArticles.removeAll { article in
+                    // 从存储中加载该feed的已有文章
+                    let savedArticles = storageService.loadArticles(for: feed.id)
+                    print("Loaded \(savedArticles.count) saved articles")
+                    
+                    // 获取其他feed的文章
+                    let otherArticles = articles.filter { article in
                         if let feedId = article.feedId {
-                            return feedId == feed.id
+                            return feedId != feed.id
                         }
-                        return article.feedTitle == feed.title
+                        return article.feedTitle != feed.title
                     }
                     
                     // 确保新文章都有正确的feedId和feedTitle
@@ -113,19 +125,21 @@ class ArticlesViewModel: ObservableObject {
                         return updatedArticle
                     }
                     
-                    // 合并新文章
-                    let mergedArticles = mergeArticles(existing: currentArticles, new: processedNewArticles)
-                    currentArticles = mergedArticles
+                    // 合并已存储的文章和新文章
+                    let mergedArticles = mergeArticles(existing: savedArticles, new: processedNewArticles)
                     
-                    // 在MainActor上下文中更新UI和状态
+                    // 保存合并后的文章到存储
+                    storageService.saveArticles(mergedArticles, for: feed.id)
+                    
                     await MainActor.run {
-                        articles = currentArticles
+                        // 更新内存中的文章列表
+                        articles = otherArticles + mergedArticles
                         articles.sort { $0.publishDate > $1.publishDate }
                         feedLoadingStates[feed.id] = .loaded
                         objectWillChange.send()
                     }
                     
-                    print("Total articles for \(feed.title): \(processedNewArticles.count)")
+                    print("Total saved articles for \(feed.title): \(mergedArticles.count)")
                     print("Total articles in app: \(articles.count)")
                 } else {
                     failureCount += 1
@@ -133,7 +147,8 @@ class ArticlesViewModel: ObservableObject {
             }
         }
         
-        print("\n--- Finished refreshing all feeds ---\n")
+        print("\n=== ArticlesViewModel: Completed refreshAllFeeds() ===")
+        print("Success: \(successCount), Failures: \(failureCount)\n")
         
         await MainActor.run {
             isLoading = false
@@ -163,8 +178,10 @@ class ArticlesViewModel: ObservableObject {
     }
     
     /// 刷新单个RSS源
-    /// - Parameter feed: 要刷新的源
-    func refreshFeed(_ feed: Feed) async {
+    /// - Parameters:
+    ///   - feed: 要刷新的源
+    ///   - forceRefresh: 是否强制刷新，忽略缓存
+    func refreshFeed(_ feed: Feed, forceRefresh: Bool = true) async {
         print("\n--- Refreshing single feed: \(feed.title) ---")
         
         await MainActor.run {
@@ -172,7 +189,12 @@ class ArticlesViewModel: ObservableObject {
             objectWillChange.send()
         }
         
-        if let (_, newArticles) = await loadFeedArticles(feed) {
+        if let (_, newArticles) = await loadFeedArticles(feed, forceRefresh: forceRefresh) {
+            // 从存储中加载该feed的已有文章
+            let savedArticles = storageService.loadArticles(for: feed.id)
+            print("Loaded \(savedArticles.count) saved articles")
+            
+            // 获取其他feed的文章
             let otherArticles = articles.filter { article in
                 if let feedId = article.feedId {
                     return feedId != feed.id
@@ -188,24 +210,21 @@ class ArticlesViewModel: ObservableObject {
                 return updatedArticle
             }
             
-            // 合并新文章
-            let mergedArticles = mergeArticles(existing: otherArticles, new: processedNewArticles)
+            // 合并已存储的文章和新文章
+            let mergedArticles = mergeArticles(existing: savedArticles, new: processedNewArticles)
+            
+            // 保存合并后的文章到存储
+            storageService.saveArticles(mergedArticles, for: feed.id)
             
             await MainActor.run {
-                articles = mergedArticles.sorted { $0.publishDate > $1.publishDate }
+                // 更新内存中的文章列表
+                articles = otherArticles + mergedArticles
+                articles.sort { $0.publishDate > $1.publishDate }
                 feedLoadingStates[feed.id] = .loaded
                 objectWillChange.send()
-                HapticManager.shared.lightImpact()
-                // 显示成功提示
-                if processedNewArticles.count > 0 {
-                    ToastManager.shared.showSuccess(
-                        "更新成功",
-                        message: "已更新源\"\(feed.title)\"，获取\(processedNewArticles.count)篇文章"
-                    )
-                }
             }
             
-            print("Updated articles for \(feed.title): \(processedNewArticles.count)")
+            print("Total saved articles for \(feed.title): \(mergedArticles.count)")
             print("Total articles in app: \(articles.count)")
         } else {
             await MainActor.run {
@@ -427,18 +446,22 @@ class ArticlesViewModel: ObservableObject {
     // MARK: - Private Methods
     
     /// 加载指定源的文章
-    /// - Parameter feed: Feed对象
+    /// - Parameters:
+    ///   - feed: Feed对象
+    ///   - forceRefresh: 是否强制刷新，忽略缓存
     /// - Returns: Feed对象和文章列表的元组
-    private func loadFeedArticles(_ feed: Feed) async -> (Feed, [Article])? {
-        print("\n--- Loading feed: \(feed.title) ---")
+    private func loadFeedArticles(_ feed: Feed, forceRefresh: Bool = false) async -> (Feed, [Article])? {
+        print("\n=== Loading feed: \(feed.title) ===")
         print("Feed URL: \(feed.url)")
         
         do {
-            let articles = try await rssService.fetchArticles(from: feed)
-            print("Successfully fetched \(articles.count) articles from \(feed.title)")
+            print("Fetching articles from RSS service...")
+            let articles = try await rssService.fetchArticles(from: feed, forceRefresh: forceRefresh)
+            print("✅ Successfully fetched \(articles.count) articles from \(feed.title)")
             return (feed, articles)
         } catch {
-            print("❌ Error loading feed \(feed.title): \(error.localizedDescription)")
+            print("❌ Error loading feed \(feed.title)")
+            print("Error details: \(error.localizedDescription)")
             await MainActor.run {
                 feedLoadingStates[feed.id] = .failed(error)
             }
@@ -478,4 +501,4 @@ class ArticlesViewModel: ObservableObject {
         
         return updatedExisting + newArticles
     }
-} 
+}

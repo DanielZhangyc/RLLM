@@ -10,11 +10,11 @@ actor RSSService {
     
     // MARK: - Properties
     
-    /// 文章缓存，键为Feed URL，值为缓存日期和文章列表
-    private var cache: [String: (date: Date, articles: [Article])] = [:]
+    /// 文章缓存，键为Feed URL，值为最后更新时间和文章列表
+    private var cache: [String: (lastUpdate: Date, articles: [Article])] = [:]
     
-    /// 缓存有效期（3天）
-    private let cacheValidityDuration: TimeInterval = 3 * 24 * 3600
+    /// 最小更新间隔（1小时）
+    private let minimumUpdateInterval: TimeInterval = 3600
     
     // MARK: - Initialization
     
@@ -26,18 +26,19 @@ actor RSSService {
     /// - Parameters:
     ///   - feed: 要获取的Feed
     ///   - existingArticles: 已存在的文章列表，用于去重
+    ///   - forceRefresh: 是否强制刷新，忽略缓存
     /// - Returns: 更新后的文章列表
     /// - Throws: RSSError
-    func fetchArticles(from feed: Feed, existingArticles: [Article] = []) async throws -> [Article] {
+    func fetchArticles(from feed: Feed, existingArticles: [Article] = [], forceRefresh: Bool = false) async throws -> [Article] {
         print("\n--- Fetching articles for \(feed.title) ---")
         print("Feed URL: \(feed.url)")
         
-        // 检查缓存
-        if isCacheValid(for: feed.url) {
-            if let cachedData = cache[feed.url] {
-                print("Using cached data with \(cachedData.articles.count) articles")
-                return cachedData.articles
-            }
+        // 检查是否需要更新
+        if !forceRefresh,
+           let cacheEntry = cache[feed.url],
+           Date().timeIntervalSince(cacheEntry.lastUpdate) < minimumUpdateInterval {
+            print("Using cached data, last update: \(cacheEntry.lastUpdate)")
+            return cacheEntry.articles
         }
         
         print("Fetching fresh data from network")
@@ -61,54 +62,39 @@ actor RSSService {
         let parser = RSSParser()
         let (_, parsedArticles) = try parser.parse(data: data)
         
-        // 使用URL而不是ID来去重
+        // 使用URL作为唯一标识符进行去重
         let existingUrls = Set(existingArticles.map { $0.url })
-        let processedArticles = parsedArticles
+        let newArticles = parsedArticles
             .filter { !existingUrls.contains($0.url) }
             .map { article in
-                // 创建新的Article实例，设置feedTitle
                 Article(
                     id: article.id,
                     title: article.title,
                     content: article.content,
                     url: article.url,
                     publishDate: article.publishDate,
-                    feedTitle: feed.title,  // 设置正确的feedTitle
+                    feedTitle: feed.title,
                     author: article.author,
                     isRead: article.isRead,
                     summary: article.summary
                 )
             }
         
-        print("Processed \(processedArticles.count) new articles")
+        print("Found \(newArticles.count) new articles")
         
-        // 合并并按发布日期排序
-        let mergedArticles = (existingArticles + processedArticles)
-            .sorted { $0.publishDate > $1.publishDate }
+        // 合并新旧文章并按发布日期排序
+        var allArticles = existingArticles
+        allArticles.append(contentsOf: newArticles)
+        allArticles.sort { $0.publishDate > $1.publishDate }
         
-        // 去除重复项（基于URL）
-        let uniqueArticles = Dictionary<String, Article>(
-            mergedArticles.map { ($0.url, $0) },
-            uniquingKeysWith: { first, _ in first }
-        )
-        .values
-        .sorted { $0.publishDate > $1.publishDate }
+        // 更新缓存
+        cache[feed.url] = (lastUpdate: Date(), articles: allArticles)
+        print("Updated cache with \(allArticles.count) total articles")
         
-        print("Caching \(uniqueArticles.count) unique articles")
-        cache[feed.url] = (date: Date(), articles: Array(uniqueArticles))
-        
-        return Array(uniqueArticles)
+        return allArticles
     }
     
     // MARK: - Private Methods
-    
-    /// 检查指定URL的缓存是否有效
-    /// - Parameter url: Feed的URL
-    /// - Returns: 缓存是否有效
-    private func isCacheValid(for url: String) -> Bool {
-        guard let cacheEntry = cache[url] else { return false }
-        return Date().timeIntervalSince(cacheEntry.date) < cacheValidityDuration
-    }
     
     /// 解码HTML实体
     /// - Parameter text: 包含HTML实体的文本

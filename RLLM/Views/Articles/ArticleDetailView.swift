@@ -230,20 +230,25 @@ struct ArticleDetailView: View {
             print("🔄 场景状态变化：\(newPhase)")
             switch newPhase {
             case .active:
-                lastActiveTime = Date()
-                print("▶️ 恢复计时，当前累计时间：\(accumulatedTime)秒")
+                // 只有从非活跃状态恢复时才重置计时
+                if oldPhase != .active {
+                    lastActiveTime = Date()
+                    print("▶️ 恢复计时，累计：\(Int(accumulatedTime))秒")
+                }
             case .background:
                 if let lastActive = lastActiveTime {
                     let sessionTime = Date().timeIntervalSince(lastActive)
-                    accumulatedTime += sessionTime
-                    // 保存累计时间
-                    lastAccumulatedTime = accumulatedTime
-                    print("⏸ 暂停计时，本次会话时长：\(sessionTime)秒")
-                    print("📊 当前累计时间：\(accumulatedTime)秒")
+                    // 只有当会话时间大于1秒时才累加
+                    if sessionTime > 1 {
+                        accumulatedTime += sessionTime
+                        lastAccumulatedTime = accumulatedTime
+                        print("⏸ 进入后台，本次：\(Int(sessionTime))秒，累计：\(Int(accumulatedTime))秒")
+                    }
                     lastActiveTime = Date()
                 }
             case .inactive:
-                print("⚪️ 进入非活跃状态")
+                // 进入非活跃状态时不重置计时器
+                break
             @unknown default:
                 break
             }
@@ -252,15 +257,10 @@ struct ArticleDetailView: View {
             if let startTime = readingStartTime,
                let lastActive = lastActiveTime {
                 let finalSessionTime = Date().timeIntervalSince(lastActive)
-                let totalDuration = accumulatedTime + finalSessionTime
-                
-                print("📝 结束阅读")
-                print("⏱ 最后一段时长：\(finalSessionTime)秒")
-                print("⌛️ 累计时间：\(accumulatedTime)秒")
-                print("🕒 总计时间：\(totalDuration)秒")
-                
-                // 保存累计时间
-                lastAccumulatedTime = accumulatedTime
+                // 只有当最后一段时间大于1秒时才计入总时长
+                let totalDuration = finalSessionTime > 1 
+                    ? accumulatedTime + finalSessionTime
+                    : accumulatedTime
                 
                 if totalDuration >= ReadingHistoryManager.minimumReadingDuration {
                     let record = ReadingRecord(
@@ -271,13 +271,11 @@ struct ArticleDetailView: View {
                         duration: totalDuration
                     )
                     historyManager.addRecord(record)
-                    print("✅ 保存阅读记录：\(totalDuration)秒")
+                    print("✅ 保存阅读记录：\(Int(totalDuration))秒")
                     
                     // 保存记录后重置
                     lastArticleId = ""
                     lastAccumulatedTime = 0
-                } else {
-                    print("❌ 阅读时间不足，未保存记录")
                 }
             }
         }
@@ -401,4 +399,4 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }
-} 
+}

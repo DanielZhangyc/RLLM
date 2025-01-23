@@ -30,7 +30,8 @@ RLLM 是一个由大语言模型驱动的创新型 RSS 阅读器，提供智能�
 - [开发](#开发)
 - [参与贡献](#参与贡献)
 - [FAQ](#FAQ)
-- [开源协议](#开源协议)
+- [开源协议](#License)
+
 
 <a id="功能特性"></a>
 ## ✨ 功能特性
@@ -145,7 +146,9 @@ RLLM = RSS + LLM，代表软件希望使用 LLM 的能力来增强 RSS 阅读体
 
 是的，您需要为想要使用的 LLM 服务提供自己的 API 密钥。这些可以在应用的设置中配置。
 
-<a id="开源协议"></a>
-## 📄 开源协议
+<a id="License"></a>
+## 📄 License
 
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件 
+本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
+
+[![Star History Chart](https://api.star-history.com/svg?repos=DanielZhangyc/RLLM&type=Date)](https://star-history.com/#DanielZhangyc/RLLM&Date)

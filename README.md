@@ -145,3 +145,5 @@ Yes, you need to provide your own API keys for the LLM services you want to use.
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+[![Star History Chart](https://api.star-history.com/svg?repos=DanielZhangyc/RLLM&type=Date)](https://star-history.com/#DanielZhangyc/RLLM&Date)

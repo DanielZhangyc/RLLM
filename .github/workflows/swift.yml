@@ -70,7 +70,7 @@ jobs:
             -configuration Release \
             -sdk iphoneos \
             CURRENT_PROJECT_VERSION=${{ env.BUILD_NUMBER }} \
-            MARKETING_VERSION=0.3.0 \
+            MARKETING_VERSION=0.4.0 \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
@@ -85,7 +85,7 @@ jobs:
             -sdk iphoneos \
             -archivePath $RUNNER_TEMP/RLLM.xcarchive \
             CURRENT_PROJECT_VERSION=${{ env.BUILD_NUMBER }} \
-            MARKETING_VERSION=0.3.0 \
+            MARKETING_VERSION=0.4.0 \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \

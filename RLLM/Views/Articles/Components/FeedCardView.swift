@@ -8,10 +8,10 @@ extension Date {
         
         if let day = components.day, day > 0 {
             if day == 1 {
-                return "1天前"
+                return NSLocalizedString("time.one_day_ago", comment: "One day ago")
             }
             if day < 7 {
-                return "\(day)天前"
+                return String(format: NSLocalizedString("time.days_ago", comment: "Days ago"), day)
             }
             // 超过一周就显示具体日期
             let formatter = DateFormatter()
@@ -20,14 +20,14 @@ extension Date {
         }
         
         if let hour = components.hour, hour > 0 {
-            return "\(hour)小时前"
+            return String(format: NSLocalizedString("time.hours_ago", comment: "Hours ago"), hour)
         }
         
         if let minute = components.minute, minute > 0 {
-            return "\(minute)分钟前"
+            return String(format: NSLocalizedString("time.minutes_ago", comment: "Minutes ago"), minute)
         }
         
-        return "刚刚"
+        return NSLocalizedString("time.just_now", comment: "Just now")
     }
 }
 
@@ -93,7 +93,7 @@ struct FeedCardView: View {
                             .foregroundColor(.red)
                             .help(error.localizedDescription)
                     default:
-                        Text("\(articleCount)篇")
+                        Text("\(articleCount)")
                             .font(.subheadline.weight(.medium))
                             .foregroundColor(.secondary)
                             .padding(.horizontal, 10)
@@ -168,7 +168,7 @@ struct FeedCardView: View {
             Button(action: {
                 showingEditSheet = true
             }) {
-                Label("设置", systemImage: "gear")
+                Label(NSLocalizedString("feed_edit.title", comment: "Settings"), systemImage: "gear")
             }
             
             Button(role: .destructive, action: {
@@ -180,7 +180,7 @@ struct FeedCardView: View {
                     articlesViewModel.deleteFeed(feed)
                 }
             }) {
-                Label("删除", systemImage: "trash")
+                Label(NSLocalizedString("feed.delete", comment: "Delete feed"), systemImage: "trash")
             }
         }
         .sheet(isPresented: $showingEditSheet) {

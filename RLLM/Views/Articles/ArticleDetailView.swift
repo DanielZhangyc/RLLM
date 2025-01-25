@@ -75,7 +75,7 @@ struct ArticleDetailView: View {
                 .foregroundColor(.secondary)
                 
                 if let author = article.author {
-                    Text("作者：\(author)")
+                    Text(String(format: NSLocalizedString("article.author", comment: "Author with name"), author))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -88,7 +88,7 @@ struct ArticleDetailView: View {
                     if showSummary {
                         if isLoadingSummary {
                             HStack {
-                                Label("正在生成概括...", systemImage: "sparkles")
+                                Label(NSLocalizedString("article.generating_summary", comment: "Generating summary"), systemImage: "sparkles")
                                     .foregroundColor(.secondary)
                                 Spacer()
                                 ProgressView()
@@ -99,7 +99,7 @@ struct ArticleDetailView: View {
                         } else if let summary = summary {
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
-                                    Label("AI概括", systemImage: "sparkles")
+                                    Label(NSLocalizedString("article.ai_summary", comment: "AI Summary"), systemImage: "sparkles")
                                         .font(.headline)
                                     Spacer()
                                     Image(systemName: "chevron.up")
@@ -110,7 +110,7 @@ struct ArticleDetailView: View {
                                     .font(.subheadline)
                                 
                                 if error != nil {
-                                    Button("重新生成") {
+                                    Button(NSLocalizedString("article.regenerate", comment: "Regenerate summary")) {
                                         generateSummary(forceRefresh: true)
                                     }
                                     .font(.footnote)
@@ -126,9 +126,9 @@ struct ArticleDetailView: View {
                             }
                         } else {
                             HStack {
-                                Label("AI概括", systemImage: "sparkles")
+                                Label(NSLocalizedString("article.ai_summary", comment: "AI Summary"), systemImage: "sparkles")
                                 Spacer()
-                                Text("生成")
+                                Text(NSLocalizedString("article.generate", comment: "Generate summary"))
                                     .foregroundColor(.accentColor)
                             }
                             .padding(12)
@@ -141,7 +141,7 @@ struct ArticleDetailView: View {
                         }
                     } else {
                         HStack {
-                            Label("AI概括", systemImage: "sparkles")
+                            Label(NSLocalizedString("article.ai_summary", comment: "AI Summary"), systemImage: "sparkles")
                             Spacer()
                             Image(systemName: "chevron.down")
                                 .foregroundColor(.secondary)
@@ -159,7 +159,7 @@ struct ArticleDetailView: View {
                 
                 // AI 洞察按钮
                 HStack {
-                    Label("AI深度洞察", systemImage: "brain.fill")
+                    Label(NSLocalizedString("article.ai_insight", comment: "AI Deep Insight"), systemImage: "brain.fill")
                     Spacer()
                     Image(systemName: "chevron.right")
                         .foregroundColor(.secondary)
@@ -184,7 +184,7 @@ struct ArticleDetailView: View {
                 // 底部操作栏
                 HStack {
                     Button(action: { contentViewModel.showWebView = true }) {
-                        Label("浏览器打开", systemImage: "safari")
+                        Label(NSLocalizedString("article.open_in_browser", comment: "Open in browser"), systemImage: "safari")
                     }
                     
                     Spacer()
@@ -196,7 +196,7 @@ struct ArticleDetailView: View {
                             quotesViewModel.addQuote(article.content, from: article, isFullArticle: true)
                         }
                     }) {
-                        Label(isArticleSaved ? "取消收藏" : "收藏全文", 
+                        Label(isArticleSaved ? NSLocalizedString("article.unsave", comment: "Unsave article") : NSLocalizedString("article.save_full", comment: "Save full article"), 
                               systemImage: isArticleSaved ? "bookmark.fill" : "bookmark")
                     }
                 }
@@ -318,12 +318,12 @@ struct ArticleDetailView: View {
     private func generateSummary(forceRefresh: Bool = false) {
         guard let configData = storedConfig,
               let config = try? JSONDecoder().decode(LLMConfig.self, from: configData) else {
-            summary = "请先在设置中配置 LLM"
+            summary = NSLocalizedString("article.llm_not_configured", comment: "LLM not configured")
             return
         }
         
         guard !config.apiKey.isEmpty else {
-            summary = "请先在设置中配置 API Key"
+            summary = NSLocalizedString("article.api_key_missing", comment: "API key missing")
             return
         }
         
@@ -352,7 +352,7 @@ struct ArticleDetailView: View {
             } catch {
                 await MainActor.run {
                     self.error = error
-                    summary = "生成概括失败：\(error.localizedDescription)"
+                    summary = String(format: NSLocalizedString("article.summary_error", comment: "Summary generation error"), error.localizedDescription)
                     isLoadingSummary = false
                 }
             }

@@ -20,7 +20,7 @@ struct AIInsightsView: View {
                 if viewModel.isAnalyzing {
                     VStack {
                         Spacer()
-                        ProgressView("正在分析...")
+                        ProgressView(NSLocalizedString("ai.analyzing", comment: "Analyzing progress"))
                             .frame(maxWidth: .infinity, alignment: .center)
                         Spacer()
                     }
@@ -29,7 +29,7 @@ struct AIInsightsView: View {
                     VStack {
                         Spacer()
                         ContentUnavailableView {
-                            Label("配置错误", systemImage: "exclamationmark.triangle")
+                            Label(NSLocalizedString("ai.config_error", comment: "Configuration error"), systemImage: "exclamationmark.triangle")
                                 .font(.title2)
                         } description: {
                             if let configError = error as? AIAnalysisError {
@@ -44,7 +44,7 @@ struct AIInsightsView: View {
                                     await viewModel.refreshInsights(forceRefresh: true)
                                 }
                             }) {
-                                Text("重试")
+                                Text(NSLocalizedString("ai.retry", comment: "Retry button"))
                                     .font(.headline)
                                     .foregroundColor(.white)
                                     .padding(.horizontal, 20)
@@ -60,10 +60,10 @@ struct AIInsightsView: View {
                     VStack {
                         Spacer()
                         ContentUnavailableView {
-                            Label("暂无阅读记录", systemImage: "book.closed")
+                            Label(NSLocalizedString("ai.no_reading_records", comment: "No reading records"), systemImage: "book.closed")
                                 .font(.title2)
                         } description: {
-                            Text("开始阅读一些文章，AI将为你生成今日阅读总结")
+                            Text(NSLocalizedString("ai.no_reading_records_desc", comment: "No reading records description"))
                         } actions: {
                             Button(action: {
                                 refreshTask?.cancel()
@@ -71,7 +71,7 @@ struct AIInsightsView: View {
                                     await viewModel.refreshInsights(forceRefresh: true)
                                 }
                             }) {
-                                Text("刷新")
+                                Text(NSLocalizedString("ai.refresh", comment: "Refresh button"))
                                     .font(.headline)
                                     .foregroundColor(.white)
                                     .padding(.horizontal, 20)
@@ -89,13 +89,13 @@ struct AIInsightsView: View {
                         VStack(alignment: .leading, spacing: 20) {
                             // 今日总结
                             VStack(alignment: .leading, spacing: 12) {
-                                Label("今日总结", systemImage: "text.justify")
+                                Label(NSLocalizedString("ai.daily_summary", comment: "Daily summary"), systemImage: "text.justify")
                                     .font(.headline)
                                     .padding(.bottom, 4)
                                 Text(summary)
                                     .font(.body)
                                 if let readingTime = viewModel.readingTime {
-                                    Text("阅读时长：\(readingTime)")
+                                    Text(NSLocalizedString("ai.reading_time_prefix", comment: "Reading time prefix") + readingTime)
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                         .padding(.top, 4)
@@ -107,7 +107,7 @@ struct AIInsightsView: View {
                                 Divider()
                                 
                                 VStack(alignment: .leading, spacing: 12) {
-                                    Label("关键观点", systemImage: "list.bullet")
+                                    Label(NSLocalizedString("ai.key_points", comment: "Key points"), systemImage: "list.bullet")
                                         .font(.headline)
                                         .padding(.bottom, 4)
                                     ForEach(points, id: \.self) { point in
@@ -126,7 +126,7 @@ struct AIInsightsView: View {
                                 Divider()
                                 
                                 VStack(alignment: .leading, spacing: 12) {
-                                    Label("学习建议", systemImage: "lightbulb")
+                                    Label(NSLocalizedString("ai.learning_advice", comment: "Learning advice"), systemImage: "lightbulb")
                                         .font(.headline)
                                         .padding(.bottom, 4)
                                     Text(advice)
@@ -145,7 +145,7 @@ struct AIInsightsView: View {
                     // 热门话题部分
                     if !viewModel.topTopics.isEmpty {
                         VStack(alignment: .leading, spacing: 16) {
-                            Label("热门话题", systemImage: "chart.bar.fill")
+                            Label(NSLocalizedString("ai.hot_topics", comment: "Hot topics"), systemImage: "chart.bar.fill")
                                 .font(.headline)
                                 .padding(.bottom, 8)
                             
@@ -154,7 +154,9 @@ struct AIInsightsView: View {
                                     Text(topic)
                                         .font(.body)
                                     Spacer()
-                                    Text("\(viewModel.topicCounts[topic] ?? 0)篇")
+                                    let count = viewModel.topicCounts[topic] ?? 0
+                                    let key = count == 1 ? "reading_history.article_read" : "reading_history.articles_read"
+                                    Text(String(format: NSLocalizedString(key, comment: "Articles read"), count))
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
@@ -180,7 +182,7 @@ struct AIInsightsView: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color(.systemGroupedBackground))
-        .navigationTitle("AI总结")
+        .navigationTitle(NSLocalizedString("tab.ai_summary", comment: "AI Summary tab"))
         .onAppear {
             if backgroundTask == nil {
                 backgroundTask = Task(priority: .background) {

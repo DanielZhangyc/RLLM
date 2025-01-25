@@ -13,26 +13,26 @@ struct SettingsView: View {
     
     var body: some View {
         Form {
-            Section("LLM设置") {
-                Picker("服务商", selection: $llmViewModel.config.provider) {
+            Section(NSLocalizedString("settings.llm", comment: "LLM settings section")) {
+                Picker(NSLocalizedString("settings.provider", comment: "Provider picker"), selection: $llmViewModel.config.provider) {
                     ForEach(LLMConnectionManager.getProviders(), id: \.self) { provider in
-                        Text(provider.rawValue).tag(provider)
+                        Text(provider.displayName).tag(provider)
                     }
                 }
                 .onChange(of: llmViewModel.config.provider) { _, newValue in
                     llmViewModel.updateProvider(newValue)
                 }
                 
-                TextField("Base URL", text: $llmViewModel.config.baseURL)
+                TextField(NSLocalizedString("settings.base_url", comment: "Base URL"), text: $llmViewModel.config.baseURL)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                 
-                SecureField("API Key", text: $llmViewModel.config.apiKey)
+                SecureField(NSLocalizedString("settings.api_key", comment: "API Key"), text: $llmViewModel.config.apiKey)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                 
                 if llmViewModel.isLoadingModels {
-                    ProgressView("加载模型列表...")
+                    ProgressView(NSLocalizedString("settings.loading_models", comment: "Loading models"))
                 } else {
                     NavigationLink {
                         ModelSelectionView(
@@ -43,7 +43,7 @@ struct SettingsView: View {
                         )
                     } label: {
                         HStack {
-                            Text("模型")
+                            Text(NSLocalizedString("settings.model", comment: "Model selection"))
                             Spacer()
                             Text(llmViewModel.config.model)
                                 .foregroundColor(.secondary)
@@ -61,18 +61,18 @@ struct SettingsView: View {
                     if llmViewModel.isTestingConnection {
                         ProgressView()
                     } else {
-                        Text("测试连接")
+                        Text(NSLocalizedString("settings.test_connection", comment: "Test connection button"))
                     }
                 }
                 .disabled(llmViewModel.config.apiKey.isEmpty)
                 
                 if let testResult = llmViewModel.testResult {
                     Text(testResult)
-                        .foregroundColor(testResult.contains("成功") ? .green : .red)
+                        .foregroundColor(testResult.contains(NSLocalizedString("settings.test_success", comment: "Test success")) ? .green : .red)
                 }
             }
             
-            Section(header: Text("阅读设置")) {
+            Section(header: Text(NSLocalizedString("settings.reading", comment: "Reading settings section"))) {
                 HStack {
                     Text("A").font(.footnote)
                     Slider(value: $fontSize, in: 14...24, step: 1)
@@ -85,18 +85,18 @@ struct SettingsView: View {
                 NavigationLink {
                     ReadingHistoryView()
                 } label: {
-                    Label("阅读历史", systemImage: "clock.arrow.circlepath")
+                    Label(NSLocalizedString("settings.reading_history", comment: "Reading history"), systemImage: "clock.arrow.circlepath")
                 }
             }
             
-            Section("订阅源管理") {
+            Section(NSLocalizedString("settings.feed_management", comment: "Feed management section")) {
                 NavigationLink {
                     FeedManagementView()
                 } label: {
                     HStack {
-                        Text("管理RSS源")
+                        Text(NSLocalizedString("settings.manage_feeds", comment: "Manage feeds"))
                         Spacer()
-                        Text("\(viewModel.feedCount)个订阅")
+                        Text(String(format: NSLocalizedString("settings.feed_count", comment: "Feed count"), viewModel.feedCount))
                             .foregroundColor(.secondary)
                     }
                 }
@@ -104,7 +104,7 @@ struct SettingsView: View {
             
             Section {
                 HStack {
-                    Text("版本")
+                    Text(NSLocalizedString("settings.version", comment: "Version"))
                     Spacer()
                     Text(Bundle.main.versionAndBuild)
                         .foregroundColor(.secondary)
@@ -112,16 +112,16 @@ struct SettingsView: View {
                 
                 Link(destination: URL(string: "https://github.com/DanielZhangyc/RLLM")!) {
                     HStack {
-                        Text("源代码")
+                        Text(NSLocalizedString("settings.source_code", comment: "Source code"))
                         Spacer()
                         Image(systemName: "arrow.up.right.square")
                             .foregroundColor(.secondary)
                     }
                 }
             } header: {
-                Text("关于")
+                Text(NSLocalizedString("settings.about", comment: "About section"))
             } footer: {
-                Text("RLLM 是一个开源的RSS阅读器，结合了AI的智能分析功能。")
+                Text(NSLocalizedString("settings.about_description", comment: "About description"))
             }
             
             Section {
@@ -129,7 +129,7 @@ struct SettingsView: View {
                     AICacheManagementView()
                 } label: {
                     HStack {
-                        Text("AI缓存管理")
+                        Text(NSLocalizedString("settings.ai_cache", comment: "AI cache management"))
                         Spacer()
                         let totalSize = summaryStats.totalSize + insightStats.totalSize + dailySummaryStats.totalSize
                         Text(ByteCountFormatter.string(fromByteCount: totalSize, countStyle: .file))
@@ -141,19 +141,19 @@ struct SettingsView: View {
                     showingClearReadingHistoryAlert = true
                 } label: {
                     HStack {
-                        Text("清除阅读记录")
+                        Text(NSLocalizedString("settings.clear_history", comment: "Clear history"))
                         Spacer()
-                        Text("\(historyManager.readingRecords.count)个记录")
+                        Text(String(format: NSLocalizedString("settings.record_count", comment: "Record count"), historyManager.readingRecords.count))
                             .foregroundColor(.secondary)
                     }
                 }
             } header: {
-                Text("数据管理")
+                Text(NSLocalizedString("settings.data_management", comment: "Data management section"))
             } footer: {
-                Text("清除阅读记录将删除所有阅读历史和统计数据，此操作无法撤销。")
+                Text(NSLocalizedString("settings.clear_history_warning", comment: "Clear history warning"))
             }
         }
-        .navigationTitle("设置")
+        .navigationTitle(NSLocalizedString("settings.title", comment: "Settings title"))
         .onAppear {
             viewModel.updateFeedCount(feeds: articlesViewModel.feeds)
         }
@@ -163,16 +163,16 @@ struct SettingsView: View {
         .onChange(of: llmViewModel.config) { _, _ in
             llmViewModel.saveConfig()
         }
-        .alert("确认清除阅读记录", isPresented: $showingClearReadingHistoryAlert) {
-            Button("取消", role: .cancel) { }
-            Button("清除", role: .destructive) {
+        .alert(NSLocalizedString("settings.clear_history_title", comment: "Clear history confirmation title"), isPresented: $showingClearReadingHistoryAlert) {
+            Button(NSLocalizedString("settings.cancel", comment: "Cancel button"), role: .cancel) { }
+            Button(NSLocalizedString("settings.clear", comment: "Clear button"), role: .destructive) {
                 // 使用CoreStorage清除阅读记录
                 CoreDataManager.shared.clearAllReadingRecords()
                 // 更新UI状态
                 historyManager.readingRecords = []
             }
         } message: {
-            Text("这将删除所有阅读记录和统计数据，此操作无法撤销。")
+            Text(NSLocalizedString("settings.clear_history_message", comment: "Clear history confirmation message"))
         }
     }
     

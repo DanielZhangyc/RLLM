@@ -10,7 +10,7 @@ struct QuoteDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 if quote.isFullArticle {
-                    Label("全文收藏", systemImage: "doc.text.fill")
+                    Label(NSLocalizedString("quote.full_article", comment: "Full article saved"), systemImage: "doc.text.fill")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -28,15 +28,15 @@ struct QuoteDetailView: View {
                 Divider()
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("来源：\(quote.articleTitle)")
+                    Text(NSLocalizedString("quote.source_prefix", comment: "Source prefix") + quote.articleTitle)
                         .font(.subheadline)
                     
-                    Text("保存时间：\(quote.savedDate.formatted())")
+                    Text(NSLocalizedString("quote.save_time_prefix", comment: "Save time prefix") + quote.savedDate.formatted())
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 
-                Button("查看原文") {
+                Button(NSLocalizedString("quote.view_original", comment: "View original")) {
                     if let url = URL(string: quote.articleURL) {
                         openURL(url)
                     }
@@ -45,6 +45,6 @@ struct QuoteDetailView: View {
             }
             .padding()
         }
-        .navigationTitle("收藏详情")
+        .navigationTitle(NSLocalizedString("quote.detail", comment: "Quote detail"))
     }
 } 

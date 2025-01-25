@@ -1,0 +1,6 @@
+strings:
+  inputs: 
+    - RLLM/Resources/en.lproj/Localizable.strings
+  outputs:
+    - templateName: structured-swift5
+      output: RLLM/Generated/Strings.swift 

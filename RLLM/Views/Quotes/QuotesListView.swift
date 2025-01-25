@@ -13,7 +13,7 @@ struct QuotesListView: View {
                 }
             }
         }
-        .navigationTitle("收藏")
+        .navigationTitle(NSLocalizedString("quotes.title", comment: "Quotes title"))
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background(Color(.systemGroupedBackground))
@@ -23,12 +23,12 @@ struct QuotesListView: View {
 private struct EmptyQuotesView: View {
     var body: some View {
         ContentUnavailableView {
-            Label("收藏精彩语段", systemImage: "quote.bubble")
+            Label(NSLocalizedString("quotes.save_quote", comment: "Save quotes title"), systemImage: "quote.bubble")
                 .font(.title2)
         } description: {
             VStack(spacing: 12) {
-                Text("在阅读文章时长按选择文字即可收藏")
-                Text("收藏的语段将在这里显示")
+                Text(NSLocalizedString("quotes.save_instruction", comment: "Save quotes instruction"))
+                Text(NSLocalizedString("quotes.saved_display", comment: "Saved quotes display"))
                     .foregroundColor(.secondary)
             }
         }
@@ -66,7 +66,7 @@ private struct QuotesList: View {
                         VStack {
                             Image(systemName: "trash")
                                 .font(.title2)
-                            Text("删除")
+                            Text(NSLocalizedString("quotes.delete", comment: "Delete quote"))
                                 .font(.caption)
                         }
                         .frame(width: 60)

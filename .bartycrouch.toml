@@ -1,0 +1,36 @@
+[update]
+tasks = ["interfaces", "code", "normalize"]
+
+[update.interfaces]
+paths = ["RLLM"]
+defaultToBase = false
+ignoreEmptyStrings = false
+unstripped = false
+
+[update.code]
+codePaths = ["RLLM"]
+localizablePaths = ["RLLM"]
+defaultToKeys = false
+additive = true
+customFunction = "NSLocalizedString"
+unstripped = false
+
+[update.normalize]
+paths = ["RLLM"]
+sourceLocale = "en"
+harmonizeWithSource = true
+sortByKeys = true
+
+[update.transform]
+codePaths = ["RLLM"]
+localizablePaths = ["RLLM"]
+transformer = "swiftgenStructured"
+supportedLanguageEnumPath = "RLLM/Generated"
+typeName = "BartyCrouch"
+translateMethodName = "translate"
+
+[lint]
+paths = ["."]
+subpathsToIgnore = [".git", "carthage", "pods", "build", ".build", "docs"]
+duplicateKeys = true
+emptyValues = true

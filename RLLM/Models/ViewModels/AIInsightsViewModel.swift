@@ -210,7 +210,12 @@ class AIInsightsViewModel: ObservableObject {
         let totalDuration = todayRecords.reduce(0) { $0 + $1.duration }
         let hours = Int(totalDuration) / 3600
         let minutes = Int(totalDuration) % 3600 / 60
-        let timeString = hours > 0 ? "\(hours)小时\(minutes)分钟" : "\(minutes)分钟"
+        let timeString: String
+        if hours > 0 {
+            timeString = String(format: NSLocalizedString("reading_history.hours_minutes", comment: "Hours and minutes"), hours, minutes)
+        } else {
+            timeString = String(format: NSLocalizedString(minutes == 1 ? "reading_history.minute" : "reading_history.minutes", comment: "Minutes"), minutes)
+        }
         
         print("计算得到总阅读时长：\(timeString)")
         

@@ -9,9 +9,9 @@ struct ReadingHistoryView: View {
         
         var title: String {
             switch self {
-            case .day: return "今日"
-            case .week: return "本周"
-            case .month: return "本月"
+            case .day: return NSLocalizedString("reading_history.today", comment: "Today")
+            case .week: return NSLocalizedString("reading_history.this_week", comment: "This week")
+            case .month: return NSLocalizedString("reading_history.this_month", comment: "This month")
             }
         }
     }
@@ -19,27 +19,27 @@ struct ReadingHistoryView: View {
     var body: some View {
         List {
             Section {
-                Picker("时间范围", selection: $selectedTimeRange) {
-                    Text("今日").tag(TimeRange.day)
-                    Text("本周").tag(TimeRange.week)
-                    Text("本月").tag(TimeRange.month)
+                Picker(NSLocalizedString("reading_history.time_range", comment: "Time range"), selection: $selectedTimeRange) {
+                    Text(NSLocalizedString("reading_history.today", comment: "Today")).tag(TimeRange.day)
+                    Text(NSLocalizedString("reading_history.this_week", comment: "This week")).tag(TimeRange.week)
+                    Text(NSLocalizedString("reading_history.this_month", comment: "This month")).tag(TimeRange.month)
                 }
                 .pickerStyle(.segmented)
                 .padding(.vertical, 8)
             }
             
-            Section("阅读统计") {
+            Section(NSLocalizedString("reading_history.statistics", comment: "Reading statistics")) {
                 VStack(spacing: 16) {
                     HStack {
                         StatCard(
-                            title: "阅读时长",
+                            title: NSLocalizedString("reading_history.reading_time", comment: "Reading time"),
                             value: formattedReadingTime,
                             icon: "clock.fill"
                         )
                         
                         StatCard(
-                            title: "阅读文章",
-                            value: "\(articleCount)篇",
+                            title: NSLocalizedString("reading_history.articles_read", comment: "Articles read"),
+                            value: formattedArticleCount,
                             icon: "doc.text.fill"
                         )
                     }
@@ -47,13 +47,13 @@ struct ReadingHistoryView: View {
                     if selectedTimeRange != .day {
                         HStack {
                             StatCard(
-                                title: "平均每日",
+                                title: NSLocalizedString("reading_history.daily_average", comment: "Daily average"),
                                 value: formattedAverageTime,
                                 icon: "chart.bar.fill"
                             )
                             
                             StatCard(
-                                title: "平均每篇",
+                                title: NSLocalizedString("reading_history.average_per_article", comment: "Average per article"),
                                 value: formattedAveragePerArticle,
                                 icon: "book.fill"
                             )
@@ -63,9 +63,9 @@ struct ReadingHistoryView: View {
                 .padding(.vertical, 8)
             }
             
-            Section("阅读记录") {
+            Section(NSLocalizedString("reading_history.records", comment: "Reading records")) {
                 if records.isEmpty {
-                    Text("暂无阅读记录")
+                    Text(NSLocalizedString("reading_history.no_records", comment: "No reading records"))
                         .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding()
@@ -76,7 +76,7 @@ struct ReadingHistoryView: View {
                 }
             }
         }
-        .navigationTitle("阅读历史")
+        .navigationTitle(NSLocalizedString("reading_history.title", comment: "Reading history"))
     }
     
     private var records: [ReadingRecord] {
@@ -105,16 +105,23 @@ struct ReadingHistoryView: View {
     private var formattedReadingTime: String {
         let minutes = records.reduce(0) { $0 + $1.duration / 60 }
         if minutes < 60 {
-            return "\(Int(minutes))分钟"
+            let key = minutes == 1 ? "reading_history.minute" : "reading_history.minutes"
+            return String(format: NSLocalizedString(key, comment: "Minutes"), Int(minutes))
         } else {
             let hours = Int(minutes / 60)
             let remainingMinutes = Int(minutes.truncatingRemainder(dividingBy: 60))
-            return "\(hours)小时\(remainingMinutes)分钟"
+            return String(format: NSLocalizedString("reading_history.hours_minutes", comment: "Hours and minutes"), hours, remainingMinutes)
         }
     }
     
     private var articleCount: Int {
         records.count
+    }
+    
+    private var formattedArticleCount: String {
+        let count = records.count
+        let key = count == 1 ? "reading_history.article_read" : "reading_history.articles_read"
+        return String(format: NSLocalizedString(key, comment: "Articles read"), count)
     }
     
     private var formattedAverageTime: String {
@@ -130,40 +137,48 @@ struct ReadingHistoryView: View {
             return ""  // 不显示每日平均
         case .week:
             guard let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) else {
-                return "0分钟"
+                let key = "reading_history.minute"
+                return String(format: NSLocalizedString(key, comment: "Minutes"), 0)
             }
             startDate = weekStart
         case .month:
             guard let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) else {
-                return "0分钟"
+                let key = "reading_history.minute"
+                return String(format: NSLocalizedString(key, comment: "Minutes"), 0)
             }
             startDate = monthStart
         }
         
         guard let days = calendar.dateComponents([.day], from: startDate, to: now).day,
               days > 0 else {
-            return "0分钟"
+            let key = "reading_history.minute"
+            return String(format: NSLocalizedString(key, comment: "Minutes"), 0)
         }
         
         let averageMinutes = totalMinutes / Double(days)
         if averageMinutes < 60 {
-            return "\(Int(averageMinutes))分钟"
+            let key = averageMinutes == 1 ? "reading_history.minute" : "reading_history.minutes"
+            return String(format: NSLocalizedString(key, comment: "Minutes"), Int(averageMinutes))
         } else {
             let hours = Int(averageMinutes / 60)
             let remainingMinutes = Int(averageMinutes.truncatingRemainder(dividingBy: 60))
-            return "\(hours)小时\(remainingMinutes)分钟"
+            return String(format: NSLocalizedString("reading_history.hours_minutes", comment: "Hours and minutes"), hours, remainingMinutes)
         }
     }
     
     private var formattedAveragePerArticle: String {
-        guard !records.isEmpty else { return "0分钟" }
+        guard !records.isEmpty else { 
+            let key = "reading_history.minute"
+            return String(format: NSLocalizedString(key, comment: "Minutes"), 0)
+        }
         let averageMinutes = records.reduce(0) { $0 + $1.duration / 60 } / Double(records.count)
         if averageMinutes < 60 {
-            return "\(Int(averageMinutes))分钟"
+            let key = averageMinutes == 1 ? "reading_history.minute" : "reading_history.minutes"
+            return String(format: NSLocalizedString(key, comment: "Minutes"), Int(averageMinutes))
         } else {
             let hours = Int(averageMinutes / 60)
             let remainingMinutes = Int(averageMinutes.truncatingRemainder(dividingBy: 60))
-            return "\(hours)小时\(remainingMinutes)分钟"
+            return String(format: NSLocalizedString("reading_history.hours_minutes", comment: "Hours and minutes"), hours, remainingMinutes)
         }
     }
 }
@@ -200,7 +215,9 @@ struct ReadingRecordRow: View {
                 .lineLimit(1)
             
             HStack {
-                Label("\(Int(record.duration / 60))分钟", systemImage: "clock")
+                let minutes = Int(record.duration / 60)
+                let key = minutes == 1 ? "reading_history.minute" : "reading_history.minutes"
+                Label(String(format: NSLocalizedString(key, comment: "Minutes"), minutes), systemImage: "clock")
                 
                 Spacer()
                 

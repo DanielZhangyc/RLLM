@@ -1,0 +1,536 @@
+/* Add feed button */
+"add_feed.add" = "Add";
+
+/* Error alert title */
+"add_feed.error" = "Error";
+
+/* Feed name */
+"add_feed.feed_name" = "Feed Name (Optional)";
+
+/* OK button */
+"add_feed.ok" = "OK";
+
+/* RSS feed URL */
+"add_feed.rss_url" = "RSS Feed URL";
+
+/* Add feed title */
+"add_feed.title" = "Add Feed";
+
+/* Unknown error message */
+"add_feed.unknown_error" = "Unknown Error";
+
+/* AI Insights */
+"ai.analyzing" = "Analyzing...";
+
+/* Article count suffix */
+"ai.article_count_suffix" = " articles";
+
+/* Configuration error */
+"ai.config_error" = "Configuration Error";
+
+/* Daily summary */
+"ai.daily_summary" = "Daily Summary";
+
+/* Hot topics */
+"ai.hot_topics" = "Hot Topics";
+
+/* Key points */
+"ai.key_points" = "Key Points";
+
+/* Learning advice */
+"ai.learning_advice" = "Learning Advice";
+
+/* No reading records */
+"ai.no_reading_records" = "No Reading Records";
+
+/* No reading records description */
+"ai.no_reading_records_desc" = "Start reading some articles, and AI will generate a daily reading summary for you";
+
+/* Reading time prefix */
+"ai.reading_time_prefix" = "Reading Time: ";
+
+/* Refresh button */
+"ai.refresh" = "Refresh";
+
+/* Retry button */
+"ai.retry" = "Retry";
+
+"ai.section.advice" = "Advice";
+
+/* Topic analysis section titles */
+"ai.section.hot_topics" = "Hot Topics";
+
+"ai.section.key_points" = "Key Points";
+
+/* Daily summary section titles */
+"ai.section.summary" = "Summary";
+
+"ai.section.topic_distribution" = "Topic Distribution";
+
+/* Cancel button */
+"ai_cache.cancel" = "Cancel";
+
+/* Clear button */
+"ai_cache.clear" = "Clear";
+
+/* Clear all AI cache */
+"ai_cache.clear_all" = "Clear All AI Cache";
+
+/* Clear all AI cache message */
+"ai_cache.clear_all_message" = "Are you sure you want to clear all AI cache?";
+
+/* Clear all AI cache confirmation */
+"ai_cache.clear_all_title" = "Clear All AI Cache";
+
+/* Clear daily summary cache message */
+"ai_cache.clear_daily_summary_message" = "Are you sure you want to clear daily summary cache?";
+
+/* Clear daily summary cache confirmation */
+"ai_cache.clear_daily_summary_title" = "Clear Daily Summary Cache";
+
+/* Clear insight cache message */
+"ai_cache.clear_insight_message" = "Are you sure you want to clear insight cache?";
+
+/* Clear insight cache confirmation */
+"ai_cache.clear_insight_title" = "Clear Insight Cache";
+
+/* Clear summary cache message */
+"ai_cache.clear_summary_message" = "Are you sure you want to clear summary cache?";
+
+/* Clear summary cache confirmation */
+"ai_cache.clear_summary_title" = "Clear Summary Cache";
+
+/* Daily summary cache */
+"ai_cache.daily_summary_cache" = "Daily Summary Cache";
+
+/* Entry count and size */
+"ai_cache.entry_count_size" = "%d entries • %@";
+
+/* Expired entries */
+"ai_cache.expired_entries" = "%d expired entries";
+
+/* AI insight cache */
+"ai_cache.insight_cache" = "AI Insight Cache";
+
+/* AI summary cache */
+"ai_cache.summary_cache" = "AI Summary Cache";
+
+/* AI cache management */
+"ai_cache.title" = "AI Cache Management";
+
+/* AI Deep Insight */
+"article.ai_insight" = "AI Deep Insight";
+
+/* AI Summary */
+"article.ai_summary" = "AI Summary";
+
+/* API key missing */
+"article.api_key_missing" = "Please configure API Key in settings";
+
+/* Author with name */
+"article.author" = "Author: %@";
+
+/* Generate summary */
+"article.generate" = "Generate";
+
+/* Generating summary */
+"article.generating_summary" = "Generating summary...";
+
+/* LLM not configured */
+"article.llm_not_configured" = "Please configure LLM in settings";
+
+/* Open in browser */
+"article.open_in_browser" = "Open in Browser";
+
+/* Regenerate summary */
+"article.regenerate" = "Regenerate";
+
+/* Save full article */
+"article.save_full" = "Save Full Article";
+
+/* Summary generation error */
+"article.summary_error" = "Failed to generate summary: %@";
+
+/* Unsave article */
+"article.unsave" = "Unsave";
+
+/* Article Insight */
+"article_insight.analyzing" = "Analyzing...";
+
+/* Background */
+"article_insight.background" = "Background";
+
+/* Click to start analysis */
+"article_insight.click_to_start" = "Click to Start Analysis";
+
+/* Core summary */
+"article_insight.core_summary" = "Core Summary";
+
+/* Key points */
+"article_insight.key_points" = "Key Points";
+
+/* Sentiment */
+"article_insight.sentiment" = "Sentiment";
+
+/* Start analysis */
+"article_insight.start" = "Start Analysis";
+
+/* Topic tags */
+"article_insight.topic_tags" = "Topic Tags";
+
+/* Cancel button */
+"cancel" = "Cancel";
+
+/* Retry button */
+"error.retry" = "Retry";
+
+/* Delete feed */
+"feed.delete" = "Delete";
+
+/* Basic info section */
+"feed_edit.basic_info" = "Basic Info";
+
+/* Cancel */
+"feed_edit.cancel" = "Cancel";
+
+/* Done */
+"feed_edit.done" = "Done";
+
+/* Icon settings */
+"feed_edit.icon_settings" = "Icon Settings";
+
+/* Feed name field */
+"feed_edit.name" = "Name";
+
+/* Settings */
+"feed_edit.title" = "Settings";
+
+/* Error alert title */
+"feed_management.error" = "Error";
+
+/* OK button */
+"feed_management.ok" = "OK";
+
+/* Feed management title */
+"feed_management.title" = "Feed Management";
+
+/* Unknown error message */
+"feed_management.unknown_error" = "Unknown Error";
+
+/* Authentication failed error */
+"llm.error.auth_failed" = "Authentication failed, please check your API Key";
+
+/* Decoding error with description */
+"llm.error.decoding" = "Decoding error: %@";
+
+/* Invalid response error */
+"llm.error.invalid_response" = "Invalid response";
+
+/* Invalid URL error */
+"llm.error.invalid_url" = "Invalid URL";
+
+/* Network error with description */
+"llm.error.network" = "Network error: %@";
+
+/* No content error */
+"llm.error.no_content" = "No valid content received";
+
+/* Language instruction for LLM */
+"llm.language_instruction" = "Please respond in English. Keep all section titles and formatting markers unchanged.";
+
+/* Error */
+"model.error" = "Error";
+
+/* OK */
+"model.ok" = "OK";
+
+/* Search model */
+"model.search" = "Search Model";
+
+/* Select model */
+"model.select" = "Select Model";
+
+/* Model thinking warning */
+"model.thinking_warning" = "⚠️ This model outputs thinking process, which may affect summary quality";
+
+/* Unknown error */
+"model.unknown_error" = "Unknown Error";
+
+/* Custom provider */
+"provider.custom" = "Custom";
+
+/* Quote detail */
+"quote.detail" = "Quote Detail";
+
+/* Full article saved */
+"quote.full_article" = "Full Article";
+
+/* Save quote menu item */
+"quote.save" = "Save Quote";
+
+/* Save time prefix */
+"quote.save_time_prefix" = "Saved at: ";
+
+/* Source prefix */
+"quote.source_prefix" = "Source: ";
+
+/* View original */
+"quote.view_original" = "View Original";
+
+/* Delete quote */
+"quotes.delete" = "Delete";
+
+/* Save quotes instruction */
+"quotes.save_instruction" = "Long press to select text while reading to save quotes";
+
+/* Save quotes title */
+"quotes.save_quote" = "Save Quotes";
+
+/* Saved quotes display */
+"quotes.saved_display" = "Saved quotes will be displayed here";
+
+/* Quotes title */
+"quotes.title" = "Quotes";
+
+/* Article count */
+"reading_history.article_count" = "%d Articles";
+
+/* Articles read - singular */
+"reading_history.article_read" = "%d article";
+
+/* Articles read - plural */
+"reading_history.articles_read" = "%d articles";
+
+/* Average per article */
+"reading_history.average_per_article" = "Average per Article";
+
+/* Daily average */
+"reading_history.daily_average" = "Daily Average";
+
+/* Hours and minutes */
+"reading_history.hours_minutes" = "%d hours %d minutes";
+
+/* Reading time - singular */
+"reading_history.minute" = "%d minute";
+
+/* Reading time - plural */
+"reading_history.minutes" = "%d minutes";
+
+/* No reading records */
+"reading_history.no_records" = "No reading records";
+
+/* Reading time */
+"reading_history.reading_time" = "Reading Time";
+
+/* Reading records */
+"reading_history.records" = "Reading Records";
+
+/* Reading statistics */
+"reading_history.statistics" = "Reading Statistics";
+
+/* This month */
+"reading_history.this_month" = "This Month";
+
+/* This week */
+"reading_history.this_week" = "This Week";
+
+/* Time range */
+"reading_history.time_range" = "Time Range";
+
+/* Reading history */
+"reading_history.title" = "Reading History";
+
+/* Today */
+"reading_history.today" = "Today";
+
+/* About section */
+"settings.about" = "About";
+
+/* About description */
+"settings.about_description" = "RLLM is an open-source RSS reader with AI-powered analysis features.";
+
+/* AI cache management */
+"settings.ai_cache" = "AI Cache Management";
+
+/* API Key */
+"settings.api_key" = "API Key";
+
+/* Base URL */
+"settings.base_url" = "Base URL";
+
+/* Cancel button */
+"settings.cancel" = "Cancel";
+
+/* Clear button */
+"settings.clear" = "Clear";
+
+/* Clear history */
+"settings.clear_history" = "Clear Reading History";
+
+/* Clear history confirmation message */
+"settings.clear_history_message" = "This will delete all reading history and statistics. This action cannot be undone.";
+
+/* Clear history confirmation title */
+"settings.clear_history_title" = "Confirm Clear Reading History";
+
+/* Clear history warning */
+"settings.clear_history_warning" = "This will delete all reading history and statistics. This action cannot be undone.";
+
+/* Data management section */
+"settings.data_management" = "Data Management";
+
+/* Feed count */
+"settings.feed_count" = "%d Subscriptions";
+
+/* Feed management section */
+"settings.feed_management" = "Feed Management";
+
+/* LLM settings section */
+"settings.llm" = "LLM Settings";
+
+/* Loading models */
+"settings.loading_models" = "Loading models...";
+
+/* Manage feeds */
+"settings.manage_feeds" = "Manage RSS Feeds";
+
+/* Model selection */
+"settings.model" = "Model";
+
+/* Provider picker */
+"settings.provider" = "Provider";
+
+/* Reading settings section */
+"settings.reading" = "Reading Settings";
+
+/* Reading history */
+"settings.reading_history" = "Reading History";
+
+/* Record count */
+"settings.record_count" = "%d Records";
+
+/* Source code */
+"settings.source_code" = "Source Code";
+
+/* Test connection button */
+"settings.test_connection" = "Test Connection";
+
+/* Test connection failed */
+"settings.test_failed" = "Connection failed";
+
+/* Test connection success */
+"settings.test_success" = "Connection successful";
+
+/* Settings title */
+"settings.title" = "Settings";
+
+/* Version */
+"settings.version" = "Version";
+
+/* AI Summary tab */
+"tab.ai_summary" = "AI Summary";
+
+/* Articles tab */
+"tab.articles" = "Articles";
+
+/* Quotes tab */
+"tab.quotes" = "Quotes";
+
+/* Settings tab */
+"tab.settings" = "Settings";
+
+/* Days ago */
+"time.days_ago" = "%d days ago";
+
+/* Hours ago */
+"time.hours_ago" = "%d hours ago";
+
+/* Time ago display */
+"time.just_now" = "Just now";
+
+/* Minutes ago */
+"time.minutes_ago" = "%d minutes ago";
+
+/* One day ago */
+"time.one_day_ago" = "1 day ago";
+
+"toast.articles.add_failed.message" = "Unable to save feed. Please try again.";
+
+"toast.articles.add_failed.title" = "Add Failed";
+
+/* Delete failed message */
+"toast.articles.delete_failed.message" = "Unable to delete feed. Please try again.";
+
+/* Delete failed title */
+"toast.articles.delete_failed.title" = "Delete Failed";
+
+/* Deleted message */
+"toast.articles.deleted.message" = "Feed \"%@\" has been deleted";
+
+/* Deleted title */
+"toast.articles.deleted.title" = "Deleted";
+
+/* Load failed message */
+"toast.articles.load_failed.message" = "Unable to load feed list. Please restart the app.";
+
+/* Toast messages - Articles */
+"toast.articles.load_failed.title" = "Load Failed";
+
+/* Refresh failed message */
+"toast.articles.refresh_failed.message" = "Success: %d, Failed: %d";
+
+/* Refresh failed title */
+"toast.articles.refresh_failed.title" = "Refresh Failed";
+
+/* Refresh success message */
+"toast.articles.refresh_success.message" = "Updated content from %d feeds";
+
+/* Refresh success title */
+"toast.articles.refresh_success.title" = "Refresh Success";
+
+/* Update failed message */
+"toast.articles.update_failed.message" = "Unable to update feed \"%@\". Please check network connection.";
+
+/* Update failed title */
+"toast.articles.update_failed.title" = "Update Failed";
+
+/* Updated message */
+"toast.articles.updated.message" = "Settings for feed \"%@\" have been updated";
+
+/* Updated title */
+"toast.articles.updated.title" = "Updated";
+
+/* Toast error */
+"toast.error" = "Error";
+
+/* Toast info */
+"toast.info" = "Info";
+
+"toast.quotes.article_saved.message" = "Full article has been added to favorites";
+
+/* Toast messages - Quotes */
+"toast.quotes.article_saved.title" = "Article Saved";
+
+"toast.quotes.article_unsaved.message" = "Article has been removed from favorites";
+
+"toast.quotes.article_unsaved.title" = "Article Unsaved";
+
+/* Quotes deleted message */
+"toast.quotes.deleted.message" = "Removed %d favorite items";
+
+/* Quotes deleted title */
+"toast.quotes.deleted.title" = "Deleted";
+
+"toast.quotes.text_saved.message" = "Selected text has been added to favorites";
+
+"toast.quotes.text_saved.title" = "Text Saved";
+
+"toast.quotes.text_unsaved.message" = "Text has been removed from favorites";
+
+"toast.quotes.text_unsaved.title" = "Text Unsaved";
+
+/* Toast success */
+"toast.success" = "Success";
+
+/* Toast warning */
+"toast.warning" = "Warning";

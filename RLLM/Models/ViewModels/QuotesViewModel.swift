@@ -41,8 +41,8 @@ class QuotesViewModel: ObservableObject {
             HapticManager.shared.lightImpact()
             // 显示成功提示
             ToastManager.shared.showSuccess(
-                isFullArticle ? "文章已收藏" : "文本已收藏",
-                message: isFullArticle ? "已将整篇文章添加到收藏" : "已将选中文本添加到收藏"
+                NSLocalizedString(isFullArticle ? "toast.quotes.article_saved.title" : "toast.quotes.text_saved.title", comment: "Quote saved title"),
+                message: NSLocalizedString(isFullArticle ? "toast.quotes.article_saved.message" : "toast.quotes.text_saved.message", comment: "Quote saved message")
             )
             print("Added new quote: \(isFullArticle ? "Full article" : "Text selection") from \(article.title)")
         } else {
@@ -67,8 +67,8 @@ class QuotesViewModel: ObservableObject {
         
         // 显示删除提示
         ToastManager.shared.showWarning(
-            "已删除收藏",
-            message: "已移除\(count)条收藏内容"
+            NSLocalizedString("toast.quotes.deleted.title", comment: "Quotes deleted title"),
+            message: String(format: NSLocalizedString("toast.quotes.deleted.message", comment: "Quotes deleted message"), count)
         )
         print("Deleted quotes at offsets: \(offsets)")
     }
@@ -87,8 +87,8 @@ class QuotesViewModel: ObservableObject {
             HapticManager.shared.lightImpact()
             // 显示取消收藏提示
             ToastManager.shared.showWarning(
-                isFullArticle ? "已取消收藏" : "已移除收藏",
-                message: isFullArticle ? "已将文章从收藏中移除" : "已将文本从收藏中移除"
+                NSLocalizedString(isFullArticle ? "toast.quotes.article_unsaved.title" : "toast.quotes.text_unsaved.title", comment: "Quote unsaved title"),
+                message: NSLocalizedString(isFullArticle ? "toast.quotes.article_unsaved.message" : "toast.quotes.text_unsaved.message", comment: "Quote unsaved message")
             )
             print("Removed quote for article: \(articleURL)")
         }

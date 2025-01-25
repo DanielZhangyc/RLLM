@@ -36,7 +36,7 @@ struct ModelCard: View {
                         }
                         
                         if model.isThinkingModel {
-                            Text("⚠️ 此模型会输出思维过程，可能影响摘要质量")
+                            Text(NSLocalizedString("model.thinking_warning", comment: "Model thinking warning"))
                                 .font(.caption)
                                 .foregroundColor(.orange)
                                 .padding(.top, 4)

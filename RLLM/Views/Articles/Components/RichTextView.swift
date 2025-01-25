@@ -78,7 +78,7 @@ struct RichTextView: UIViewRepresentable {
         
         #if compiler(>=5.7)
         // 添加自定义菜单项，并确保它显示在最前面
-        let saveQuoteItem = UIMenuItem(title: "收藏", action: #selector(CustomWKWebView.saveQuote(_:)))
+        let saveQuoteItem = UIMenuItem(title: NSLocalizedString("quote.save", comment: "Save quote menu item"), action: #selector(CustomWKWebView.saveQuote(_:)))
         UIMenuController.shared.menuItems = [saveQuoteItem]
         #endif
         

@@ -14,17 +14,17 @@ class LLMService {
         var errorDescription: String? {
             switch self {
             case .invalidURL:
-                return "无效的 URL"
+                return NSLocalizedString("llm.error.invalid_url", comment: "Invalid URL error")
             case .networkError(let error):
-                return "网络错误: \(error.localizedDescription)"
+                return String(format: NSLocalizedString("llm.error.network", comment: "Network error with description"), error.localizedDescription)
             case .invalidResponse:
-                return "无效的响应"
+                return NSLocalizedString("llm.error.invalid_response", comment: "Invalid response error")
             case .authenticationFailed:
-                return "认证失败，请检查 API Key"
+                return NSLocalizedString("llm.error.auth_failed", comment: "Authentication failed error")
             case .decodingError(let error):
-                return "解析错误: \(error.localizedDescription)"
+                return String(format: NSLocalizedString("llm.error.decoding", comment: "Decoding error with description"), error.localizedDescription)
             case .noContent:
-                return "未获取到有效内容"
+                return NSLocalizedString("llm.error.no_content", comment: "No content error")
             }
         }
     }
@@ -35,18 +35,23 @@ class LLMService {
     // MARK: - Private Methods
     
     private func buildSummaryPrompt(for article: Article) -> String {
-        return LLMPrompts.format(LLMPrompts.summary, with: [
+        let languageInstruction = NSLocalizedString("llm.language_instruction", comment: "Language instruction for LLM")
+        let prompt = LLMPrompts.format(LLMPrompts.summary, with: [
             "article_content": article.content.removingHTMLTags()
         ])
+        return languageInstruction + "\n\n" + prompt
     }
     
     private func buildInsightPrompt(for content: String) -> String {
-        return LLMPrompts.format(LLMPrompts.insight, with: [
+        let languageInstruction = NSLocalizedString("llm.language_instruction", comment: "Language instruction for LLM")
+        let prompt = LLMPrompts.format(LLMPrompts.insight, with: [
             "article_content": content
         ])
+        return languageInstruction + "\n\n" + prompt
     }
     
     private func buildDailySummaryPrompt(with records: [ReadingRecord]) -> String {
+        let languageInstruction = NSLocalizedString("llm.language_instruction", comment: "Language instruction for LLM")
         let recordsText = records.map { record in
             """
             标题：\(record.articleTitle)
@@ -55,12 +60,14 @@ class LLMService {
             """
         }.joined(separator: "\n\n")
         
-        return LLMPrompts.format(LLMPrompts.dailySummary, with: [
+        let prompt = LLMPrompts.format(LLMPrompts.dailySummary, with: [
             "reading_records": recordsText
         ])
+        return languageInstruction + "\n\n" + prompt
     }
     
     private func buildTopicAnalysisPrompt(with records: [ReadingRecord]) -> String {
+        let languageInstruction = NSLocalizedString("llm.language_instruction", comment: "Language instruction for LLM")
         let recordsText = records.map { record in
             """
             标题：\(record.articleTitle)
@@ -69,9 +76,10 @@ class LLMService {
             """
         }.joined(separator: "\n\n")
         
-        return LLMPrompts.format(LLMPrompts.topicAnalysis, with: [
+        let prompt = LLMPrompts.format(LLMPrompts.topicAnalysis, with: [
             "reading_records": recordsText
         ])
+        return languageInstruction + "\n\n" + prompt
     }
     
     // MARK: - Network Request Methods

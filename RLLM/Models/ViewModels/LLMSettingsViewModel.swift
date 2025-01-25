@@ -44,11 +44,11 @@ class LLMSettingsViewModel: ObservableObject {
             do {
                 _ = try await LLMService.shared.fetchAvailableModels(config: config)
                 await MainActor.run {
-                    self.testResult = "连接成功"
+                    self.testResult = NSLocalizedString("settings.test_success", comment: "Test success")
                 }
             } catch {
                 await MainActor.run {
-                    self.testResult = "连接失败: \(error.localizedDescription)"
+                    self.testResult = NSLocalizedString("settings.test_failed", comment: "Test failed") + ": \(error.localizedDescription)"
                 }
             }
             await MainActor.run {

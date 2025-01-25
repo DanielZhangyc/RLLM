@@ -12,7 +12,7 @@ enum LLMProvider: String, Codable, CaseIterable {
     case anthropic = "Anthropic"
     
     /// 自定义API服务
-    case custom = "自定义"
+    case custom = "Custom"
     
     /// Deepseek API服务
     case deepseek = "Deepseek"
@@ -22,7 +22,7 @@ enum LLMProvider: String, Codable, CaseIterable {
     /// 返回排序后的提供者列表，自定义始终在底部，其他选项按字母顺序排序
     static var sortedCases: [LLMProvider] {
         let allCases = Self.allCases.filter { $0 != .custom }
-        let sorted = allCases.sorted { $0.rawValue.localizedStandardCompare($1.rawValue) == .orderedAscending }
+        let sorted = allCases.sorted { $0.displayName.localizedStandardCompare($1.displayName) == .orderedAscending }
         return sorted + [.custom]
     }
     
@@ -53,6 +53,16 @@ enum LLMProvider: String, Codable, CaseIterable {
             return []
         case .deepseek:
             return ["deepseek-chat"]
+        }
+    }
+    
+    /// 获取提供商的显示名称
+    var displayName: String {
+        switch self {
+        case .custom:
+            return NSLocalizedString("provider.custom", comment: "Custom provider")
+        default:
+            return rawValue
         }
     }
 }

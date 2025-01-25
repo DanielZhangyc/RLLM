@@ -30,7 +30,7 @@ struct ErrorView: View {
             
             if showRetryButton {
                 Button(action: retryAction) {
-                    Label("重试", systemImage: "arrow.clockwise")
+                    Label(NSLocalizedString("error.retry", comment: "Retry button"), systemImage: "arrow.clockwise")
                 }
                 .buttonStyle(.bordered)
                 .tint(.accentColor)

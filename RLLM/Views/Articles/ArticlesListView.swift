@@ -53,7 +53,7 @@ struct ArticlesListView: View {
                 .padding()
             }
         }
-        .navigationTitle("文章")
+        .navigationTitle(NSLocalizedString("tab.articles", comment: "Articles tab"))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { showAddFeedSheet = true }) {

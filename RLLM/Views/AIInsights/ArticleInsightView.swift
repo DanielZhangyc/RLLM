@@ -27,7 +27,7 @@ struct ArticleInsightView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 if viewModel.isAnalyzing {
-                    ProgressView("正在分析...")
+                    ProgressView(NSLocalizedString("article_insight.analyzing", comment: "Analyzing progress"))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if let insight = viewModel.articleInsight {
                     insightContent(insight)
@@ -46,9 +46,9 @@ struct ArticleInsightView: View {
                         Image(systemName: "wand.and.stars")
                             .font(.largeTitle)
                             .foregroundColor(.accentColor)
-                        Text("点击开始分析")
+                        Text(NSLocalizedString("article_insight.click_to_start", comment: "Click to start analysis"))
                             .foregroundColor(.secondary)
-                        Button("开始分析") {
+                        Button(NSLocalizedString("article_insight.start", comment: "Start analysis")) {
                             Task {
                                 _ = await viewModel.analyzeArticle(content, articleId: articleId)
                                 HapticManager.shared.success()
@@ -63,7 +63,7 @@ struct ArticleInsightView: View {
             .padding()
             .frame(maxWidth: .infinity, minHeight: 300)
         }
-        .navigationTitle("AI洞察")
+        .navigationTitle(NSLocalizedString("article.ai_insight", comment: "AI Deep Insight"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -94,7 +94,7 @@ struct ArticleInsightView: View {
         VStack(alignment: .leading, spacing: 20) {
             // 主题标签
             VStack(alignment: .leading, spacing: 12) {
-                Label("主题标签", systemImage: "tag")
+                Label(NSLocalizedString("article_insight.topic_tags", comment: "Topic tags"), systemImage: "tag")
                     .font(.headline)
                     .padding(.bottom, 8)
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -121,7 +121,7 @@ struct ArticleInsightView: View {
             
             // 核心摘要
             VStack(alignment: .leading, spacing: 12) {
-                Label("核心摘要", systemImage: "text.justify")
+                Label(NSLocalizedString("article_insight.core_summary", comment: "Core summary"), systemImage: "text.justify")
                     .font(.headline)
                     .padding(.bottom, 4)
                 Text(insight.summary)
@@ -132,7 +132,7 @@ struct ArticleInsightView: View {
             
             // 关键观点
             VStack(alignment: .leading, spacing: 12) {
-                Label("关键观点", systemImage: "list.bullet")
+                Label(NSLocalizedString("article_insight.key_points", comment: "Key points"), systemImage: "list.bullet")
                     .font(.headline)
                     .padding(.bottom, 4)
                 ForEach(insight.keyPoints, id: \.self) { point in
@@ -149,7 +149,7 @@ struct ArticleInsightView: View {
             
             // 情感倾向
             VStack(alignment: .leading, spacing: 12) {
-                Label("情感倾向", systemImage: "heart")
+                Label(NSLocalizedString("article_insight.sentiment", comment: "Sentiment"), systemImage: "heart")
                     .font(.headline)
                     .padding(.bottom, 4)
                 Text(insight.sentiment)
@@ -160,7 +160,7 @@ struct ArticleInsightView: View {
             if let backgroundInfo = insight.backgroundInfo {
                 Divider()
                 VStack(alignment: .leading, spacing: 12) {
-                    Label("背景补充", systemImage: "info.circle")
+                    Label(NSLocalizedString("article_insight.background", comment: "Background"), systemImage: "info.circle")
                         .font(.headline)
                         .padding(.bottom, 4)
                     Text(backgroundInfo)

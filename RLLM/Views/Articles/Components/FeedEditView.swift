@@ -49,9 +49,9 @@ struct FeedEditView: View {
     var body: some View {
         Form {
             Section {
-                TextField("标题", text: $title)
+                TextField(NSLocalizedString("feed_edit.name", comment: "Feed name field"), text: $title)
             } header: {
-                Text("基本信息")
+                Text(NSLocalizedString("feed_edit.basic_info", comment: "Basic info section"))
             }
             
             Section {
@@ -100,20 +100,20 @@ struct FeedEditView: View {
                     .padding(.vertical, 8)
                 }
             } header: {
-                Text("图标设置")
+                Text(NSLocalizedString("feed_edit.icon_settings", comment: "Icon settings"))
             }
         }
-        .navigationTitle("设置")
+        .navigationTitle(NSLocalizedString("feed_edit.title", comment: "Settings"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button("取消") {
+                Button(NSLocalizedString("feed_edit.cancel", comment: "Cancel")) {
                     dismiss()
                 }
             }
             
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("完成") {
+                Button(NSLocalizedString("feed_edit.done", comment: "Done")) {
                     articlesViewModel.updateFeed(
                         feed,
                         title: title,

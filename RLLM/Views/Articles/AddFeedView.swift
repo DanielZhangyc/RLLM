@@ -13,12 +13,12 @@ struct AddFeedView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("RSS源地址", text: $url)
+                    TextField(NSLocalizedString("add_feed.rss_url", comment: "RSS feed URL"), text: $url)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .keyboardType(.URL)
                     
-                    TextField("源名称（可选）", text: $customTitle)
+                    TextField(NSLocalizedString("add_feed.feed_name", comment: "Feed name"), text: $customTitle)
                 }
                 
                 Section {
@@ -27,20 +27,20 @@ struct AddFeedView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle())
                         } else {
-                            Text("添加")
+                            Text(NSLocalizedString("add_feed.add", comment: "Add feed button"))
                         }
                     }
                     .disabled(url.isEmpty || isLoading)
                 }
             }
-            .navigationTitle("添加订阅源")
-            .navigationBarItems(trailing: Button("取消") {
+            .navigationTitle(NSLocalizedString("add_feed.title", comment: "Add feed title"))
+            .navigationBarItems(trailing: Button(NSLocalizedString("cancel", comment: "Cancel button")) {
                 dismiss()
             })
-            .alert("错误", isPresented: $showingError) {
-                Button("确定", role: .cancel) {}
+            .alert(NSLocalizedString("add_feed.error", comment: "Error alert title"), isPresented: $showingError) {
+                Button(NSLocalizedString("add_feed.ok", comment: "OK button"), role: .cancel) {}
             } message: {
-                Text(error?.localizedDescription ?? "未知错误")
+                Text(error?.localizedDescription ?? NSLocalizedString("add_feed.unknown_error", comment: "Unknown error message"))
             }
         }
     }

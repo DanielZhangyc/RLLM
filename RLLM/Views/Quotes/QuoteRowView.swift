@@ -13,7 +13,7 @@ struct QuoteRowView: View {
             // 内容区域
             VStack(alignment: .leading, spacing: 8) {
                 if quote.isFullArticle {
-                    Text("全文收藏")
+                    Text(NSLocalizedString("quote.full_article", comment: "Full article saved"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.vertical, 4)

@@ -59,8 +59,8 @@ class ArticlesViewModel: ObservableObject {
             self.error = error
             // 显示错误提示
             ToastManager.shared.showError(
-                "加载失败",
-                message: "无法加载订阅源列表，请重启应用"
+                NSLocalizedString("toast.articles.load_failed.title", comment: "Load failed title"),
+                message: NSLocalizedString("toast.articles.load_failed.message", comment: "Load failed message")
             )
         }
     }
@@ -163,15 +163,15 @@ class ArticlesViewModel: ObservableObject {
                 if successCount > 0 {
                     HapticManager.shared.success()
                     ToastManager.shared.showSuccess(
-                        "刷新成功",
-                        message: "已更新\(successCount)个订阅源的内容"
+                        NSLocalizedString("toast.articles.refresh_success.title", comment: "Refresh success title"),
+                        message: String(format: NSLocalizedString("toast.articles.refresh_success.message", comment: "Refresh success message"), successCount)
                     )
                 }
             } else {
                 HapticManager.shared.error()
                 ToastManager.shared.showError(
-                    "刷新失败",
-                    message: "成功\(successCount)个，失败\(failureCount)个"
+                    NSLocalizedString("toast.articles.refresh_failed.title", comment: "Refresh failed title"),
+                    message: String(format: NSLocalizedString("toast.articles.refresh_failed.message", comment: "Refresh failed message"), successCount, failureCount)
                 )
             }
         }
@@ -234,8 +234,8 @@ class ArticlesViewModel: ObservableObject {
                 objectWillChange.send()
                 // 显示错误提示
                 ToastManager.shared.showError(
-                    "更新失败",
-                    message: "无法更新源\"\(feed.title)\"，请检查网络连接"
+                    NSLocalizedString("toast.articles.update_failed.title", comment: "Update failed title"),
+                    message: String(format: NSLocalizedString("toast.articles.update_failed.message", comment: "Update failed message"), feed.title)
                 )
             }
             print("Failed to refresh feed: \(feed.title)")
@@ -313,16 +313,16 @@ class ArticlesViewModel: ObservableObject {
             HapticManager.shared.lightImpact()
             // 显示成功提示
             ToastManager.shared.showWarning(
-                "已删除订阅源",
-                message: "已移除源\"\(feed.title)\"及其所有文章"
+                NSLocalizedString("toast.articles.deleted.title", comment: "Deleted title"),
+                message: String(format: NSLocalizedString("toast.articles.deleted.message", comment: "Deleted message"), feed.title)
             )
         } catch {
             print("Error saving feeds after deletion: \(error.localizedDescription)")
             self.error = error
             // 显示错误提示
             ToastManager.shared.showError(
-                "删除失败",
-                message: "无法保存更改，请重试"
+                NSLocalizedString("toast.articles.delete_failed.title", comment: "Delete failed title"),
+                message: NSLocalizedString("toast.articles.delete_failed.message", comment: "Delete failed message")
             )
         }
     }
@@ -334,8 +334,8 @@ class ArticlesViewModel: ObservableObject {
             articles[index].isRead = true
             // 显示提示
             ToastManager.shared.showInfo(
-                "已读",
-                message: "已将源\"\(article.title)\"标记为已读"
+                NSLocalizedString("toast.articles.updated.title", comment: "Updated title"),
+                message: String(format: NSLocalizedString("toast.articles.updated.message", comment: "Updated message"), article.title)
             )
         }
     }
@@ -420,8 +420,8 @@ class ArticlesViewModel: ObservableObject {
                 
                 // 显示成功提示
                 ToastManager.shared.showSuccess(
-                    "更新成功",
-                    message: "已更新源\"\(title)\"的设置"
+                    NSLocalizedString("toast.articles.updated.title", comment: "Updated title"),
+                    message: String(format: NSLocalizedString("toast.articles.updated.message", comment: "Updated message"), title)
                 )
                 
                 // 立即刷新更新后的Feed的文章列表
@@ -435,8 +435,8 @@ class ArticlesViewModel: ObservableObject {
                     feedLoadingStates[feed.id] = .failed(error)
                     // 显示错误提示
                     ToastManager.shared.showError(
-                        "保存失败",
-                        message: "无法保存源\"\(title)\"的设置更改"
+                        NSLocalizedString("toast.articles.update_failed.title", comment: "Update failed title"),
+                        message: NSLocalizedString("toast.articles.update_failed.message", comment: "Update failed message")
                     )
                 }
             }

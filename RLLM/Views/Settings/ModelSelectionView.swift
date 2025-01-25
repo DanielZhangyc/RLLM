@@ -36,9 +36,9 @@ struct ModelSelectionView: View {
             .padding(.horizontal)
             .padding(.top, 8)
         }
-        .navigationTitle("选择模型")
-        .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: "搜索模型", suggestions: {
+        .navigationTitle(NSLocalizedString("model.select", comment: "Select model"))
+        .navigationBarTitleDisplayMode(.inline)
+        .searchable(text: $searchText, prompt: NSLocalizedString("model.search", comment: "Search model"), suggestions: {
             if searchText.isEmpty {
                 ForEach(viewModel.models.prefix(3)) { model in
                     Text(model.name)
@@ -55,10 +55,10 @@ struct ModelSelectionView: View {
                     .background(Color(.systemBackground).opacity(0.8))
             }
         }
-        .alert("错误", isPresented: $viewModel.showError) {
-            Button("确定", role: .cancel) {}
+        .alert(NSLocalizedString("model.error", comment: "Error"), isPresented: $viewModel.showError) {
+            Button(NSLocalizedString("model.ok", comment: "OK"), role: .cancel) {}
         } message: {
-            Text(viewModel.errorMessage ?? "未知错误")
+            Text(viewModel.errorMessage ?? NSLocalizedString("model.unknown_error", comment: "Unknown error"))
         }
         .task {
             await viewModel.fetchModels(config: config)

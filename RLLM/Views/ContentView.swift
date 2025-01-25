@@ -13,7 +13,7 @@ struct ContentView: View {
                     .environmentObject(quotesViewModel)
             }
             .tabItem {
-                Label("文章", systemImage: "doc.text.fill")
+                Label(NSLocalizedString("tab.articles", comment: "Articles tab"), systemImage: "doc.text.fill")
             }
             
             NavigationStack {
@@ -21,21 +21,21 @@ struct ContentView: View {
                     .environmentObject(quotesViewModel)
             }
             .tabItem {
-                Label("收藏", systemImage: "bookmark.fill")
+                Label(NSLocalizedString("tab.quotes", comment: "Quotes tab"), systemImage: "bookmark.fill")
             }
             
             NavigationStack {
                 AIInsightsView()
             }
             .tabItem {
-                Label("AI总结", systemImage: "brain.fill")
+                Label(NSLocalizedString("tab.ai_summary", comment: "AI Summary tab"), systemImage: "brain.fill")
             }
             
             NavigationStack {
                 SettingsView()
             }
             .tabItem {
-                Label("设置", systemImage: "gearshape.fill")
+                Label(NSLocalizedString("tab.settings", comment: "Settings tab"), systemImage: "gearshape.fill")
             }
         }
         .environmentObject(articlesViewModel)

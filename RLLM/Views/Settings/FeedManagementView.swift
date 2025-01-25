@@ -24,7 +24,7 @@ struct FeedManagementView: View {
                 }
             }
         }
-        .navigationTitle("订阅源管理")
+        .navigationTitle(NSLocalizedString("feed_management.title", comment: "Feed management title"))
         .navigationBarItems(trailing: Button(action: {
             showingAddFeed = true
         }) {
@@ -33,10 +33,10 @@ struct FeedManagementView: View {
         .sheet(isPresented: $showingAddFeed) {
             AddFeedView(viewModel: articlesViewModel)
         }
-        .alert("错误", isPresented: $showingError) {
-            Button("确定", role: .cancel) {}
+        .alert(NSLocalizedString("feed_management.error", comment: "Error alert title"), isPresented: $showingError) {
+            Button(NSLocalizedString("feed_management.ok", comment: "OK button"), role: .cancel) {}
         } message: {
-            Text(error?.localizedDescription ?? "未知错误")
+            Text(error?.localizedDescription ?? NSLocalizedString("feed_management.unknown_error", comment: "Unknown error message"))
         }
     }
 }

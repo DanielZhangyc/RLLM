@@ -1,0 +1,536 @@
+/* Add feed button */
+"add_feed.add" = "添加";
+
+/* Error alert title */
+"add_feed.error" = "错误";
+
+/* Feed name */
+"add_feed.feed_name" = "源名称（可选）";
+
+/* OK button */
+"add_feed.ok" = "确定";
+
+/* RSS feed URL */
+"add_feed.rss_url" = "RSS源地址";
+
+/* Add feed title */
+"add_feed.title" = "添加订阅源";
+
+/* Unknown error message */
+"add_feed.unknown_error" = "未知错误";
+
+/* AI Insights */
+"ai.analyzing" = "正在分析...";
+
+/* Article count suffix */
+"ai.article_count_suffix" = "篇";
+
+/* Configuration error */
+"ai.config_error" = "配置错误";
+
+/* Daily summary */
+"ai.daily_summary" = "今日总结";
+
+/* Hot topics */
+"ai.hot_topics" = "热门话题";
+
+/* Key points */
+"ai.key_points" = "关键观点";
+
+/* Learning advice */
+"ai.learning_advice" = "学习建议";
+
+/* No reading records */
+"ai.no_reading_records" = "暂无阅读记录";
+
+/* No reading records description */
+"ai.no_reading_records_desc" = "开始阅读一些文章，AI将为你生成今日阅读总结";
+
+/* Reading time prefix */
+"ai.reading_time_prefix" = "阅读时长：";
+
+/* Refresh button */
+"ai.refresh" = "刷新";
+
+/* Retry button */
+"ai.retry" = "重试";
+
+"ai.section.advice" = "学习建议";
+
+/* Topic analysis section titles */
+"ai.section.hot_topics" = "热门话题";
+
+"ai.section.key_points" = "关键观点";
+
+/* Daily summary section titles */
+"ai.section.summary" = "核心摘要";
+
+"ai.section.topic_distribution" = "话题分布";
+
+/* Cancel button */
+"ai_cache.cancel" = "取消";
+
+/* Clear button */
+"ai_cache.clear" = "清除";
+
+/* Clear all AI cache */
+"ai_cache.clear_all" = "清除所有AI缓存";
+
+/* Clear all AI cache message */
+"ai_cache.clear_all_message" = "确定要清除所有AI缓存吗？";
+
+/* Clear all AI cache confirmation */
+"ai_cache.clear_all_title" = "清除所有AI缓存";
+
+/* Clear daily summary cache message */
+"ai_cache.clear_daily_summary_message" = "确定要清除每日总结缓存吗？";
+
+/* Clear daily summary cache confirmation */
+"ai_cache.clear_daily_summary_title" = "清除每日总结缓存";
+
+/* Clear insight cache message */
+"ai_cache.clear_insight_message" = "确定要清除洞察缓存吗？";
+
+/* Clear insight cache confirmation */
+"ai_cache.clear_insight_title" = "清除洞察缓存";
+
+/* Clear summary cache message */
+"ai_cache.clear_summary_message" = "确定要清除概括缓存吗？";
+
+/* Clear summary cache confirmation */
+"ai_cache.clear_summary_title" = "清除概括缓存";
+
+/* Daily summary cache */
+"ai_cache.daily_summary_cache" = "每日总结缓存";
+
+/* Entry count and size */
+"ai_cache.entry_count_size" = "%d个 • %@";
+
+/* Expired entries */
+"ai_cache.expired_entries" = "%d个过期条目";
+
+/* AI insight cache */
+"ai_cache.insight_cache" = "AI洞察缓存";
+
+/* AI summary cache */
+"ai_cache.summary_cache" = "AI概括缓存";
+
+/* AI cache management */
+"ai_cache.title" = "AI缓存管理";
+
+/* AI Deep Insight */
+"article.ai_insight" = "AI深度洞察";
+
+/* AI Summary */
+"article.ai_summary" = "AI概括";
+
+/* API key missing */
+"article.api_key_missing" = "请先在设置中配置 API Key";
+
+/* Author with name */
+"article.author" = "作者：%@";
+
+/* Generate summary */
+"article.generate" = "生成";
+
+/* Generating summary */
+"article.generating_summary" = "正在生成概括...";
+
+/* LLM not configured */
+"article.llm_not_configured" = "请先在设置中配置 LLM";
+
+/* Open in browser */
+"article.open_in_browser" = "浏览器打开";
+
+/* Regenerate summary */
+"article.regenerate" = "重新生成";
+
+/* Save full article */
+"article.save_full" = "收藏全文";
+
+/* Summary generation error */
+"article.summary_error" = "生成概括失败：%@";
+
+/* Unsave article */
+"article.unsave" = "取消收藏";
+
+/* Article Insight */
+"article_insight.analyzing" = "正在分析...";
+
+/* Background */
+"article_insight.background" = "背景补充";
+
+/* Click to start analysis */
+"article_insight.click_to_start" = "点击开始分析";
+
+/* Core summary */
+"article_insight.core_summary" = "核心摘要";
+
+/* Key points */
+"article_insight.key_points" = "关键观点";
+
+/* Sentiment */
+"article_insight.sentiment" = "情感倾向";
+
+/* Start analysis */
+"article_insight.start" = "开始分析";
+
+/* Topic tags */
+"article_insight.topic_tags" = "主题标签";
+
+/* Cancel button */
+"cancel" = "取消";
+
+/* Retry button */
+"error.retry" = "重试";
+
+/* Delete feed */
+"feed.delete" = "删除";
+
+/* Basic info section */
+"feed_edit.basic_info" = "基本信息";
+
+/* Cancel */
+"feed_edit.cancel" = "取消";
+
+/* Done */
+"feed_edit.done" = "完成";
+
+/* Icon settings */
+"feed_edit.icon_settings" = "图标设置";
+
+/* Feed name field */
+"feed_edit.name" = "标题";
+
+/* Settings */
+"feed_edit.title" = "设置";
+
+/* Error alert title */
+"feed_management.error" = "错误";
+
+/* OK button */
+"feed_management.ok" = "确定";
+
+/* Feed management title */
+"feed_management.title" = "订阅源管理";
+
+/* Unknown error message */
+"feed_management.unknown_error" = "未知错误";
+
+/* Authentication failed error */
+"llm.error.auth_failed" = "认证失败，请检查 API Key";
+
+/* Decoding error with description */
+"llm.error.decoding" = "解析错误: %@";
+
+/* Invalid response error */
+"llm.error.invalid_response" = "无效的响应";
+
+/* Invalid URL error */
+"llm.error.invalid_url" = "无效的 URL";
+
+/* Network error with description */
+"llm.error.network" = "网络错误: %@";
+
+/* No content error */
+"llm.error.no_content" = "未获取到有效内容";
+
+/* Language instruction for LLM */
+"llm.language_instruction" = "请用中文回答。保持所有小节标题和格式标记不变。";
+
+/* Error */
+"model.error" = "错误";
+
+/* OK */
+"model.ok" = "确定";
+
+/* Search model */
+"model.search" = "搜索模型";
+
+/* Select model */
+"model.select" = "选择模型";
+
+/* Model thinking warning */
+"model.thinking_warning" = "⚠️ 此模型会输出思维过程，可能影响摘要质量";
+
+/* Unknown error */
+"model.unknown_error" = "未知错误";
+
+/* Custom provider */
+"provider.custom" = "自定义";
+
+/* Quote detail */
+"quote.detail" = "收藏详情";
+
+/* Full article saved */
+"quote.full_article" = "全文收藏";
+
+/* Save quote menu item */
+"quote.save" = "收藏";
+
+/* Save time prefix */
+"quote.save_time_prefix" = "保存时间：";
+
+/* Source prefix */
+"quote.source_prefix" = "来源：";
+
+/* View original */
+"quote.view_original" = "查看原文";
+
+/* Delete quote */
+"quotes.delete" = "删除";
+
+/* Save quotes instruction */
+"quotes.save_instruction" = "在阅读文章时长按选择文字即可收藏";
+
+/* Save quotes title */
+"quotes.save_quote" = "收藏精彩语段";
+
+/* Saved quotes display */
+"quotes.saved_display" = "收藏的语段将在这里显示";
+
+/* Quotes title */
+"quotes.title" = "收藏";
+
+/* Article count */
+"reading_history.article_count" = "%d篇";
+
+/* Articles read */
+"reading_history.article_read" = "%d篇文章";
+
+/* Articles read */
+"reading_history.articles_read" = "%d篇文章";
+
+/* Average per article */
+"reading_history.average_per_article" = "平均每篇";
+
+/* Daily average */
+"reading_history.daily_average" = "平均每日";
+
+/* Hours and minutes */
+"reading_history.hours_minutes" = "%d小时%d分钟";
+
+/* Reading time - singular */
+"reading_history.minute" = "%d分钟";
+
+/* Reading time - plural */
+"reading_history.minutes" = "%d分钟";
+
+/* No reading records */
+"reading_history.no_records" = "暂无阅读记录";
+
+/* Reading time */
+"reading_history.reading_time" = "阅读时长";
+
+/* Reading records */
+"reading_history.records" = "阅读记录";
+
+/* Reading statistics */
+"reading_history.statistics" = "阅读统计";
+
+/* This month */
+"reading_history.this_month" = "本月";
+
+/* This week */
+"reading_history.this_week" = "本周";
+
+/* Time range */
+"reading_history.time_range" = "时间范围";
+
+/* Reading history */
+"reading_history.title" = "阅读历史";
+
+/* Today */
+"reading_history.today" = "今日";
+
+/* About section */
+"settings.about" = "关于";
+
+/* About description */
+"settings.about_description" = "RLLM 是一个开源的RSS阅读器，结合了AI的智能分析功能。";
+
+/* AI cache management */
+"settings.ai_cache" = "AI缓存管理";
+
+/* API Key */
+"settings.api_key" = "API密钥";
+
+/* Base URL */
+"settings.base_url" = "基础URL";
+
+/* Cancel button */
+"settings.cancel" = "取消";
+
+/* Clear button */
+"settings.clear" = "清除";
+
+/* Clear history */
+"settings.clear_history" = "清除阅读记录";
+
+/* Clear history confirmation message */
+"settings.clear_history_message" = "这将删除所有阅读记录和统计数据，此操作无法撤销。";
+
+/* Clear history confirmation title */
+"settings.clear_history_title" = "确认清除阅读记录";
+
+/* Clear history warning */
+"settings.clear_history_warning" = "清除阅读记录将删除所有阅读历史和统计数据，此操作无法撤销。";
+
+/* Data management section */
+"settings.data_management" = "数据管理";
+
+/* Feed count */
+"settings.feed_count" = "%d个订阅";
+
+/* Feed management section */
+"settings.feed_management" = "订阅源管理";
+
+/* LLM settings section */
+"settings.llm" = "LLM设置";
+
+/* Loading models */
+"settings.loading_models" = "加载模型列表...";
+
+/* Manage feeds */
+"settings.manage_feeds" = "管理RSS源";
+
+/* Model selection */
+"settings.model" = "模型";
+
+/* Provider picker */
+"settings.provider" = "服务商";
+
+/* Reading settings section */
+"settings.reading" = "阅读设置";
+
+/* Reading history */
+"settings.reading_history" = "阅读历史";
+
+/* Record count */
+"settings.record_count" = "%d个记录";
+
+/* Source code */
+"settings.source_code" = "源代码";
+
+/* Test connection button */
+"settings.test_connection" = "测试连接";
+
+/* Test connection failed */
+"settings.test_failed" = "连接失败";
+
+/* Test connection success */
+"settings.test_success" = "连接成功";
+
+/* Settings title */
+"settings.title" = "设置";
+
+/* Version */
+"settings.version" = "版本";
+
+/* AI Summary tab */
+"tab.ai_summary" = "AI总结";
+
+/* Articles tab */
+"tab.articles" = "文章";
+
+/* Quotes tab */
+"tab.quotes" = "收藏";
+
+/* Settings tab */
+"tab.settings" = "设置";
+
+/* Days ago */
+"time.days_ago" = "%d天前";
+
+/* Hours ago */
+"time.hours_ago" = "%d小时前";
+
+/* Time ago display */
+"time.just_now" = "刚刚";
+
+/* Minutes ago */
+"time.minutes_ago" = "%d分钟前";
+
+/* One day ago */
+"time.one_day_ago" = "1天前";
+
+"toast.articles.add_failed.message" = "无法保存RSS源，请重试";
+
+"toast.articles.add_failed.title" = "添加失败";
+
+/* Delete failed message */
+"toast.articles.delete_failed.message" = "无法删除RSS源，请重试";
+
+/* Delete failed title */
+"toast.articles.delete_failed.title" = "删除失败";
+
+/* Deleted message */
+"toast.articles.deleted.message" = "已删除源\"%@\"";
+
+/* Deleted title */
+"toast.articles.deleted.title" = "已删除";
+
+/* Load failed message */
+"toast.articles.load_failed.message" = "无法加载订阅源列表，请重启应用";
+
+/* Toast messages - Articles */
+"toast.articles.load_failed.title" = "加载失败";
+
+/* Refresh failed message */
+"toast.articles.refresh_failed.message" = "成功%d个，失败%d个";
+
+/* Refresh failed title */
+"toast.articles.refresh_failed.title" = "刷新失败";
+
+/* Refresh success message */
+"toast.articles.refresh_success.message" = "已更新%d个订阅源的内容";
+
+/* Refresh success title */
+"toast.articles.refresh_success.title" = "刷新成功";
+
+/* Update failed message */
+"toast.articles.update_failed.message" = "无法更新源\"%@\"，请检查网络连接";
+
+/* Update failed title */
+"toast.articles.update_failed.title" = "更新失败";
+
+/* Updated message */
+"toast.articles.updated.message" = "已更新源\"%@\"的设置";
+
+/* Updated title */
+"toast.articles.updated.title" = "已更新";
+
+/* Toast error */
+"toast.error" = "错误";
+
+/* Toast info */
+"toast.info" = "提示";
+
+"toast.quotes.article_saved.message" = "已将整篇文章添加到收藏";
+
+/* Toast messages - Quotes */
+"toast.quotes.article_saved.title" = "文章已收藏";
+
+"toast.quotes.article_unsaved.message" = "已将文章从收藏中移除";
+
+"toast.quotes.article_unsaved.title" = "已取消收藏";
+
+/* Quotes deleted message */
+"toast.quotes.deleted.message" = "已移除%d条收藏内容";
+
+/* Quotes deleted title */
+"toast.quotes.deleted.title" = "已删除收藏";
+
+"toast.quotes.text_saved.message" = "已将选中文本添加到收藏";
+
+"toast.quotes.text_saved.title" = "文本已收藏";
+
+"toast.quotes.text_unsaved.message" = "已将文本从收藏中移除";
+
+"toast.quotes.text_unsaved.title" = "已移除收藏";
+
+/* Toast success */
+"toast.success" = "成功";
+
+/* Toast warning */
+"toast.warning" = "警告";

@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "RLLM",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v17)
     ],

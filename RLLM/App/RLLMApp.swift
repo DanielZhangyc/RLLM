@@ -11,9 +11,16 @@ struct RLLMApp: App {
     @State private var errorMessage = ""
     
     init() {
-        DataMigrationService.shared.resetMigrationStatus()
-        // 执行数据迁移
-        DataMigrationService.shared.performMigration()
+        // 检查是否有旧数据需要迁移
+        let storageService = StorageService.shared
+        let oldFeeds = storageService.loadFeeds()
+        
+        if !oldFeeds.isEmpty {
+            // 只有在存在旧数据时才执行迁移
+            DataMigrationService.shared.resetMigrationStatus()
+            DataMigrationService.shared.performMigration()
+        }
+        
         // 检查并执行数据清理
         CleanupService.shared.performCleanupIfNeeded()
         // 在应用启动时主动请求网络权限

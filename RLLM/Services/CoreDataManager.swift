@@ -33,8 +33,20 @@ class CoreDataManager {
         ] as [String : Any]
         
         // 获取存储文件URL
-        let storeURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            .appendingPathComponent("RLLM.sqlite")
+        let applicationSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let storeURL = applicationSupportURL.appendingPathComponent("RLLM.sqlite")
+        
+        // 确保目录存在
+        do {
+            try FileManager.default.createDirectory(
+                at: applicationSupportURL,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+        } catch {
+            print("Failed to create directory: \(error)")
+            fatalError("Unable to create Application Support directory: \(error)")
+        }
         
         // 尝试加载存储
         do {
@@ -47,15 +59,23 @@ class CoreDataManager {
         } catch {
             print("Failed to load store: \(error), \(error.localizedDescription)")
             
-            // 尝试删除并重建存储
+            // 只有在文件存在时才尝试删除
+            if FileManager.default.fileExists(atPath: storeURL.path) {
+                // 尝试删除并重建存储
+                do {
+                    try FileManager.default.removeItem(at: storeURL)
+                    // 同时删除相关文件
+                    try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("shm"))
+                    try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("wal"))
+                    print("Deleted existing store files")
+                } catch {
+                    print("Failed to delete store files: \(error)")
+                    fatalError("Unable to delete existing store files: \(error)")
+                }
+            }
+            
+            // 重新创建存储
             do {
-                try FileManager.default.removeItem(at: storeURL)
-                // 同时删除相关文件
-                try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("shm"))
-                try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("wal"))
-                print("Deleted existing store files")
-                
-                // 重新创建存储
                 try container.persistentStoreCoordinator.addPersistentStore(
                     ofType: NSSQLiteStoreType,
                     configurationName: nil,
@@ -64,7 +84,7 @@ class CoreDataManager {
                 )
             } catch {
                 print("Failed to recreate store: \(error)")
-                fatalError("Unable to load or recreate persistent stores: \(error)")
+                fatalError("Unable to create persistent store: \(error)")
             }
         }
         

@@ -95,13 +95,27 @@ class ReadingHistoryManager: ObservableObject {
     func addRecord(_ record: ReadingRecord) {
         guard let articleId = UUID(uuidString: record.articleId) else { return }
         
-        // 更新Core Data中的记录
-        _ = coreDataManager.createOrUpdateReadingRecord(record, articleId: articleId)
-        
-        // 更新内存中的记录列表
-        // 移除同一文章的所有旧记录
-        readingRecords.removeAll { $0.articleId == record.articleId }
-        readingRecords.insert(record, at: 0)
+        // 查找是否存在同一文章的记录
+        if let existingIndex = readingRecords.firstIndex(where: { $0.articleId == record.articleId }) {
+            let existingRecord = readingRecords[existingIndex]
+            // 创建新记录,累加时长,保留最早的开始时间
+            let updatedRecord = ReadingRecord(
+                id: UUID(), // 生成新的ID
+                articleId: record.articleId,
+                articleTitle: record.articleTitle,
+                articleURL: record.articleURL,
+                startTime: min(existingRecord.startTime, record.startTime), // 保留最早的开始时间
+                duration: existingRecord.duration + record.duration // 累加时长
+            )
+            // 更新Core Data中的记录
+            _ = coreDataManager.createOrUpdateReadingRecord(updatedRecord, articleId: articleId)
+            // 更新内存中的记录
+            readingRecords[existingIndex] = updatedRecord
+        } else {
+            // 如果是新文章,直接添加记录
+            _ = coreDataManager.createOrUpdateReadingRecord(record, articleId: articleId)
+            readingRecords.insert(record, at: 0)
+        }
         
         // 更新统计数据
         updateDailyStats(with: record)

@@ -257,20 +257,16 @@ class AIInsightsViewModel: ObservableObject {
                 self.isAnalyzing = false
                 
                 // 保存到缓存
-                if let summary = self.dailySummary,
-                   let keyPoints = self.keyPoints,
-                   let learningAdvice = self.learningAdvice {
-                    let cacheData = DailySummaryCache.DailySummaryData(
-                        summary: summary,
-                        keyPoints: keyPoints,
-                        learningAdvice: learningAdvice,
-                        readingTime: timeString,
-                        topTopics: topics,
-                        topicCounts: counts,
-                        date: today
-                    )
-                    DailySummaryCache.shared.set(cacheData, for: today)
-                }
+                let cacheData = DailySummaryCache.DailySummaryData(
+                    summary: self.dailySummary ?? "",
+                    keyPoints: self.keyPoints ?? [],
+                    learningAdvice: self.learningAdvice ?? "",
+                    readingTime: timeString,
+                    topTopics: topics,
+                    topicCounts: counts,
+                    date: today
+                )
+                DailySummaryCache.shared.set(cacheData, for: today)
             }
             
         } catch {

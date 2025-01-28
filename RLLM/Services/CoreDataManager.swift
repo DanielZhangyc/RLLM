@@ -727,18 +727,32 @@ class CoreDataManager {
     @discardableResult
     func createOrUpdateReadingRecord(_ record: ReadingRecord, articleId: UUID) -> ReadingRecordEntity {
         let fetchRequest: NSFetchRequest<ReadingRecordEntity> = ReadingRecordEntity.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", record.id as CVarArg)
+        // 使用文章 ID 或 URL 作为查找条件
+        fetchRequest.predicate = NSPredicate(format: "article.id == %@ OR articleURL == %@", 
+            articleId as CVarArg,
+            record.articleURL as CVarArg
+        )
         
         do {
             let results = try viewContext.fetch(fetchRequest)
             let recordEntity = results.first ?? ReadingRecordEntity(context: viewContext)
             
-            // 先保存基本信息
-            recordEntity.id = record.id
-            recordEntity.startTime = record.startTime
-            recordEntity.duration = record.duration
-            recordEntity.articleTitle = record.articleTitle
-            recordEntity.articleURL = record.articleURL
+            // 如果是更新现有记录,累加时长
+            if results.first != nil {
+                recordEntity.duration += record.duration
+                // 保持最早的开始时间
+                if let existingStartTime = recordEntity.startTime,
+                   existingStartTime > record.startTime {
+                    recordEntity.startTime = record.startTime
+                }
+            } else {
+                // 新记录,设置所有字段
+                recordEntity.id = record.id
+                recordEntity.startTime = record.startTime
+                recordEntity.duration = record.duration
+                recordEntity.articleTitle = record.articleTitle
+                recordEntity.articleURL = record.articleURL
+            }
             
             // 尝试关联到文章
             let articleFetchRequest: NSFetchRequest<ArticleEntity> = ArticleEntity.fetchRequest()
@@ -750,7 +764,7 @@ class CoreDataManager {
             if let articleEntity = try viewContext.fetch(articleFetchRequest).first {
                 recordEntity.article = articleEntity
                 
-                // 如果记录没有标题，使用文章的标题
+                // 如果记录没有标题,使用文章的标题
                 if recordEntity.articleTitle == nil || recordEntity.articleTitle?.isEmpty == true {
                     recordEntity.articleTitle = articleEntity.title
                 }

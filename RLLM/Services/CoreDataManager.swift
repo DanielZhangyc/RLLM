@@ -22,6 +22,7 @@ class CoreDataManager {
     /// 持久化容器
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "RLLM")
+        print("Initializing Core Data persistent container")
         
         // 配置迁移选项
         let options = [
@@ -35,6 +36,7 @@ class CoreDataManager {
         // 获取存储文件URL
         let applicationSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let storeURL = applicationSupportURL.appendingPathComponent("RLLM.sqlite")
+        print("Core Data store URL: \(storeURL.path)")
         
         // 确保目录存在
         do {
@@ -43,6 +45,7 @@ class CoreDataManager {
                 withIntermediateDirectories: true,
                 attributes: nil
             )
+            print("Application Support directory created/verified")
         } catch {
             print("Failed to create directory: \(error)")
             fatalError("Unable to create Application Support directory: \(error)")
@@ -50,12 +53,14 @@ class CoreDataManager {
         
         // 尝试加载存储
         do {
+            print("Attempting to add persistent store")
             try container.persistentStoreCoordinator.addPersistentStore(
                 ofType: NSSQLiteStoreType,
                 configurationName: nil,
                 at: storeURL,
                 options: options
             )
+            print("Successfully added persistent store")
         } catch {
             print("Failed to load store: \(error), \(error.localizedDescription)")
             
@@ -63,11 +68,12 @@ class CoreDataManager {
             if FileManager.default.fileExists(atPath: storeURL.path) {
                 // 尝试删除并重建存储
                 do {
+                    print("Attempting to delete existing store files")
                     try FileManager.default.removeItem(at: storeURL)
                     // 同时删除相关文件
                     try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("shm"))
                     try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("wal"))
-                    print("Deleted existing store files")
+                    print("Successfully deleted existing store files")
                 } catch {
                     print("Failed to delete store files: \(error)")
                     fatalError("Unable to delete existing store files: \(error)")
@@ -76,12 +82,14 @@ class CoreDataManager {
             
             // 重新创建存储
             do {
+                print("Attempting to recreate persistent store")
                 try container.persistentStoreCoordinator.addPersistentStore(
                     ofType: NSSQLiteStoreType,
                     configurationName: nil,
                     at: storeURL,
                     options: options
                 )
+                print("Successfully recreated persistent store")
             } catch {
                 print("Failed to recreate store: \(error)")
                 fatalError("Unable to create persistent store: \(error)")
@@ -90,6 +98,7 @@ class CoreDataManager {
         
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        print("Core Data stack successfully initialized")
         
         return container
     }()

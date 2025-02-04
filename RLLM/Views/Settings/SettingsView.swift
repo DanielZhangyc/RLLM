@@ -100,6 +100,12 @@ struct SettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                
+                Button {
+                    exportOPML()
+                } label: {
+                    Label(NSLocalizedString("settings.export_opml", comment: "Export OPML"), systemImage: "square.and.arrow.up")
+                }
             }
             
             Section {
@@ -186,6 +192,38 @@ struct SettingsView: View {
     
     private var dailySummaryStats: CacheStats {
         DailySummaryCache.shared.getStats()
+    }
+    
+    // MARK: - OPML Export
+    
+    private func exportOPML() {
+        do {
+            let url = try ExportManager.shared.exportOPML(articlesViewModel.feeds)
+            
+            // 显示分享菜单
+            let activityVC = UIActivityViewController(
+                activityItems: [url],
+                applicationActivities: nil
+            )
+            
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first,
+               let viewController = window.rootViewController {
+                viewController.present(activityVC, animated: true)
+            }
+            
+            // 显示成功提示
+            ToastManager.shared.showSuccess(
+                NSLocalizedString("toast.opml.export_success.title", comment: "Export success"),
+                message: NSLocalizedString("toast.opml.export_success.message", comment: "OPML file has been generated")
+            )
+        } catch {
+            // 显示错误提示
+            ToastManager.shared.showError(
+                NSLocalizedString("toast.opml.export_error.title", comment: "Export failed"),
+                message: String(format: NSLocalizedString("toast.opml.export_error.message", comment: "Failed to export OPML"), error.localizedDescription)
+            )
+        }
     }
 }
 

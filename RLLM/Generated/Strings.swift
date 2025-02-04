@@ -158,6 +158,50 @@ internal enum L10n {
     /// Retry button
     internal static let retry = L10n.tr("Localizable", "error.retry", fallback: "Retry")
   }
+  internal enum Export {
+    /// Generating newspaper style
+    internal static let generating = L10n.tr("Localizable", "export.generating", fallback: "Generating newspaper style...")
+    internal enum Error {
+      /// Export related
+      internal static let emptyContent = L10n.tr("Localizable", "export.error.empty_content", fallback: "No content to export")
+      /// Failed to create export file
+      internal static let fileCreation = L10n.tr("Localizable", "export.error.file_creation", fallback: "Failed to create export file")
+      /// Failed to generate image
+      internal static let imageGeneration = L10n.tr("Localizable", "export.error.image_generation", fallback: "Failed to generate image")
+      /// Export error message
+      internal static func message(_ p1: Any) -> String {
+        return L10n.tr("Localizable", "export.error.message", String(describing: p1), fallback: "Failed to generate image: %@")
+      }
+      /// Export error
+      internal static let title = L10n.tr("Localizable", "export.error.title", fallback: "Export Failed")
+      /// Failed to write content
+      internal static func write(_ p1: Any) -> String {
+        return L10n.tr("Localizable", "export.error.write", String(describing: p1), fallback: "Failed to write content: %@")
+      }
+    }
+    internal enum Newspaper {
+      /// By %@
+      internal static func author(_ p1: Any) -> String {
+        return L10n.tr("Localizable", "export.newspaper.author", String(describing: p1), fallback: "By %@")
+      }
+      /// Publish date
+      internal static func date(_ p1: Any) -> String {
+        return L10n.tr("Localizable", "export.newspaper.date", String(describing: p1), fallback: "Date: %@")
+      }
+      /// Source: %@
+      internal static func source(_ p1: Any) -> String {
+        return L10n.tr("Localizable", "export.newspaper.source", String(describing: p1), fallback: "Source: %@")
+      }
+      /// Newspaper title
+      internal static let title = L10n.tr("Localizable", "export.newspaper.title", fallback: "RLLM Quotes")
+    }
+    internal enum Success {
+      /// Export success message
+      internal static let message = L10n.tr("Localizable", "export.success.message", fallback: "Quote image has been generated")
+      /// Export success
+      internal static let title = L10n.tr("Localizable", "export.success.title", fallback: "Export Success")
+    }
+  }
   internal enum Feed {
     /// Delete feed
     internal static let delete = L10n.tr("Localizable", "feed.delete", fallback: "Delete")
@@ -243,12 +287,22 @@ internal enum L10n {
   internal enum Quotes {
     /// Delete quote
     internal static let delete = L10n.tr("Localizable", "quotes.delete", fallback: "Delete")
+    /// Delete Selected
+    internal static let deleteSelected = L10n.tr("Localizable", "quotes.delete_selected", fallback: "Delete Selected")
+    /// Deselect All
+    internal static let deselectAll = L10n.tr("Localizable", "quotes.deselect_all", fallback: "Deselect All")
+    /// Done
+    internal static let done = L10n.tr("Localizable", "quotes.done", fallback: "Done")
+    /// Multi-selection related
+    internal static let edit = L10n.tr("Localizable", "quotes.edit", fallback: "Edit")
     /// Save quotes instruction
     internal static let saveInstruction = L10n.tr("Localizable", "quotes.save_instruction", fallback: "Long press to select text while reading to save quotes")
     /// Save quotes title
     internal static let saveQuote = L10n.tr("Localizable", "quotes.save_quote", fallback: "Save Quotes")
     /// Saved quotes display
     internal static let savedDisplay = L10n.tr("Localizable", "quotes.saved_display", fallback: "Saved quotes will be displayed here")
+    /// Select All
+    internal static let selectAll = L10n.tr("Localizable", "quotes.select_all", fallback: "Select All")
     /// Quotes title
     internal static let title = L10n.tr("Localizable", "quotes.title", fallback: "Quotes")
   }
@@ -361,6 +415,10 @@ internal enum L10n {
     internal static let title = L10n.tr("Localizable", "settings.title", fallback: "Settings")
     /// Version
     internal static let version = L10n.tr("Localizable", "settings.version", fallback: "Version")
+  }
+  internal enum Share {
+    /// Share
+    internal static let button = L10n.tr("Localizable", "share.button", fallback: "Share")
   }
   internal enum Tab {
     /// AI Summary tab

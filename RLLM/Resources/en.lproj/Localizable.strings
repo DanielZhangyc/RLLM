@@ -184,6 +184,43 @@
 /* Retry button */
 "error.retry" = "Retry";
 
+/* Export related */
+"export.error.empty_content" = "No content to export";
+
+/* Failed to create export file */
+"export.error.file_creation" = "Failed to create export file";
+
+/* Failed to generate image */
+"export.error.image_generation" = "Failed to generate image";
+
+/* Export error message */
+"export.error.message" = "Failed to generate image: %@";
+
+/* Export error */
+"export.error.title" = "Export Failed";
+
+/* Failed to write content */
+"export.error.write" = "Failed to write content: %@";
+
+/* Generating newspaper style */
+"export.generating" = "Generating newspaper style...";
+
+"export.newspaper.author" = "By %@";
+
+/* Publish date */
+"export.newspaper.date" = "Date: %@";
+
+"export.newspaper.source" = "Source: %@";
+
+/* Newspaper title */
+"export.newspaper.title" = "RLLM Quotes";
+
+/* Export success message */
+"export.success.message" = "Quote image has been generated";
+
+/* Export success */
+"export.success.title" = "Export Success";
+
 /* Delete feed */
 "feed.delete" = "Delete";
 
@@ -280,6 +317,18 @@
 /* Delete quote */
 "quotes.delete" = "Delete";
 
+/* Delete Selected */
+"quotes.delete_selected" = "Delete Selected";
+
+/* Deselect All */
+"quotes.deselect_all" = "Deselect All";
+
+/* Done */
+"quotes.done" = "Done";
+
+/* Multi-selection related */
+"quotes.edit" = "Edit";
+
 /* Save quotes instruction */
 "quotes.save_instruction" = "Long press to select text while reading to save quotes";
 
@@ -288,6 +337,9 @@
 
 /* Saved quotes display */
 "quotes.saved_display" = "Saved quotes will be displayed here";
+
+/* Select All */
+"quotes.select_all" = "Select All";
 
 /* Quotes title */
 "quotes.title" = "Quotes";
@@ -427,6 +479,9 @@
 /* Version */
 "settings.version" = "Version";
 
+/* Share */
+"share.button" = "Share";
+
 /* AI Summary tab */
 "tab.ai_summary" = "AI Summary";
 
@@ -534,3 +589,14 @@
 
 /* Toast warning */
 "toast.warning" = "Warning";
+
+/* Export OPML */
+"settings.export_opml" = "Export OPML";
+
+/* Export OPML success */
+"toast.opml.export_success.title" = "Export Success";
+"toast.opml.export_success.message" = "OPML file has been generated";
+
+/* Export OPML error */
+"toast.opml.export_error.title" = "Export Failed";
+"toast.opml.export_error.message" = "Failed to export OPML: %@";

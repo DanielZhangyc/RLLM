@@ -184,6 +184,43 @@
 /* Retry button */
 "error.retry" = "重试";
 
+/* Export related */
+"export.error.empty_content" = "没有可导出的内容";
+
+/* Failed to create export file */
+"export.error.file_creation" = "创建导出文件失败";
+
+/* Failed to generate image */
+"export.error.image_generation" = "生成图片失败";
+
+/* Export error message */
+"export.error.message" = "生成图片失败：%@";
+
+/* Export error */
+"export.error.title" = "导出失败";
+
+/* Failed to write content */
+"export.error.write" = "写入内容失败：%@";
+
+/* Generating newspaper style */
+"export.generating" = "正在生成报纸样式...";
+
+"export.newspaper.author" = "作者：%@";
+
+/* Publish date */
+"export.newspaper.date" = "日期：%@";
+
+"export.newspaper.source" = "来源：%@";
+
+/* Newspaper title */
+"export.newspaper.title" = "RLLM收藏";
+
+/* Export success message */
+"export.success.message" = "已生成收藏图片";
+
+/* Export success */
+"export.success.title" = "导出成功";
+
 /* Delete feed */
 "feed.delete" = "删除";
 
@@ -280,14 +317,29 @@
 /* Delete quote */
 "quotes.delete" = "删除";
 
+/* Quotes deleted message */
+"quotes.delete_selected" = "删除所选";
+
+/* Quotes deleted title */
+"quotes.deselect_all" = "取消全选";
+
+/* Quotes deleted title */
+"quotes.done" = "完成";
+
+/* Quotes deleted title */
+"quotes.edit" = "编辑";
+
 /* Save quotes instruction */
-"quotes.save_instruction" = "在阅读文章时长按选择文字即可收藏";
+"quotes.save_instruction" = "在阅读文章时，长按选择文本即可保存为收藏";
 
 /* Save quotes title */
-"quotes.save_quote" = "收藏精彩语段";
+"quotes.save_quote" = "保存收藏";
 
 /* Saved quotes display */
-"quotes.saved_display" = "收藏的语段将在这里显示";
+"quotes.saved_display" = "保存的收藏将显示在这里";
+
+/* Quotes deleted title */
+"quotes.select_all" = "全选";
 
 /* Quotes title */
 "quotes.title" = "收藏";
@@ -427,6 +479,9 @@
 /* Version */
 "settings.version" = "版本";
 
+/* Share */
+"share.button" = "分享";
+
 /* AI Summary tab */
 "tab.ai_summary" = "AI总结";
 
@@ -534,3 +589,14 @@
 
 /* Toast warning */
 "toast.warning" = "警告";
+
+/* Export OPML */
+"settings.export_opml" = "导出OPML";
+
+/* Export OPML success */
+"toast.opml.export_success.title" = "导出成功";
+"toast.opml.export_success.message" = "已生成OPML文件";
+
+/* Export OPML error */
+"toast.opml.export_error.title" = "导出失败";
+"toast.opml.export_error.message" = "导出OPML失败：%@";

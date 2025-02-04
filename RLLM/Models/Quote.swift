@@ -15,18 +15,21 @@ struct Quote: Identifiable, Codable {
     let articleURL: String   // 来源文章链接
     let savedDate: Date      // 保存时间
     let isFullArticle: Bool  // 是否为全文收藏
+    var isSelected: Bool     // 是否被选中
     
     init(id: UUID = UUID(), 
          content: String, 
          articleTitle: String, 
          articleURL: String, 
          savedDate: Date = Date(), 
-         isFullArticle: Bool = false) {
+         isFullArticle: Bool = false,
+         isSelected: Bool = false) {
         self.id = id
         self.content = content
         self.articleTitle = articleTitle
         self.articleURL = articleURL
         self.savedDate = savedDate
         self.isFullArticle = isFullArticle
+        self.isSelected = isSelected
     }
 } 

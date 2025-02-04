@@ -12,10 +12,56 @@ class QuotesViewModel: ObservableObject {
         loadQuotes()
     }
     
+    // MARK: - 数据加载
+    
     private func loadQuotes() {
         quotes = coreDataManager.getAllQuotes()
         print("Loaded \(quotes.count) quotes from Core Data")
     }
+    
+    // MARK: - 多选相关
+    
+    /// 是否有选中的引用
+    var hasSelectedQuotes: Bool {
+        quotes.contains { $0.isSelected }
+    }
+    
+    /// 是否所有引用都被选中
+    var areAllQuotesSelected: Bool {
+        !quotes.isEmpty && quotes.allSatisfy { $0.isSelected }
+    }
+    
+    /// 切换引用的选中状态
+    /// - Parameter quote: 要切换状态的引用
+    func toggleQuoteSelection(_ quote: Quote) {
+        if let index = quotes.firstIndex(where: { $0.id == quote.id }) {
+            quotes[index].isSelected.toggle()
+        }
+    }
+    
+    /// 切换全选/取消全选
+    /// - Parameter isSelected: 是否全选
+    func toggleSelectAll(_ isSelected: Bool) {
+        quotes.indices.forEach { index in
+            quotes[index].isSelected = isSelected
+        }
+    }
+    
+    /// 重置所有选择状态
+    func resetSelection() {
+        quotes.indices.forEach { index in
+            quotes[index].isSelected = false
+        }
+    }
+    
+    /// 删除选中的引用
+    func deleteSelectedQuotes() {
+        let selectedQuotes = quotes.enumerated().filter { $0.element.isSelected }
+        let indexSet = IndexSet(selectedQuotes.map { $0.offset })
+        deleteQuotes(at: indexSet)
+    }
+    
+    // MARK: - 引用操作
     
     func addQuote(_ content: String, from article: Article, isFullArticle: Bool = false) {
         let quote = Quote(

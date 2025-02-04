@@ -27,50 +27,10 @@ enum ExportError: LocalizedError {
 class ExportManager {
     /// 单例实例
     static let shared = ExportManager()
-    
-    /// 私有初始化方法
+
     private init() {}
     
-    // MARK: - 文本导出
     
-    /// 导出选中的收藏内容为文本文件
-    /// - Parameter quotes: 要导出的收藏数组
-    /// - Returns: 导出文件的URL
-    /// - Throws: ExportError
-    func exportQuotes(_ quotes: [Quote]) throws -> URL {
-        // 检查是否有内容需要导出
-        guard !quotes.isEmpty else {
-            throw ExportError.emptyContent
-        }
-        
-        // 生成导出内容
-        var content = "RLLM导出的收藏内容\n"
-        content += "导出时间：\(Date().formatted())\n"
-        content += "共\(quotes.count)条内容\n\n"
-        
-        // 添加每条收藏的内容
-        for (index, quote) in quotes.enumerated() {
-            content += "[\(index + 1)] \(quote.articleTitle)\n"
-            content += "来源：\(quote.articleURL)\n"
-            content += "保存时间：\(quote.savedDate.formatted())\n"
-            if quote.isFullArticle {
-                content += "[全文收藏]\n"
-            }
-            content += "内容：\n\(quote.content.removingHTMLTags())\n\n"
-        }
-        
-        // 创建临时文件
-        let fileName = "RLLM_Quotes_\(DateFormatter.yyyyMMdd.string(from: Date())).txt"
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-        
-        do {
-            // 写入文件
-            try content.write(to: tempURL, atomically: true, encoding: .utf8)
-            return tempURL
-        } catch {
-            throw ExportError.writeError(error)
-        }
-    }
     
     // MARK: - 图片导出
     
@@ -141,6 +101,7 @@ class ExportManager {
         titleLabel.textAlignment = .center
         titleLabel.frame = titleContainer.bounds.insetBy(dx: 20, dy: 20)
         titleLabel.backgroundColor = .clear
+        titleLabel.textColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0) // 固定使用深色文本
         titleContainer.addSubview(titleLabel)
         containerView.addSubview(titleContainer)
         

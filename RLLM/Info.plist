@@ -18,5 +18,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>CFBundleVersion</key>
+	<string>N/A</string>
 </dict>
 </plist>
